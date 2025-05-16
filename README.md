@@ -36,10 +36,4 @@ Grâce à Plant’eau, plus d’oublis d’arrosage ou de confusion : chacun sai
 
 ---
 
-## 🛠️ Installation
-
-```bash
-# Clone le projet
-git clone
-
 
