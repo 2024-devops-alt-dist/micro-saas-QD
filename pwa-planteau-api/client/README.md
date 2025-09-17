@@ -1,158 +1,85 @@
+# Client — Initialisation avec Vite (React + TypeScript)
 
-# client — React + Vite + Tailwind CSS (v4.1)
+Prérequis : Node.js (>=16 recommandé) et npm installés.
 
-Un README concis et adapté à l'état actuel du projet : Vite + React avec Tailwind CSS v4.1 installé via PostCSS.
+1) Créer le projet avec Vite
+- Lance la commande puis répond aux invites (choisir "React" puis "TypeScript") :
 
-**Prérequis**
-- Node.js (recommandé >= 18)
-- npm
-- (Optionnel) Docker
+```bash
+npm create vite@latest client
+```
 
----
+2) Entrer dans le dossier et installer les dépendances
 
-## Installation
-
-Ouvrez un terminal et placez-vous dans le dossier `client` :
-
-```powershell
-cd "c:\Users\qdegli-esposti\OneDrive - COEXYA GROUP\Desktop\Coexya\micro-saas-QD\pwa-planteau-api\client"
+```bash
+cd client
 npm install
 ```
 
----
+3) Installer les types React (utile pour TypeScript)
 
-## Commandes courantes
+```bash
+npm install --save-dev @types/react @types/react-dom
+```
 
-- Développement (serveur Vite) :
-```powershell
+4) Démarrer le serveur de développement
+
+```bash
 npm run dev
 ```
 
-- Build production :
-```powershell
-npm run build
-```
+Ouvrir l'URL indiquée (généralement http://localhost:5173).
 
-- Tester le build localement :
-```powershell
+5) Construire et prévisualiser la version de production
+
+```bash
+npm run build
 npm run preview
 ```
 
----
+6) Intégrer Tailwind CSS (optionnel)
+- Installer Tailwind et créer la config PostCSS :
 
-## Configuration Tailwind (v4.1)
-
-Fichiers clés (doivent exister et être configurés) :
-
-- `postcss.config.cjs` → doit utiliser `@tailwindcss/postcss` :
-
-```javascript
-module.exports = {
-  plugins: {
-    '@tailwindcss/postcss': {},
-    autoprefixer: {},
-  },
-}
+```bash
+npm install -D tailwindcss postcss autoprefixer
+npx tailwindcss init -p
 ```
 
-- `tailwind.config.cjs` → `content` doit couvrir `index.html` et `src/**/*` :
+- Configurer `tailwind.config.js` — inscrire les fichiers sources :
 
-```javascript
-module.exports = {
-  content: [
-    './index.html',
-    './src/**/*.{js,jsx,ts,tsx}'
-  ],
+```js
+// tailwind.config.js
+export default {
+  content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: { extend: {} },
   plugins: [],
 }
 ```
 
-- `src/index.css` → syntaxe v4 :
+- Ajouter les directives Tailwind dans `src/index.css` :
 
 ```css
-@import "tailwindcss/preflight";
-@import "tailwindcss/theme";
-@import "tailwindcss/utilities";
-/* Vos styles personnalisés dessous */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 ```
 
-- `src/main.jsx` doit importer `./index.css` (déjà en place).
+- Aucun plugin Tailwind spécifique n’est nécessaire dans `vite.config.ts`.
 
----
+7) Git — initialiser et créer une branche
 
-## Vite
-
-Le plugin `@tailwindcss/vite` est optionnel. Dans cette configuration nous utilisons Tailwind via PostCSS (plugin `@tailwindcss/postcss`) :
-
-`vite.config.js` doit contenir au moins :
-
-```javascript
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
-
-export default defineConfig({
-  plugins: [react()],
-})
+```bash
+git init
+git add .
+git commit -m "Initial commit"
+git branch -M main
+# créer une branche pour la page/composant
+git checkout -b Page/TestConnexion
 ```
 
----
+8) Conseils rapides
+- ESLint / Prettier : ajouter et configurer selon vos préférences.
+- Type-check : si vous activez des règles ESLint dépendantes du type, configurez `tsconfig.app.json` et passez par `eslint --ext .ts,.tsx`.
+- Docker : si vous avez un Dockerfile, build puis run selon votre CI/CD.
 
-## Docker (optionnel)
-
-Exemple Dockerfile multi-stage (build puis Nginx) :
-
-```dockerfile
-FROM node:18-alpine AS build
-WORKDIR /app
-COPY package*.json ./
-RUN npm ci
-COPY . .
-RUN npm run build
-
-FROM nginx:alpine
-COPY --from=build /app/dist /usr/share/nginx/html
-EXPOSE 80
-CMD ["nginx", "-g", "daemon off;"]
-```
-
----
-
-## Vérification rapide que Tailwind fonctionne
-
-1. Dans `src/App.jsx` ajoutez (ou modifiez) un composant test :
-
-```jsx
-export default function App() {
-  return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <h1 className="text-5xl font-bold text-blue-600">Tailwind OK</h1>
-    </div>
-  )
-}
-```
-
-2. Lancer :
-
-```powershell
-npm run dev
-# Ouvrir l'URL indiquée (ex: http://localhost:5173)
-```
-
-Si le style s'applique (tailwind classes visibles), tout est correct.
-
----
-
-## Erreurs courantes et résolutions (déjà rencontrées)
-
-- `Unknown word "use strict"` ou erreurs PostCSS : assurez-vous de ne pas importer `tailwindcss` en tant que JS (supprimez `@import "tailwindcss"` dans tout fichier CSS). Utilisez les imports v4 (`preflight`, `theme`, `utilities`).
-- `Missing "./components" specifier` : le package `tailwindcss` v4 n'exporte pas `./components`. Utilisez `@import "tailwindcss/theme"` au lieu de `components`.
-- `@tailwindcss/vite` provoque des erreurs d'export : retirez le plugin de `vite.config.js` et utilisez `@tailwindcss/postcss`.
-
----
-
-## Git
-
-- Garder versionnés : `src/`, `package.json`, `package-lock.json`, `Dockerfile`, `tailwind.config.cjs`, `postcss.config.cjs`, `README.md`.
-- Ignorer : `node_modules/`, `dist/`, `.env`, `.vite/`, `*.log`, `.cache/`.
-
+Ceci décrit les étapes minimales pour initialiser et lancer le client React + TypeScript créé avec Vite.
