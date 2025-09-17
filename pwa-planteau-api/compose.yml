@@ -1,0 +1,17 @@
+services:
+
+  db:
+    image: postgres:latest
+    container_name: db-container
+    environment:
+      POSTGRES_USER: ${DB_USER} 
+      POSTGRES_PASSWORD: ${DB_PASSWORD} 
+      POSTGRES_DB: ${DB_NAME} 
+    ports:
+      - 5433:5432
+    volumes:
+      - db-data:/var/lib/postgresql/data #Volume pour que même si je stoppe mon conteneur, mes données ne soient pas perdues
+      - ./bdd/init.sql:/docker-entrypoint-initdb.d/init.sql #même si je supprime tout, docker vient initiliser la base de donnée par rapport au fichier 
+
+volumes:
+  db-data:
