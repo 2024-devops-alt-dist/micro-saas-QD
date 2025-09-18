@@ -3,10 +3,10 @@ import { Flex } from "@radix-ui/themes";
 import { useState } from 'react';
 import axios from 'axios';
 
-
+type ApiResponse = { status: string; message: string }
 
 export default function Home() {
-    const [result, setResult] = useState<any>(null);
+    const [result, setResult] = useState<ApiResponse | null>(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
@@ -16,13 +16,16 @@ export default function Home() {
         setResult(null);
 
         try {
-            const res = await axios.get('/api/health');
+            const res = await axios.get<ApiResponse>('/api/health');
             setResult(res.data);
             console.log(res.data);
         } catch (err: any) {
-            const apiError = err?.response?.data;
-            if (apiError && apiError.message) setError(apiError.message);
-            else setError('Impossible de joindre l’API');
+            const apiError = err?.response?.data as ApiResponse | undefined;
+            if (apiError && apiError.message) {
+        setResult(apiError) // ou setError(apiError.message) selon affichage voulu
+      } else {
+        setError('Impossible de joindre l’API')
+      }
         } finally {
             setLoading(false);
         }
