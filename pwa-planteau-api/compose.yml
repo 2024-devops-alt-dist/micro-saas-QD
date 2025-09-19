@@ -11,7 +11,39 @@ services:
       - 5433:5432
     volumes:
       - db-data:/var/lib/postgresql/data #Volume pour que même si je stoppe mon conteneur, mes données ne soient pas perdues
-      - ./bdd/init.sql:/docker-entrypoint-initdb.d/init.sql #même si je supprime tout, docker vient initiliser la base de donnée par rapport au fichier 
+      # - ./bdd/init.sql:/docker-entrypoint-initdb.d/init.sql #même si je supprime tout, docker vient initiliser la base de donnée par rapport au fichier
 
+  api:
+    build:
+      context: ./api  # Le chemin vers le répertoire contenant le Dockerfile
+    container_name: api-container
+    ports:
+      - "3000:3000"  # Mappe le port 3000 du conteneur sur le port 3000 de la machine hôte
+    env_file:
+      - ./api/.env
+    environment:
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_HOST=db
+      - DB_NAME=${DB_NAME}
+      - DB_PORT=5432
+    depends_on:
+      - db  # L'API dépend de la base de données (elle sera lancée après la base de données)
+    volumes:
+      - ./api:/app
+      - /app/node_modules
+
+  client:
+    build:
+      context: ./client
+    container_name: client-container
+    ports:
+      - "5173:80"
+    volumes:
+      - ./client:/app        # HMR / édition locale
+      - /app/node_modules
+    depends_on:
+      - api
+      
 volumes:
   db-data:

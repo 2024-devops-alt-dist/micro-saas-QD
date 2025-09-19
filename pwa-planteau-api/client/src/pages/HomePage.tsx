@@ -3,6 +3,8 @@ import { Flex } from "@radix-ui/themes";
 import { useState } from 'react';
 import axios from 'axios';
 
+const API_URL = (import.meta.env.VITE_API_URL as string) || 'http://localhost:3000';
+
 type ApiResponse = { status: string; message: string }
 
 export default function Home() {
@@ -13,10 +15,10 @@ export default function Home() {
     const handleTestApi = async () => {
         setLoading(true);
         setError(null);
-        setResult(null);
-
+        setResult(null)
         try {
-            const res = await axios.get<ApiResponse>('/api/health');
+            const res = await axios.get<ApiResponse>(`${API_URL}/api/health`);
+            console.log(res)
             setResult(res.data);
             console.log(res.data);
         } catch (err: any) {
@@ -40,7 +42,7 @@ export default function Home() {
                 </CustomButton>
                 {result && (
                     <pre className="mt-4 rounded pre-custom">
-                        {JSON.stringify(result, null, 2)}
+                         {JSON.stringify(result, null, 2)}
                     </pre>
                 )}
                 {error && (
@@ -50,3 +52,4 @@ export default function Home() {
         </Flex>
     );
 }
+
