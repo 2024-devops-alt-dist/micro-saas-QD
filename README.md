@@ -1,3 +1,5 @@
+![CI](https://github.com/2024-devops-alt-dist/micro-saas-QD/actions/workflows/ci.yml/badge.svg)
+
 # 🌿 Plant'eau
 
 Plant'eau est une application ludique de gestion de plantes d’intérieur, conçue pour simplifier l’organisation des soins au quotidien. Elle propose un **calendrier intelligent** qui génère automatiquement des rappels personnalisés selon les besoins de chaque plante. L’application permet également un usage **collaboratif**, idéal pour les familles, colocataires ou groupes partageant l’entretien de plantes.
