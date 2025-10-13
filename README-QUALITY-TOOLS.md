@@ -1,8 +1,8 @@
-# í³‹ Guide des Outils de QualitÃ©
+# ï¿½ï¿½ï¿½ Guide des Outils de QualitÃ©
 
 Configuration automatisÃ©e pour garantir un code propre et cohÃ©rent.
 
-## í» ï¸ Outils UtilisÃ©s
+## ï¿½ï¿½ï¿½ï¸ Outils UtilisÃ©s
 
 - **ESLint** : DÃ©tection d'erreurs et bonnes pratiques
 - **Prettier** : Formatage automatique du code
@@ -10,7 +10,7 @@ Configuration automatisÃ©e pour garantir un code propre et cohÃ©rent.
 - **Commitlint** : Validation des messages de commit
 - **Lint-staged** : Analyse uniquement des fichiers modifiÃ©s
 
-## íº€ Installation Rapide
+## ï¿½ï¿½ï¿½ Installation Rapide
 
 ```bash
 # Cloner et installer
@@ -23,7 +23,7 @@ npm install
 git config core.hooksPath .husky
 ```
 
-## í³ Scripts Essentiels
+## ï¿½ï¿½ï¿½ Scripts Essentiels
 
 ```bash
 # VÃ©rifier la qualitÃ© globale
@@ -36,7 +36,22 @@ npm run quality:fix
 npm run dev
 ```
 
-## í²¬ Format des Commits
+## ğŸ“œ DÃ©tail des scripts
+
+| Script             | Description                                                        |
+|--------------------|--------------------------------------------------------------------|
+| `dev`              | DÃ©marre le serveur de dÃ©veloppement                                |
+| `build`            | Compile TypeScript et construit le projet                          |
+| `preview`          | Lance un serveur local pour prÃ©visualiser le build                 |
+| `lint`             | Analyse le code avec ESLint                                        |
+| `lint:fix`         | Corrige automatiquement les erreurs ESLint                         |
+| `format`           | Formate le code avec Prettier                                      |
+| `format:check`     | VÃ©rifie le formatage Prettier sans modifier les fichiers           |
+| `quality`          | Lint + vÃ©rification du formatage                                   |
+| `quality:fix`      | Lint + correction du formatage                                     |
+| `type-check`       | VÃ©rifie les types TypeScript sans gÃ©nÃ©rer de fichiers              |
+
+## ï¿½ï¿½ï¿½ Format des Commits
 
 ### âœ… Formats Valides
 ```bash
@@ -60,7 +75,7 @@ git commit -m "added feature"  # Mauvais type
 - `refactor` : Refactoring
 - `test` : Tests
 
-## í´„ Workflow Automatique
+## ï¿½ï¿½ï¿½ Workflow Automatique
 
 1. **Modifier** du code TypeScript/React
 2. **Commit** avec le bon format
@@ -70,7 +85,7 @@ git commit -m "added feature"  # Mauvais type
    - Commitlint valide le message
 4. **Commit acceptÃ©** si tout passe
 
-## í°› DÃ©pannage
+## ï¿½ï¿½ï¿½ DÃ©pannage
 
 ### Hooks ne marchent pas ?
 ```bash
@@ -88,7 +103,7 @@ npm run install:all
 git commit -m "emergency fix" --no-verify
 ```
 
-## í³ Structure
+## ï¿½ï¿½ï¿½ Structure
 
 ```
 micro-saas-qd/
@@ -102,11 +117,11 @@ micro-saas-qd/
 
 ## âœ… Avantages
 
-- í´’ **QualitÃ© garantie** Ã  chaque commit
-- í´ **Code cohÃ©rent** dans l'Ã©quipe
-- íº€ **Corrections automatiques**
-- í³– **Historique lisible**
+- ï¿½ï¿½ï¿½ **QualitÃ© garantie** Ã  chaque commit
+- ï¿½ï¿½ï¿½ **Code cohÃ©rent** dans l'Ã©quipe
+- ï¿½ï¿½ï¿½ **Corrections automatiques**
+- ï¿½ï¿½ï¿½ **Historique lisible**
 
 ---
 
-**La qualitÃ© est maintenant automatique ! í¾‰**
+**La qualitÃ© est maintenant automatique ! ï¿½ï¿½ï¿½**

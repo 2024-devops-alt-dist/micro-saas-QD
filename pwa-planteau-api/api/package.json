@@ -13,7 +13,8 @@
     "format:check": "prettier --check \"src/**/*.{ts,json}\"",
     "quality": "npm run lint && npm run format:check",
     "quality:fix": "npm run lint:fix && npm run format",
-    "create-fixtures": "ts-node src/db/createFixtures.ts"
+    "create-fixtures": "ts-node src/db/createFixtures.ts",
+    "type-check": "tsc --noEmit"
   },
   "keywords": [],
   "author": "",
