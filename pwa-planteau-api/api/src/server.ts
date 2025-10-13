@@ -1,10 +1,9 @@
-import { Express } from "express";
 import dotenv from 'dotenv';
 dotenv.config();
 
-import app from "./app";
+import app from './app';
 import { closeDbConnection, testDbConnection } from './config/db-connection';
-import logger from './middlewares/logger'
+import logger from './middlewares/logger';
 
 const port: number = Number(process.env.API_PORT) || 3000;
 
@@ -15,7 +14,7 @@ const startServer = async () => {
 
     //Démarrage du serveur
     app.listen(port, () => {
-      logger.info(`Server is running on http://localhost:${port}`)
+      logger.info(`Server is running on http://localhost:${port}`);
     });
   } catch (error) {
     logger.error('Failed to start server: ' + String(error));

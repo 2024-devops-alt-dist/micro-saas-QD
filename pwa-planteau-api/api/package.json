@@ -7,6 +7,12 @@
     "start": "ts-node src/server.ts",
     "build": "tsc",
     "dev": "nodemon --exec ts-node src/server.ts",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write \"src/**/*.{ts,json}\"",
+    "format:check": "prettier --check \"src/**/*.{ts,json}\"",
+    "quality": "npm run lint && npm run format:check",
+    "quality:fix": "npm run lint:fix && npm run format",
     "create-fixtures": "ts-node src/db/createFixtures.ts"
   },
   "keywords": [],
@@ -21,13 +27,18 @@
     "winston": "^3.17.0"
   },
   "devDependencies": {
+    "@eslint/js": "^9.36.0",
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.3",
     "@types/node": "^24.5.0",
     "@types/pg": "^8.15.5",
     "@types/winston": "^2.4.4",
+    "eslint": "^9.36.0",
+    "eslint-config-prettier": "^10.1.8",
     "nodemon": "^3.1.10",
+    "prettier": "^3.6.2",
     "ts-node-dev": "^2.0.0",
-    "typescript": "^5.9.2"
+    "typescript": "^5.9.2",
+    "typescript-eslint": "^8.45.0"
   }
 }

@@ -1,0 +1,23 @@
+{
+  "name": "micro-saas-qd",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "prepare": "husky",
+    "install:all": "npm install && cd pwa-planteau-api/client && npm install && cd ../api && npm install",
+    "dev": "cd pwa-planteau-api && docker compose up --build",
+    "quality:check": "npm run quality:client && npm run quality:api",
+    "quality:fix": "npm run quality:fix:client && npm run quality:fix:api",
+    "quality:client": "cd pwa-planteau-api/client && npm run quality",
+    "quality:api": "cd pwa-planteau-api/api && npm run quality",
+    "quality:fix:client": "cd pwa-planteau-api/client && npm run quality:fix",
+    "quality:fix:api": "cd pwa-planteau-api/api && npm run quality:fix"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^20.1.0",
+    "@commitlint/config-conventional": "^20.0.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.2.3"
+  }
+}

@@ -1,0 +1,112 @@
+# Ì≥ã Guide des Outils de Qualit√©
+
+Configuration automatis√©e pour garantir un code propre et coh√©rent.
+
+## Ìª†Ô∏è Outils Utilis√©s
+
+- **ESLint** : D√©tection d'erreurs et bonnes pratiques
+- **Prettier** : Formatage automatique du code
+- **Husky** : Hooks Git automatiques
+- **Commitlint** : Validation des messages de commit
+- **Lint-staged** : Analyse uniquement des fichiers modifi√©s
+
+## Ì∫Ä Installation Rapide
+
+```bash
+# Cloner et installer
+git clone <repo-url>
+cd micro-saas-qd
+npm run install:all
+
+# Configuration Husky
+npm install
+git config core.hooksPath .husky
+```
+
+## Ì≥ù Scripts Essentiels
+
+```bash
+# V√©rifier la qualit√© globale
+npm run quality:check
+
+# Corriger automatiquement
+npm run quality:fix
+
+# Lancer le projet
+npm run dev
+```
+
+## Ì≤¨ Format des Commits
+
+### ‚úÖ Formats Valides
+```bash
+git commit -m "feat: add user authentication"
+git commit -m "fix: resolve login bug"
+git commit -m "docs: update README"
+git commit -m "chore: update dependencies"
+```
+
+### ‚ùå Formats Invalides
+```bash
+git commit -m "fix bug"        # Manque les deux-points
+git commit -m "added feature"  # Mauvais type
+```
+
+### Types Disponibles
+- `feat` : Nouvelle fonctionnalit√©
+- `fix` : Correction de bug
+- `docs` : Documentation
+- `chore` : Maintenance
+- `refactor` : Refactoring
+- `test` : Tests
+
+## Ì¥Ñ Workflow Automatique
+
+1. **Modifier** du code TypeScript/React
+2. **Commit** avec le bon format
+3. **Hooks automatiques** :
+   - ESLint analyse et corrige
+   - Prettier formate le code
+   - Commitlint valide le message
+4. **Commit accept√©** si tout passe
+
+## Ì∞õ D√©pannage
+
+### Hooks ne marchent pas ?
+```bash
+git config core.hooksPath .husky
+chmod +x .husky/pre-commit .husky/commit-msg
+```
+
+### Erreurs de d√©pendances ?
+```bash
+npm run install:all
+```
+
+### Bypass temporaire (urgence) ?
+```bash
+git commit -m "emergency fix" --no-verify
+```
+
+## Ì≥Å Structure
+
+```
+micro-saas-qd/
+‚îú‚îÄ‚îÄ .husky/              # Hooks Git
+‚îú‚îÄ‚îÄ package.json         # Scripts globaux
+‚îú‚îÄ‚îÄ *config.js          # Configuration outils
+‚îî‚îÄ‚îÄ pwa-planteau-api/
+    ‚îú‚îÄ‚îÄ client/         # React + TypeScript
+    ‚îî‚îÄ‚îÄ api/           # Node.js + Express
+```
+
+## ‚úÖ Avantages
+
+- Ì¥í **Qualit√© garantie** √† chaque commit
+- Ì¥ù **Code coh√©rent** dans l'√©quipe
+- Ì∫Ä **Corrections automatiques**
+- Ì≥ñ **Historique lisible**
+
+---
+
+**La qualit√© est maintenant automatique ! Ìæâ**
