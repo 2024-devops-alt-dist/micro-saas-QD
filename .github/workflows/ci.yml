@@ -67,6 +67,6 @@ jobs:
       - name: Lint Dockerfiles
         uses: hadolint/hadolint-action@v3.1.0
         with:
-          dockerfile: ./pwa-planteau-api/Dockerfile
+          dockerfile: ./pwa-planteau-api/api/Dockerfile
       - name: Build Docker images
         run: docker compose -f ./pwa-planteau-api/docker-compose.yml build
