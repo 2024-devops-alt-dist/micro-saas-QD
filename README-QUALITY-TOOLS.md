@@ -35,6 +35,8 @@ npm run quality:fix
 # Lancer le projet
 npm run dev
 ```
+## Pense à remplir les .env
+Pense à bien créer tes .env en fonction des .env.example
 
 ## 📜 Détail des scripts
 
