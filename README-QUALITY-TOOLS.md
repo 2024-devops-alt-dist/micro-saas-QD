@@ -15,17 +15,34 @@ Configuration automatisée pour garantir un code propre et cohérent.
 ```bash
 # Cloner et installer
 git clone <repo-url>
-cd micro-saas-qd
-npm run install:all
+cd MICRO-SAAS-QD
+npm run install
+
+cd pwa-planteau-api
+npm run install
 
 # Configuration Husky
 npm install
 git config core.hooksPath .husky
 ```
+## Pense à remplir les .env
+Pense à bien créer tes .env en fonction des .env.example. Il y en a un dans pwa-planteau-api, un dans client et un dans api. 
+
+▶️ Lancer avec Docker Compose
+```
+docker-compose up -d
+```
 
 ## ��� Scripts Essentiels
 
 ```bash
+# Cloner et installer les dépendances dans api et client
+cd api
+npm run install
+
+cd client
+npm run install
+
 # Vérifier la qualité globale
 npm run quality:check
 
@@ -35,8 +52,6 @@ npm run quality:fix
 # Lancer le projet
 npm run dev
 ```
-## Pense à remplir les .env
-Pense à bien créer tes .env en fonction des .env.example
 
 ## 📜 Détail des scripts
 
@@ -87,24 +102,6 @@ git commit -m "added feature"  # Mauvais type
    - Commitlint valide le message
 4. **Commit accepté** si tout passe
 
-## ��� Dépannage
-
-### Hooks ne marchent pas ?
-```bash
-git config core.hooksPath .husky
-chmod +x .husky/pre-commit .husky/commit-msg
-```
-
-### Erreurs de dépendances ?
-```bash
-npm run install:all
-```
-
-### Bypass temporaire (urgence) ?
-```bash
-git commit -m "emergency fix" --no-verify
-```
-
 ## ��� Structure
 
 ```
@@ -117,13 +114,3 @@ micro-saas-qd/
     └── api/           # Node.js + Express
 ```
 
-## ✅ Avantages
-
-- ��� **Qualité garantie** à chaque commit
-- ��� **Code cohérent** dans l'équipe
-- ��� **Corrections automatiques**
-- ��� **Historique lisible**
-
----
-
-**La qualité est maintenant automatique ! ���**
