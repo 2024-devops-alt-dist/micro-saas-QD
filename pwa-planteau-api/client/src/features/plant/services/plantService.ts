@@ -21,7 +21,7 @@ const mockApi = {
     // Simule la création d'une plante (id généré)
     return { id: Date.now(), ...plant };
   },
-  async delete(id: number): Promise<{ success: boolean }> {
+  async delete(_id: number): Promise<{ success: boolean }> {
     // Simule la suppression
     return { success: true };
   },
@@ -35,7 +35,7 @@ const realApi = {
   async create(plant: Omit<Plant, 'id'>): Promise<Plant> {
     return { id: Date.now(), ...plant };
   },
-  async delete(id: number): Promise<{ success: boolean }> {
+  async delete(_id: number): Promise<{ success: boolean }> {
     return { success: true };
   },
 };
