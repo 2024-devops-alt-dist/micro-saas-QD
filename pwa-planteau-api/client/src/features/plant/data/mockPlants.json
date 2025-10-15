@@ -1,0 +1,74 @@
+[
+  {
+    "id": 1,
+    "name": "Monstera",
+    "scientificName": "Monstera deliciosa",
+    "type": "Intérieur",
+    "image": "/assets/images/monstera.jpg",
+    "waterNeed": "Tous les 3 jours",
+    "room": "Salon"
+  },
+  {
+    "id": 2,
+    "name": "Ficus",
+    "scientificName": "Ficus lyrata",
+    "type": "Intérieur",
+    "image": "/assets/images/ficus.jpg",
+    "waterNeed": "Tous les 5 jours",
+    "room": "Chambre 1"
+  },
+  {
+    "id": 3,
+    "name": "Calathea",
+    "scientificName": "Calathea orbifolia",
+    "type": "Intérieur",
+    "image": "/assets/images/calathea.jpg",
+    "waterNeed": "Tous les 4 jours",
+    "room": "Salon"
+  },
+  {
+    "id": 4,
+    "name": "Pothos",
+    "scientificName": "Scindapsus aureus",
+    "type": "Intérieur",
+    "image": "/assets/images/pothos.webp",
+    "waterNeed": "Tous les 7 jours",
+    "room": "Cuisine"
+  },
+  {
+    "id": 5,
+    "name": "Maranta",
+    "scientificName": "Maranta leuconeura",
+    "type": "Intérieur",
+    "image": "/assets/images/maranta.webp",
+    "waterNeed": "Tous les 4 jours",
+    "room": "Chambre 2"
+  },
+  {
+    "id": 6,
+    "name": "Alocasia",
+    "scientificName": "Alocasia zebrina",
+    "type": "Intérieur",
+    "image": "/assets/images/alocasia-zebrina.webp",
+    "waterNeed": "Tous les 6 jours",
+    "room": "Salon"
+  },
+  {
+    "id": 7,
+    "name": "Lierre",
+    "scientificName": "Hedera helix",
+    "type": "Intérieur",
+    "image": "/assets/images/lierre.webp",
+    "waterNeed": "Tous les 5 jours",
+    "room": "Couloir"
+  },
+  {
+    "id": 8,
+    "name": "Palmier Areca",
+    "scientificName": "Dypsis lutescens",
+    "type": "Intérieur",
+    "image": "/assets/images/palmier.jpg",
+    "waterNeed": "Tous les 3 jours",
+    "room": "Salon"
+  }
+]
