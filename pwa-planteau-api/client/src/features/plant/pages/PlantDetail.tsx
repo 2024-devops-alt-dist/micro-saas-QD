@@ -49,6 +49,13 @@ const PlantDetail: React.FC = () => {
             <span className="font-semibold">Arrosage :</span> {plant.waterNeed}
           </div>
         </div>
+        {/* Bouton Planifier une tâche */}
+        <Link
+          to="/watering/create"
+          className="block w-full bg-green-700 hover:bg-green-600 text-white py-2 rounded-full font-semibold text-center mt-6 transition"
+        >
+          Planifier une tâche
+        </Link>
       </div>
     </div>
   );
