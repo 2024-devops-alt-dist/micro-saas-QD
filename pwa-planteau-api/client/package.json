@@ -16,7 +16,6 @@
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
-    "@radix-ui/themes": "^3.2.1",
     "@tailwindcss/vite": "^4.1.13",
     "axios": "^1.12.2",
     "react": "^19.1.1",
