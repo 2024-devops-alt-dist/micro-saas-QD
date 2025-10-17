@@ -1,0 +1,38 @@
+@import './variable.css';
+
+/* Layout helpers (containers, grids, etc.) */
+.page-centered {
+  width: 100%;
+  max-width: 500px;
+  min-width: 320px;
+  margin-left: auto;
+  margin-right: auto;
+  background: var(--color-white);
+  box-shadow: 0 0 24px 0 rgba(0,0,0,0.04);
+  border-radius: 16px;
+}
+
+@media (min-width: 1024px) {
+  .page-centered {
+    width: 100%;
+
+  }
+}
+
+.navbar-layout {
+  display: flex;
+  min-height: 100vh;
+  background: #f5f5f5;
+}
+
+  @media (min-width: 1024px) {
+  .navbar-layout {
+    width: 60vw;
+    max-width: none;
+    background: var(--color-white);
+    border-radius: var(--radius-sm);
+    box-shadow: 0 0 32px 0 rgba(0,0,0,0.08);
+    margin-left: auto;
+    margin-right: auto;
+  }
+}

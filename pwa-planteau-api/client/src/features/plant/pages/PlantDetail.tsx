@@ -26,7 +26,7 @@ const PlantDetail: React.FC = () => {
   if (!plant) return <div className="p-4">Plante introuvable.</div>;
 
   return (
-    <div className="p-4 max-w-md mx-auto">
+    <div className="p-4 max-w-md mx-auto page-centered">
       <Link to="/plants" className="text-green-700 underline mb-4 inline-block">
         &larr; Retour
       </Link>

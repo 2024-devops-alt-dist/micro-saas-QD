@@ -47,7 +47,7 @@ export default function WateringList() {
 	const tomorrowTasks = waterings.filter(w => w.nextWatering === tomorrowIso);
 
 	return (
-		<div className="p-4 max-w-md mx-auto min-h-screen bg-gray-50 flex flex-col relative">
+		<div className="p-4 max-w-md mx-auto min-h-screen bg-gray-50 flex flex-col relative page-centered">
 			<Header name="Quentin" avatarSrc="/assets/images/avatar-homme.webp" />
 			<WeekCarousel week={week} />
 			<TodayTasks todayTasks={todayTasks} />
