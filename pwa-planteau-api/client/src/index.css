@@ -19,6 +19,10 @@ html, body {
 @media (min-width: 1024px) {
   html, body {
     background-color: var(--color-black);
+    overflow: hidden;
+  }
+  .navbar-layout {
+    background-color: var(--color-black);
   }
 }
 
