@@ -15,7 +15,6 @@ function App() {
         <Route path="/plants/:id" element={<PlantDetail />} />
         <Route path="/watering/create" element={<WateringCreate />} />
         <Route path="/watering" element={<WateringList />} />
-        
       </Routes>
     </Router>
   );

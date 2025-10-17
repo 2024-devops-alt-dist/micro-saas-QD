@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import DateCarousel from '../components/DateCarousel';
@@ -55,15 +54,26 @@ export default function WateringCreate() {
   return (
     <div className="navbar-layout">
       <Navbar />
-  <div className="page-centered p-2 flex-1 flex flex-col overflow-y-auto" style={{height: '90vh', maxHeight: '90vh'}}>
+      <div
+        className="page-centered p-2 flex-1 flex flex-col overflow-y-auto"
+        style={{ height: '90vh', maxHeight: '90vh' }}
+      >
         <form onSubmit={handleSubmit}>
           {/* Header */}
           <div className="flex items-center justify-between mb-2">
             <div />
             <span className="font-pacifico text-green-900 text-xl text-center flex-1">
-              Planifier votre<br />nouvelle Tâche
+              Planifier votre
+              <br />
+              nouvelle Tâche
             </span>
-            <button className="text-gray-400 text-2xl font-bold" type="button" onClick={() => navigate(-1)}>&times;</button>
+            <button
+              className="text-gray-400 text-2xl font-bold"
+              type="button"
+              onClick={() => navigate(-1)}
+            >
+              &times;
+            </button>
           </div>
 
           {/* Mois et année */}
@@ -77,10 +87,20 @@ export default function WateringCreate() {
           <DateCarousel days={days} selectedDate={selectedDate} setSelectedDate={setSelectedDate} />
 
           {/* Sélection heure */}
-          <HourSelect startHour={startHour} endHour={endHour} setStartHour={setStartHour} setEndHour={setEndHour} hours={hours} />
+          <HourSelect
+            startHour={startHour}
+            endHour={endHour}
+            setStartHour={setStartHour}
+            setEndHour={setEndHour}
+            hours={hours}
+          />
 
           {/* Catégories */}
-          <CategorySelector categories={categories} selectedCategory={selectedCategory} setSelectedCategory={setSelectedCategory} />
+          <CategorySelector
+            categories={categories}
+            selectedCategory={selectedCategory}
+            setSelectedCategory={setSelectedCategory}
+          />
 
           {/* Jauge de soif */}
           <ThirstInput thirst={thirst} setThirst={setThirst} />
@@ -94,4 +114,4 @@ export default function WateringCreate() {
       </div>
     </div>
   );
-};
+}

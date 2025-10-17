@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 
 interface HourSelectProps {
   startHour: string;
@@ -8,7 +8,13 @@ interface HourSelectProps {
   hours: string[];
 }
 
-const HourSelect: React.FC<HourSelectProps> = ({ startHour, endHour, setStartHour, setEndHour, hours }) => (
+const HourSelect: React.FC<HourSelectProps> = ({
+  startHour,
+  endHour,
+  setStartHour,
+  setEndHour,
+  hours,
+}) => (
   <div className="mb-4">
     <label className="block text-gray-500 text-xs mb-1">Sélectionner l'heure</label>
     <div className="flex gap-4 justify-center">
@@ -18,7 +24,9 @@ const HourSelect: React.FC<HourSelectProps> = ({ startHour, endHour, setStartHou
         onChange={e => setStartHour(e.target.value)}
       >
         {hours.map(h => (
-          <option key={h} value={h}>{h}</option>
+          <option key={h} value={h}>
+            {h}
+          </option>
         ))}
       </select>
       <span className="text-2xl text-gray-400">&rarr;</span>
@@ -28,7 +36,9 @@ const HourSelect: React.FC<HourSelectProps> = ({ startHour, endHour, setStartHou
         onChange={e => setEndHour(e.target.value)}
       >
         {hours.map(h => (
-          <option key={h} value={h}>{h}</option>
+          <option key={h} value={h}>
+            {h}
+          </option>
         ))}
       </select>
     </div>

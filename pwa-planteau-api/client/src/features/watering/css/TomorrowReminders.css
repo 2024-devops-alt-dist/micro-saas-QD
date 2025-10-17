@@ -1,0 +1,18 @@
+@import '../../../assets/css/variable.css';
+
+.subtitle {
+	font-family: var(--font-h2);
+	color: var(--color-tertiary);
+}
+
+.text-info {
+	color: var(--color-tertiary);
+	font-family: var(--font-p);
+}
+
+.task-cards-reminder {
+	background: var(--color-secondary);
+	color: var(--color-tertiary);
+	border-radius: var(--radius-sm);
+	font-family: var(--font-p);
+}

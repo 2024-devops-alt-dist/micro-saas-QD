@@ -1,11 +1,8 @@
-
 import '../assets/css/Button.css';
 
-interface CustomButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {}
-
-export function CustomButton(props: CustomButtonProps) {
+export function CustomButton(props: React.ButtonHTMLAttributes<HTMLButtonElement>) {
   return (
-    <button className={"btn " + (props.className || "")} {...props}>
+    <button className={'btn ' + (props.className || '')} {...props}>
       {props.children}
     </button>
   );

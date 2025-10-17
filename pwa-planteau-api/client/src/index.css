@@ -18,11 +18,11 @@ html, body {
 
 @media (min-width: 1024px) {
   html, body {
-    background-color: var(--color-black);
+    background-color: var(--color-tertiary);
     overflow: hidden;
   }
   .navbar-layout {
-    background-color: var(--color-black);
+    background-color: var(--color-tertiary);
   }
 }
 

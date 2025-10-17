@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 
 type Day = {
   label: string;
@@ -15,7 +15,7 @@ interface DateCarouselProps {
 const DateCarousel: React.FC<DateCarouselProps> = ({ days, selectedDate, setSelectedDate }) => (
   <div className="mb-4">
     <div className="flex gap-2 overflow-x-auto pb-2">
-      {days.map((d) => (
+      {days.map(d => (
         <button
           key={d.iso}
           className={`flex flex-col items-center px-3 py-2 rounded-lg min-w-[56px] transition ${
@@ -26,8 +26,14 @@ const DateCarousel: React.FC<DateCarouselProps> = ({ days, selectedDate, setSele
           onClick={() => setSelectedDate(d.iso)}
           type="button"
         >
-          <span className={`text-base font-bold ${selectedDate === d.iso ? 'text-white' : 'text-gray-700'}`}>{d.label}</span>
-          <span className={`text-xs ${selectedDate === d.iso ? 'text-white' : 'text-gray-700'}`}>{d.week}</span>
+          <span
+            className={`text-base font-bold ${selectedDate === d.iso ? 'text-white' : 'text-gray-700'}`}
+          >
+            {d.label}
+          </span>
+          <span className={`text-xs ${selectedDate === d.iso ? 'text-white' : 'text-gray-700'}`}>
+            {d.week}
+          </span>
         </button>
       ))}
     </div>

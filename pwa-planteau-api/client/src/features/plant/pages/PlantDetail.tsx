@@ -29,7 +29,10 @@ const PlantDetail: React.FC = () => {
   return (
     <div className="navbar-layout">
       <Navbar />
-  <div className="page-centered p-2 flex-1 flex flex-col overflow-y-auto" style={{height: '90vh', maxHeight: '90vh'}}>
+      <div
+        className="page-centered p-2 flex-1 flex flex-col overflow-y-auto"
+        style={{ height: '90vh', maxHeight: '90vh' }}
+      >
         <Link to="/plants" className="text-green-700 underline mb-4 inline-block">
           &larr; Retour
         </Link>
