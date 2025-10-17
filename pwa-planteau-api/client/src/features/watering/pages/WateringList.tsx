@@ -1,4 +1,5 @@
 
+
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { wateringService } from '../services/wateringService';
@@ -6,6 +7,7 @@ import Header from '../components/Header';
 import WeekCarousel from '../components/WeekCarousel';
 import TodayTasks from '../components/TodayTasks';
 import TomorrowReminders from '../components/TomorrowReminders';
+import Navbar from '../../../components/Navbar';
 
 type Watering = {
 	id_watering: number;
@@ -47,19 +49,22 @@ export default function WateringList() {
 	const tomorrowTasks = waterings.filter(w => w.nextWatering === tomorrowIso);
 
 	return (
-		<div className="p-4 max-w-md mx-auto min-h-screen bg-gray-50 flex flex-col relative page-centered">
-			<Header name="Quentin" avatarSrc="/assets/images/avatar-homme.webp" />
-			<WeekCarousel week={week} />
-			<TodayTasks todayTasks={todayTasks} />
-			<TomorrowReminders tomorrowTasks={tomorrowTasks} />
-			<div className="flex justify-end mt-8">
-				<Link
-					to="/watering/create"
-					className="bg-green-500 hover:bg-green-600 text-white rounded-full w-12 h-12 flex items-center justify-center text-3xl shadow-lg transition"
-					aria-label="Planifier une tâche"
-				>
-					+
-				</Link>
+		<div className="navbar-layout">
+			<Navbar />
+			<div className="page-centered p-2 flex-1 flex flex-col overflow-y-auto bg-gray-50" style={{height: '90vh', maxHeight: '90vh'}}>
+				<Header name="Quentin" avatarSrc="/assets/images/avatar-homme.webp" />
+				<WeekCarousel week={week} />
+				<TodayTasks todayTasks={todayTasks} />
+				<TomorrowReminders tomorrowTasks={tomorrowTasks} />
+				<div className="flex justify-end mt-8">
+					<Link
+						to="/watering/create"
+						className="bg-green-500 hover:bg-green-600 text-white rounded-full w-12 h-12 flex items-center justify-center text-3xl shadow-lg transition"
+						aria-label="Planifier une tâche"
+					>
+						+
+					</Link>
+				</div>
 			</div>
 		</div>
 	);

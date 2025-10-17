@@ -2,6 +2,7 @@
 import { CustomButton } from '../components/Button';
 import { useState } from 'react';
 import axios from 'axios';
+import Navbar from '../components/Navbar';
 
 const API_URL = (import.meta.env.VITE_API_URL as string) || 'http://localhost:3000';
 
@@ -32,14 +33,17 @@ export default function Home() {
   };
 
   return (
-    <div className="flex items-center min-h-screen page-centered home-bg">
-      <div className="flex flex-col items-center justify-center gap-4 home-card w-full">
-        <h1>Bienvenue sur la première page de Planteau</h1>
-        <CustomButton onClick={handleTestApi} disabled={loading}>
-          {loading ? 'Connexion...' : 'Tester la connexion'}
-        </CustomButton>
-        {result && <pre className="mt-4 rounded pre-custom">{JSON.stringify(result, null, 2)}</pre>}
-        {error && <div className="text-red-500 mt-2">{error}</div>}
+    <div className="navbar-layout">
+      <Navbar />
+      <div className="page-centered p-2 flex-1 flex flex-col overflow-y-auto" style={{height: '90vh', maxHeight: '90vh'}}>
+        <div className="flex flex-col items-center justify-center gap-4 home-card w-full">
+          <h1>Bienvenue sur la première page de Planteau</h1>
+          <CustomButton onClick={handleTestApi} disabled={loading}>
+            {loading ? 'Connexion...' : 'Tester la connexion'}
+          </CustomButton>
+          {result && <pre className="mt-4 rounded pre-custom">{JSON.stringify(result, null, 2)}</pre>}
+          {error && <div className="text-red-500 mt-2">{error}</div>}
+        </div>
       </div>
     </div>
   );

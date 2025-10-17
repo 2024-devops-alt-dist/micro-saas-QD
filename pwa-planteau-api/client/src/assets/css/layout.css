@@ -19,6 +19,7 @@
     height: 90vh;
     max-height: 90vh;
     overflow-y: auto;
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
   }
 }
 
@@ -32,7 +33,7 @@
   .navbar-layout {
     width: 60vw;
     max-width: none;
-    background: var(--color-white);
+    background: var(--color-black);
     border-radius: var(--radius-sm);
     box-shadow: 0 0 32px 0 rgba(0,0,0,0.08);
     margin-left: auto;
@@ -40,4 +41,5 @@
     height: 90vh;
     overflow: hidden;
   }
+
 }
