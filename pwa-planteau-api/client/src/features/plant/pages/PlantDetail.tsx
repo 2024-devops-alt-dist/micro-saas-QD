@@ -62,8 +62,8 @@ const PlantDetail: React.FC = () => {
           <div className="plant-detail-section">
             <div className="plant-detail-section-title text-left text-lg">Soins détaillés</div>
             <div className="plant-detail-section-content">
-              <div><span className="font-semibold">Type :</span> {plant.type}</div>
-              {/* Ajoute ici d'autres infos détaillées si besoin */}
+              
+              
             </div>
           </div>
           <Link

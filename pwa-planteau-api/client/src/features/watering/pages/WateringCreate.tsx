@@ -13,8 +13,8 @@ const categories = [
   { label: 'Engrais', color: 'bg-yellow-300', value: 'engrais' },
   { label: 'Rempotage', color: 'bg-purple-300', value: 'rempotage' },
   { label: 'Vaporiser', color: 'bg-pink-300', value: 'vaporiser' },
-  { label: 'Other', color: 'bg-gray-200', value: 'other' },
-  { label: 'Arrosage', color: 'bg-green-300', value: 'arrosage' },
+  { label: 'Arrosage', color: 'bg-gray-200', value: 'arrosage' },
+  { label: 'Autre', color: 'bg-green-300', value: 'autre' },
 ];
 
 const getMonthDays = () => {
@@ -77,15 +77,10 @@ export default function WateringCreate() {
             </button>
           </div>
 
-          {/* Mois et année */}
-          <div className="mb-2 text-center">
-            <span className="text-lg font-semibold text-green-900">
-              {new Date().toLocaleString('fr-FR', { month: 'long', year: 'numeric' })}
-            </span>
-          </div>
-
           {/* Sélection date */}
-          <DateCarousel days={days} selectedDate={selectedDate} setSelectedDate={setSelectedDate} />
+          <div className="watering-date-padding">
+            <DateCarousel days={days} selectedDate={selectedDate} setSelectedDate={setSelectedDate} />
+          </div>
 
           {/* Sélection heure */}
           <HourSelect
