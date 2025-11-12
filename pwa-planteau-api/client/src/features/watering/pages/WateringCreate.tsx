@@ -7,6 +7,7 @@ import ThirstInput from '../components/ThirstInput';
 import NoteInput from '../components/NoteInput';
 import ValidateButton from '../components/ValidateButton';
 import Navbar from '../../../components/Navbar';
+import '../css/WateringCreate.css';
 
 const categories = [
   { label: 'Engrais', color: 'bg-yellow-300', value: 'engrais' },
@@ -62,7 +63,7 @@ export default function WateringCreate() {
           {/* Header */}
           <div className="flex items-center justify-between mb-2">
             <div />
-            <span className="font-pacifico text-green-900 text-xl text-center flex-1">
+            <span className="watering-create-header text-xl text-center flex-1">
               Planifier votre
               <br />
               nouvelle Tâche

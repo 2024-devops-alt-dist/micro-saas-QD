@@ -1,0 +1,10 @@
+@import '../../../assets/css/variable.css';
+
+.watering-create-header {
+  font-family: var(--font-h2);
+  font-size: var(--text-2xl);
+  color: var(--color-tertiary);
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
