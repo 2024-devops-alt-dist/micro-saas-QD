@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 
 interface Category {
   label: string;
@@ -12,7 +12,11 @@ interface CategorySelectorProps {
   setSelectedCategory: (v: string) => void;
 }
 
-const CategorySelector: React.FC<CategorySelectorProps> = ({ categories, selectedCategory, setSelectedCategory }) => (
+const CategorySelector: React.FC<CategorySelectorProps> = ({
+  categories,
+  selectedCategory,
+  setSelectedCategory,
+}) => (
   <div className="mb-4">
     <div className="flex gap-2 flex-wrap">
       {categories.map(cat => (
@@ -26,7 +30,9 @@ const CategorySelector: React.FC<CategorySelectorProps> = ({ categories, selecte
           onClick={() => setSelectedCategory(cat.value)}
           type="button"
         >
-          <span className={`w-2 h-2 rounded-full ${selectedCategory === cat.value ? 'bg-green-700' : 'bg-gray-400'}`} />
+          <span
+            className={`w-2 h-2 rounded-full ${selectedCategory === cat.value ? 'bg-green-700' : 'bg-gray-400'}`}
+          />
           {cat.label}
         </button>
       ))}

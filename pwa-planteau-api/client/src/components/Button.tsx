@@ -1,10 +1,9 @@
-import { Button } from '@radix-ui/themes';
 import '../assets/css/Button.css';
 
-export function CustomButton(props: React.ComponentProps<typeof Button>) {
+export function CustomButton(props: React.ButtonHTMLAttributes<HTMLButtonElement>) {
   return (
-    <Button className="btn" {...props}>
+    <button className={'btn ' + (props.className || '')} {...props}>
       {props.children}
-    </Button>
+    </button>
   );
 }
