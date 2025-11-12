@@ -1,0 +1,21 @@
+@import '../../../assets/css/variable.css';
+
+.week-selected {
+  background: var(--color-secondary);
+  border: none;
+  border-radius: var(--radius-sm);
+}
+
+.week-selected-text {
+  color: var(--color-tertiary) !important;
+  font-family: var(--font-p);
+}
+
+.week-dot {
+  background: var(--color-tertiary);
+}
+
+.date-number {
+  color: var(--color-tertiary);
+  font-family: var(--font-p);
+}

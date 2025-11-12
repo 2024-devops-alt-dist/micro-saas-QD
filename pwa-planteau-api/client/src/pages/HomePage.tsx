@@ -1,7 +1,7 @@
 import { CustomButton } from '../components/Button';
-import { Flex } from '@radix-ui/themes';
 import { useState } from 'react';
 import axios from 'axios';
+import Navbar from '../components/Navbar';
 
 const API_URL = (import.meta.env.VITE_API_URL as string) || 'http://localhost:3000';
 
@@ -18,13 +18,11 @@ export default function Home() {
     setResult(null);
     try {
       const res = await axios.get<ApiResponse>(`${API_URL}/api/health`);
-      console.log(res);
       setResult(res.data);
-      console.log(res.data);
     } catch (err: any) {
       const apiError = err?.response?.data as ApiResponse | undefined;
       if (apiError && apiError.message) {
-        setResult(apiError); // ou setError(apiError.message) selon affichage voulu
+        setResult(apiError);
       } else {
         setError('Impossible de joindre l’API');
       }
@@ -34,15 +32,23 @@ export default function Home() {
   };
 
   return (
-    <Flex align="center" justify="center" className="home-bg">
-      <Flex direction="column" align="center" justify="center" gap="4" className="home-card">
-        <h1>Bienvenue sur la première page de Planteau</h1>
-        <CustomButton onClick={handleTestApi} disabled={loading}>
-          {loading ? 'Connexion...' : 'Tester la connexion'}
-        </CustomButton>
-        {result && <pre className="mt-4 rounded pre-custom">{JSON.stringify(result, null, 2)}</pre>}
-        {error && <div className="text-red-500 mt-2">{error}</div>}
-      </Flex>
-    </Flex>
+    <div className="navbar-layout">
+      <Navbar />
+      <div
+        className="page-centered p-2 flex-1 flex flex-col overflow-y-auto"
+        style={{ height: '90vh', maxHeight: '90vh' }}
+      >
+        <div className="flex flex-col items-center justify-center gap-4 home-card w-full">
+          <h1>Bienvenue sur la première page de Planteau</h1>
+          <CustomButton onClick={handleTestApi} disabled={loading}>
+            {loading ? 'Connexion...' : 'Tester la connexion'}
+          </CustomButton>
+          {result && (
+            <pre className="mt-4 rounded pre-custom">{JSON.stringify(result, null, 2)}</pre>
+          )}
+          {error && <div className="text-red-500 mt-2">{error}</div>}
+        </div>
+      </div>
+    </div>
   );
 }

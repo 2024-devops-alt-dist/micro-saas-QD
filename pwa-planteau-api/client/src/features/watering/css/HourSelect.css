@@ -1,0 +1,88 @@
+@import '../../../assets/css/variable.css';
+
+.hour-select-block {
+  margin-bottom: 1.5rem;
+}
+
+.hour-select-label {
+  color: var(--color-tertiary);
+  font-size: var(--text-lg);
+  font-weight: 600;
+  display: block;
+  font-family: var(--font-p);
+  text-align: left;
+}
+
+.hour-select-card {
+  background: var(--color-gray-100);
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 2rem;
+  box-shadow: 0 2px 8px rgba(60,60,60,0.06);
+}
+
+.hour-select-col {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+}
+
+.hour-select-col:hover .hour-select-dropdown,
+.hour-select-col:focus-within .hour-select-dropdown {
+  opacity: 1;
+  z-index: 2;
+}
+
+.hour-select-sub {
+  color: var(--color-gray-400);
+  font-size: var(--text-base);
+  margin-bottom: 0.3rem;
+  font-family: var(--font-p);
+}
+
+.hour-select-value {
+  color: var(--color-tertiary);
+  font-size: var(--text-3xl);
+  font-weight: 700;
+  font-family: var(--font-p);
+}
+
+.hour-select-arrow {
+  color: var(--color-primary);
+  font-size: var(--text-xl);
+  margin: 0 1.2rem;
+  display: flex;
+  align-items: center;
+}
+
+.hour-select-dropdown {
+  background: transparent;
+  border: none;
+  font-size: var(--text-base);
+  font-weight: 500;
+  color: var(--color-tertiary);
+  text-align: center;
+  font-family: var(--font-p);
+  outline: none;
+  appearance: none;
+  padding: 0.2rem 0.5rem;
+  margin: 0;
+  min-width: 60px;
+  border-radius: 8px;
+  transition: background 0.2s;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.hour-select-dropdown:focus {
+  background: var(--color-gray-200);
+}

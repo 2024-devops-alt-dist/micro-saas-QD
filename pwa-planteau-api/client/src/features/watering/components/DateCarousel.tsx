@@ -1,4 +1,6 @@
-import React from "react";
+import React from 'react';
+import '../css/DateCarousel.css';
+
 
 type Day = {
   label: string;
@@ -12,26 +14,36 @@ interface DateCarouselProps {
   setSelectedDate: (iso: string) => void;
 }
 
-const DateCarousel: React.FC<DateCarouselProps> = ({ days, selectedDate, setSelectedDate }) => (
-  <div className="mb-4">
-    <div className="flex gap-2 overflow-x-auto pb-2">
-      {days.map((d) => (
-        <button
-          key={d.iso}
-          className={`flex flex-col items-center px-3 py-2 rounded-lg min-w-[56px] transition ${
-            selectedDate === d.iso
-              ? 'bg-green-700 text-white border-2 border-green-700'
-              : 'bg-gray-100 text-gray-700'
-          }`}
-          onClick={() => setSelectedDate(d.iso)}
-          type="button"
-        >
-          <span className={`text-base font-bold ${selectedDate === d.iso ? 'text-white' : 'text-gray-700'}`}>{d.label}</span>
-          <span className={`text-xs ${selectedDate === d.iso ? 'text-white' : 'text-gray-700'}`}>{d.week}</span>
-        </button>
-      ))}
+const DateCarousel: React.FC<DateCarouselProps> = ({ days, selectedDate, setSelectedDate }) => {
+  // Get current month from selectedDate or first day
+  const currentIso = selectedDate || (days.length > 0 ? days[0].iso : null);
+  const currentMonth = currentIso ? new Date(currentIso).toLocaleString('fr-FR', { month: 'long', year: 'numeric' }) : '';
+
+  return (
+    <div>
+      <div className="date-carousel-header">
+        <span className="date-carousel-title">Séléctionner une date:</span>
+      </div>
+      <div className="date-carousel-month">
+        {currentMonth}
+      </div>
+      <div className="date-carousel-wrapper">
+        <div className="date-carousel">
+          {days.map(d => (
+            <button
+              key={d.iso}
+              className={`date-card${selectedDate === d.iso ? ' selected' : ''}`}
+              onClick={() => setSelectedDate(d.iso)}
+              type="button"
+            >
+              <span className="date-card-number">{d.label}</span>
+              <span className="date-card-week">{d.week}</span>
+            </button>
+          ))}
+        </div>
+      </div>
     </div>
-  </div>
-);
+  );
+};
 
 export default DateCarousel;

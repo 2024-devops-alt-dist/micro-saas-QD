@@ -1,0 +1,84 @@
+@import '../../../assets/css/variable.css';
+
+.date-carousel-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  padding-bottom: 1rem;
+}
+
+.date-carousel {
+  display: flex;
+  gap: 1rem;
+
+  justify-content: flex-start;
+  min-width: max-content;
+  padding: 0 1rem;
+}
+
+.date-carousel-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.date-carousel-title {
+  font-size: var(--text-lg);
+  font-weight: 600;
+  color: var(--color-tertiary);
+  font-family: var(--font-p);
+  margin-left: 0;
+}
+
+.date-carousel-month {
+  text-align: center;
+  font-size: var(--text-base);
+  color: var(--color-gray-600);
+  font-family: var(--font-p);
+  font-weight: 500;
+  margin-bottom: 0.2rem;
+}
+
+.date-card {
+	background: var(--color-gray-100);
+	border-radius: var(--radius-md);
+	box-shadow: 0 2px 8px rgba(60,60,60,0.06);
+	padding: 1rem 0.7rem 0.7rem 0.7rem;
+	min-width: 70px;
+	text-align: center;
+	cursor: pointer;
+	transition: background 0.2s, box-shadow 0.2s;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+.date-card.selected,
+.date-card.active {
+	background: var(--color-secondary);
+	box-shadow: 0 4px 16px rgba(162,194,90,0.12);
+}
+
+.date-card-number {
+	font-size: var(--text-2xl);
+	font-weight: 700;
+	color: var(--color-tertiary);
+	margin-bottom: 0.2rem;
+	font-family: 'Manrope', Arial, sans-serif;
+}
+
+.date-card.selected .date-card-number,
+.date-card.active .date-card-number {
+	color: var(--color-tertiary);
+}
+
+.date-card-week {
+	font-size: var(--text-base);
+	color: var(--color-gray-500);
+	font-family: var(--font-p);
+}
+
+.date-card-label {
+	font-size: var(--text-base);
+	color: var(--color-gray-400);
+	font-family: var(--font-p);
+}
