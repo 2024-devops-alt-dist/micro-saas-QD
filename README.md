@@ -1,7 +1,3 @@
-
-## 🌐 Front-end déployé
-[https://micro-saas-qd.vercel.app/](https://micro-saas-qd.vercel.app/)
-
 ![CI](https://github.com/2024-devops-alt-dist/micro-saas-QD/actions/workflows/ci.yml/badge.svg)
 
 [Pour un démarrage suite à un clonage du projet, cliquez ici : README-QUALITY-TOOLS.md](README-QUALITY-TOOLS.md)
@@ -12,6 +8,10 @@ Plant'eau est une application ludique de gestion de plantes d’intérieur, con�
 
 Grâce à Plant’eau, plus d’oublis d’arrosage ou de confusion : chacun sait quoi faire, quand, et pour quelle plante.
 
+---
+
+## 🌐 Front-end déployé
+[https://micro-saas-qd.vercel.app/](https://micro-saas-qd.vercel.app/)
 
 ---
 
