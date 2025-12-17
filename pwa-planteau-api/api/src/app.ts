@@ -1,8 +1,9 @@
 import express from 'express';
 import cors from 'cors';
 import logger from './middlewares/logger';
+import { router as healthRouter } from './routes/healthRoutes';
 
-const app = express(); // crée l'application Express
+const app = express();
 app.use(express.json());
 
 app.use(
@@ -23,16 +24,6 @@ app.use((req, _res, next) => {
 // base path pour les routes API (ex: '/api') — configurable via env
 const API_BASE = process.env.API_BASE_PATH || '/api';
 
-// endpoint GET /api/health
-app.get(`${API_BASE}/health`, async (_req, res) => {
-  const dbConnected = true; // Simule la vérification de la connexion à la BDD
-  if (dbConnected) {
-    logger.info('Health check succeeded');
-    res.status(200).json({ status: 'ok', message: 'API connected to database!' });
-  } else {
-    logger.error('Health check failed');
-    res.status(500).json({ status: 'error', message: 'Database connection failed' });
-  }
-});
+app.use(API_BASE, healthRouter);
 
 export default app;
