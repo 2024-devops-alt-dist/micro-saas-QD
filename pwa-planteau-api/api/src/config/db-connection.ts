@@ -1,8 +1,11 @@
 import { Pool } from 'pg';
 import logger from '../middlewares/logger';
 import { PrismaClient } from '../generated/prisma/client';
+import { config } from './env';
 
-const prisma = new PrismaClient();
+const prisma = new PrismaClient({
+  datasourceUrl: config.DATABASE_URL,
+});
 
 export const testDbConnection = async (): Promise<void> => {
   try {

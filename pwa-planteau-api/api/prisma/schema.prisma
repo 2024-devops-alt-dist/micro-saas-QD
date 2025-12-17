@@ -11,25 +11,97 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
 }
 
-// Define your database models here
+// Enums
+enum Role {
+  ADMIN
+  MEMBER
+}
+
+enum PlantType {
+  TROPICAL
+  DESERT
+  TEMPERATE
+  SUCCULENT
+  AQUATIC
+  MEDITERRANEAN
+  BONSAI
+  ORCHID
+}
+
+enum TaskType {
+  WATERING
+  REPOTTING
+  PRUNING
+  SPRAYING
+  CLEAN_LEAVES
+  FERTILIZING
+  DEADHEADING
+}
+
+enum TaskStatus {
+  TODO
+  DONE
+  SKIPPED
+}
+
+model Household {
+  id           Int      @id @default(autoincrement())
+  name         String   @db.VarChar(100)
+  invite_code  String   @db.VarChar(20)
+  users        User[]
+  plants       Plant[]
+}
+
 model User {
-  id        Int      @id @default(autoincrement())
-  email     String   @unique
-  name      String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id           Int      @id @default(autoincrement())
+  name         String   @db.VarChar(100)
+  firstname    String   @db.VarChar(100)
+  email        String   @unique @db.VarChar(255)
+  password     String   @db.VarChar(255)
+  role         Role
+  household_id Int
+  household    Household @relation(fields: [household_id], references: [id])
+  notes        Note[]
 }
 
 model Plant {
-  id          Int      @id @default(autoincrement())
-  name        String
-  species     String
-  description String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id              Int       @id @default(autoincrement())
+  name            String    @db.VarChar(100)
+  scientific_name String    @db.VarChar(150)
+  type            PlantType
+  photo           String    @db.VarChar(255)
+  water_need      String    @db.VarChar(50)
+  room            String    @db.VarChar(50)
+  household_id    Int
+  household       Household @relation(fields: [household_id], references: [id])
+  tasks           Tasks[]
+  notes           Note[]
+}
+
+model Tasks {
+  id            Int      @id @default(autoincrement())
+  type          TaskType
+  scheduled_date DateTime
+  created_at    DateTime @default(now())
+  update_at     DateTime @updatedAt
+  status        TaskStatus
+  plant_id      Int
+  plant         Plant    @relation(fields: [plant_id], references: [id])
+  notes         Note[]
+}
+
+model Note {
+  id            Int      @id @default(autoincrement())
+  content       String   @db.Text
+  created_at    DateTime @default(now())
+  user_id       Int
+  user          User     @relation(fields: [user_id], references: [id])
+  plant_id      Int?
+  plant         Plant?   @relation(fields: [plant_id], references: [id])
+  task_id       Int?
+  task          Tasks?   @relation(fields: [task_id], references: [id])
 }
 
 
