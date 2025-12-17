@@ -1,9 +1,9 @@
 import dotenv from 'dotenv';
 dotenv.config();
-
 import app from './app';
 import { closeDbConnection, testDbConnection } from './config/db-connection';
 import logger from './middlewares/logger';
+
 
 const port: number = Number(process.env.API_PORT) || 3000;
 
