@@ -10,7 +10,7 @@ const logLevels = {
 
 const logger = winston.createLogger({
   levels: logLevels,
-  level: 'info',
+  level: process.env.LOG_LEVEL || 'http',
   format: winston.format.combine(
     winston.format.colorize(),
     winston.format.timestamp(),
