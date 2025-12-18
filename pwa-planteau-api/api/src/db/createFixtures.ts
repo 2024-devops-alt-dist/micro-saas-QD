@@ -1,4 +1,4 @@
-import prisma from '../config/db-connection';
+import prisma from '../prisma';
 
 async function main() {
   // 1. Households (find or create to be idempotent)
