@@ -1,4 +1,4 @@
-import dotenv from "dotenv";
+import dotenv from 'dotenv';
 dotenv.config();
 
 export const config = {
@@ -10,5 +10,6 @@ export const config = {
   DB_NAME: process.env.DB_NAME || 'database',
   FRONT_URL: process.env.FRONT_URL || 'http://localhost:5173/',
   DATABASE_URL:
-    process.env.DATABASE_URL || `postgresql://${process.env.DB_USER || 'user'}:${process.env.DB_PASSWORD || 'password'}@${process.env.DB_HOST || 'localhost'}:${process.env.DB_PORT || '5432'}/${process.env.DB_NAME || 'database'}`,
+    process.env.DATABASE_URL ||
+    `postgresql://${process.env.DB_USER || 'user'}:${process.env.DB_PASSWORD || 'password'}@${process.env.DB_HOST || 'localhost'}:${process.env.DB_PORT || '5432'}/${process.env.DB_NAME || 'database'}`,
 };
