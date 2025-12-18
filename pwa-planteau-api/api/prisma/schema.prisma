@@ -63,6 +63,7 @@ model User {
   role         Role
   household_id Int
   household    Household @relation(fields: [household_id], references: [id])
+  plants       Plant[]
   notes        Note[]
 }
 
@@ -74,6 +75,8 @@ model Plant {
   photo           String    @db.VarChar(255)
   water_need      String    @db.VarChar(50)
   room            String    @db.VarChar(50)
+  user_id         Int
+  user            User      @relation(fields: [user_id], references: [id])
   household_id    Int
   household       Household @relation(fields: [household_id], references: [id])
   tasks           Tasks[]
