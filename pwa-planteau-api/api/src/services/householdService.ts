@@ -15,3 +15,10 @@ export const create = async (data: any) => {
 export const remove = async (id: number) => {
   return prisma.household.delete({ where: { id } });
 };
+
+export const update = async (id: number, data: any) => {
+  return prisma.household.update({
+    where: { id },
+    data,
+  });
+};

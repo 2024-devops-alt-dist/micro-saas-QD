@@ -8,4 +8,5 @@ export const router = Router();
 router.get('/', getAll);
 router.get('/:id', getById);
 router.post('/', validateBody(NoteCreateSchema), createOne);
+router.put('/:id', validateBody(NoteCreateSchema), updateOne);
 router.delete('/:id', deleteOne);

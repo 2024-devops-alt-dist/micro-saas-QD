@@ -23,3 +23,13 @@ export const deleteOne = async (req: Request, res: Response) => {
   await service.remove(id);
   res.status(204).send();
 };
+
+export const updateOne = async (req: Request, res: Response) => {
+  const id = Number(req.params.id);
+  try {
+    const updated = await service.update(id, req.body);
+    res.json(updated);
+  } catch (err: any) {
+    res.status(400).json({ error: err.message });
+  }
+};
