@@ -7,6 +7,7 @@ import { router as userRouter } from './routes/userRoutes';
 import { router as plantRouter } from './routes/plantRoutes';
 import { router as tasksRouter } from './routes/tasksRoutes';
 import { router as noteRouter } from './routes/noteRoutes';
+import { errorHandler } from './middlewares/errorHandler';
 
 const app = express();
 app.use(express.json());
@@ -35,5 +36,7 @@ app.use(`${API_BASE}/users`, userRouter);
 app.use(`${API_BASE}/plants`, plantRouter);
 app.use(`${API_BASE}/tasks`, tasksRouter);
 app.use(`${API_BASE}/notes`, noteRouter);
+
+app.use(errorHandler);
 
 export default app;
