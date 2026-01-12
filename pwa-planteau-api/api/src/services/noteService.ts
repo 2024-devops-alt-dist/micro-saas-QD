@@ -4,3 +4,9 @@ export const findAll = async () => prisma.note.findMany();
 export const findById = async (id: number) => prisma.note.findUnique({ where: { id } });
 export const create = async (data: any) => prisma.note.create({ data });
 export const remove = async (id: number) => prisma.note.delete({ where: { id } });
+
+export const update = async (id: number, data: any) =>
+  prisma.note.update({
+    where: { id },
+    data,
+  });

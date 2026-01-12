@@ -4,3 +4,9 @@ export const findAll = async () => prisma.tasks.findMany();
 export const findById = async (id: number) => prisma.tasks.findUnique({ where: { id } });
 export const create = async (data: any) => prisma.tasks.create({ data });
 export const remove = async (id: number) => prisma.tasks.delete({ where: { id } });
+
+export const update = async (id: number, data: any) =>
+  prisma.tasks.update({
+    where: { id },
+    data,
+  });
