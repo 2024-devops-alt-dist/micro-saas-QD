@@ -72,7 +72,7 @@ jobs:
       - name: Rebuild native modules
         run: npm rebuild
       - name: Generate Prisma Client
-        run: npx prisma generate
+        run: npx prisma generate --force
       - name: Security audit
         run: npm audit --audit-level=high
       - name: Run linter
