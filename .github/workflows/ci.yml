@@ -39,6 +39,26 @@ jobs:
     defaults:
       run:
         working-directory: ./pwa-planteau-api/api
+    env:
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+      DB_NAME: planteau_db
+      DB_HOST: localhost
+      DB_PORT: 5433
+    services:
+      postgres:
+        image: postgres:latest
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: planteau_db
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5433:5432
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -58,6 +78,8 @@ jobs:
         run: npm run build || echo "No build step needed"
       - name: Generate Prisma Client
         run: npx prisma generate
+      - name: Run database migrations
+        run: npx prisma migrate deploy
       - name: Run unit tests
         run: npm run test:unit
       - name: Run integration tests
