@@ -32,7 +32,9 @@ const PlantDetail: React.FC = () => {
       <Navbar />
       <div className="page-centered flex-1 flex flex-col">
         <div className="plant-detail-container">
-          <Link to="/plants" className="plant-detail-back">&#8592;</Link>
+          <Link to="/plants" className="plant-detail-back">
+            &#8592;
+          </Link>
           <div className="plant-detail-title">Ma Plante</div>
           <div className="plant-detail-card">
             <img src={plant.image} alt={plant.name} className="plant-detail-img" />
@@ -61,15 +63,9 @@ const PlantDetail: React.FC = () => {
           </div>
           <div className="plant-detail-section">
             <div className="plant-detail-section-title text-left text-lg">Soins détaillés</div>
-            <div className="plant-detail-section-content">
-              
-              
-            </div>
+            <div className="plant-detail-section-content"></div>
           </div>
-          <Link
-            to="/watering/create"
-            className="plant-detail-action"
-          >
+          <Link to="/watering/create" className="plant-detail-action">
             Planifier une tâche
           </Link>
         </div>
