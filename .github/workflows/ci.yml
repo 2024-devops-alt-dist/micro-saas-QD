@@ -56,8 +56,12 @@ jobs:
         run: npm run type-check || true
       - name: Build application
         run: npm run build || echo "No build step needed"
-      - name: Run tests
-        run: npm test --if-present
+      - name: Run unit tests
+        run: npm run test:unit
+      - name: Run integration tests
+        run: npm run test:integration
+      - name: Generate coverage report
+        run: npm run test:coverage || true
 
   docker:
     name: Docker Build & Lint
