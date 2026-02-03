@@ -45,6 +45,7 @@ jobs:
       DB_NAME: planteau_db
       DB_HOST: localhost
       DB_PORT: 5433
+      DATABASE_URL: postgresql://postgres:postgres@localhost:5433/planteau_db
     services:
       postgres:
         image: postgres:latest
