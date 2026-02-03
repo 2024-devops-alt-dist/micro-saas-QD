@@ -3,23 +3,28 @@
   "version": "1.0.0",
   "description": "",
   "main": "server.js",
+  "type": "module",
   "scripts": {
-    "start": "ts-node src/server.ts",
+    "start": "tsx src/server.ts",
     "build": "tsc",
-    "dev": "nodemon --exec ts-node src/server.ts",
+    "dev": "tsx watch src/server.ts",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "format": "prettier --write \"src/**/*.{ts,json}\"",
     "format:check": "prettier --check \"src/**/*.{ts,json}\"",
     "quality": "npm run lint && npm run format:check",
     "quality:fix": "npm run lint:fix && npm run format",
-    "create-fixtures": "ts-node src/db/createFixtures.ts",
-    "type-check": "tsc --noEmit"
+    "create-fixtures": "tsx src/db/createFixtures.ts",
+    "type-check": "tsc --noEmit",
+    "test": "vitest run",
+    "test:unit": "vitest run tests/unit --testPathPattern=unit",
+    "test:integration": "vitest run tests/integration --testPathPattern=integration",
+    "test:coverage": "vitest run --coverage",
+    "test:watch": "vitest"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "commonjs",
   "lint-staged": {
     "**/*.ts": [
       "npm run lint:fix",
