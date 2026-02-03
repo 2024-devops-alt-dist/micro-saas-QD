@@ -1,7 +1,9 @@
 import express from 'express';
 import cors from 'cors';
+import swaggerUi from 'swagger-ui-express';
 import logger from './middlewares/logger';
 import { config } from './config/env';
+import { swaggerSpec } from './config/swagger';
 import { router as healthRouter } from './routes/healthRoutes';
 import { router as householdRouter } from './routes/householdRoutes';
 import { router as userRouter } from './routes/userRoutes';
@@ -31,6 +33,10 @@ app.use((req, _res, next) => {
 
 // base path pour les routes API (ex: '/api') — configurable via env
 const API_BASE = process.env.API_BASE_PATH || '/api';
+
+// Swagger documentation
+app.use('/api-docs', swaggerUi.serve);
+app.get('/api-docs', swaggerUi.setup(swaggerSpec));
 
 app.use(`${API_BASE}/health`, healthRouter);
 app.use(`${API_BASE}/households`, householdRouter);
