@@ -40,11 +40,6 @@ jobs:
       run:
         working-directory: ./pwa-planteau-api/api
     env:
-      DB_USER: postgres
-      DB_PASSWORD: postgres
-      DB_NAME: planteau_db
-      DB_HOST: localhost
-      DB_PORT: 5433
       DATABASE_URL: postgresql://postgres:postgres@localhost:5433/planteau_db
     services:
       postgres:
@@ -69,12 +64,12 @@ jobs:
           cache-dependency-path: ./pwa-planteau-api/api/package-lock.json
       - name: Install dependencies
         run: npm ci
-      - name: Rebuild native modules
-        run: npm rebuild
-      - name: Clean Prisma generated files
-        run: rm -rf src/generated/prisma
       - name: Generate Prisma Client
         run: npx prisma generate
+      - name: Run database migrations
+        run: npx prisma migrate deploy
+      - name: Create test fixtures
+        run: npm run create-fixtures
       - name: Security audit
         run: npm audit --audit-level=high
       - name: Run linter
@@ -83,10 +78,6 @@ jobs:
         run: npm run type-check || true
       - name: Build application
         run: npm run build || echo "No build step needed"
-      - name: Run database migrations
-        run: npx prisma migrate deploy
-      - name: Create test fixtures
-        run: npm run create-fixtures
       - name: Run unit tests
         run: npm run test:unit
       - name: Run integration tests
