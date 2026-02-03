@@ -68,6 +68,8 @@ jobs:
           cache-dependency-path: ./pwa-planteau-api/api/package-lock.json
       - name: Install dependencies
         run: npm ci
+      - name: Rebuild native modules
+        run: npm rebuild
       - name: Security audit
         run: npm audit --audit-level=high
       - name: Run linter
