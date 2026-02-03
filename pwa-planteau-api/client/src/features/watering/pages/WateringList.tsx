@@ -35,11 +35,21 @@ function getWeekDates() {
 
 export default function WateringList() {
   const [waterings, setWaterings] = useState<Watering[]>([]);
+  const [error, setError] = useState<string | null>(null);
   const week = getWeekDates();
   const todayIso = new Date().toISOString().slice(0, 10);
 
   useEffect(() => {
-    wateringService.getAll().then(setWaterings);
+    wateringService
+      .getAll()
+      .then(data => {
+        setWaterings(data);
+        setError(null);
+      })
+      .catch(err => {
+        console.error('Failed to fetch watering tasks:', err);
+        setError('Failed to load watering tasks');
+      });
   }, []);
 
   // Sépare les tâches du jour et les rappels (tâches du lendemain)
@@ -56,8 +66,16 @@ export default function WateringList() {
       >
         <Header name="Quentin" avatarSrc="/assets/images/avatar-homme.webp" />
         <WeekCarousel week={week} />
-        <TodayTasks todayTasks={todayTasks} />
-        <TomorrowReminders tomorrowTasks={tomorrowTasks} />
+        {error && <div className="text-red-500 p-4">{error}</div>}
+        {waterings.length === 0 && !error && (
+          <div className="text-gray-500 p-4">Loading watering tasks...</div>
+        )}
+        {waterings.length > 0 && (
+          <>
+            <TodayTasks todayTasks={todayTasks} />
+            <TomorrowReminders tomorrowTasks={tomorrowTasks} />
+          </>
+        )}
         <div className="flex justify-end mt-8">
           <Link to="/watering/create" className="add-task-btn" aria-label="Planifier une tâche">
             <svg

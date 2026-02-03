@@ -79,7 +79,11 @@ export default function WateringCreate() {
 
           {/* Sélection date */}
           <div className="watering-date-padding">
-            <DateCarousel days={days} selectedDate={selectedDate} setSelectedDate={setSelectedDate} />
+            <DateCarousel
+              days={days}
+              selectedDate={selectedDate}
+              setSelectedDate={setSelectedDate}
+            />
           </div>
 
           {/* Sélection heure */}

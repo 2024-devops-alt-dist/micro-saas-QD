@@ -1,9 +1,42 @@
+import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import { plantService } from '../services/plantService';
 
-import React from "react";
-import { Link } from "react-router-dom";
-import plants from "../data/mockPlants.json";
+type Plant = {
+  id: number;
+  name: string;
+  scientificName: string;
+  type: string;
+  image: string;
+  waterNeed: string;
+  room: string;
+};
 
 const PlantCard: React.FC = () => {
+  const [plants, setPlants] = useState<Plant[]>([]);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    plantService
+      .getAll()
+      .then(data => {
+        setPlants(data);
+        setError(null);
+      })
+      .catch(err => {
+        console.error('Error fetching plants:', err);
+        setError('Failed to load plants');
+      });
+  }, []);
+
+  if (error) {
+    return <div className="p-4 text-red-500">{error}</div>;
+  }
+
+  if (plants.length === 0) {
+    return <div className="p-4">Loading plants...</div>;
+  }
+
   return (
     <div className="flex flex-col gap-6 p-4">
       {plants.map((_, i) => {
@@ -38,7 +71,7 @@ const PlantCard: React.FC = () => {
           );
         }
 
-  // Ligne 2 : deux moyennes côte à côte (2 colonnes)
+        // Ligne 2 : deux moyennes côte à côte (2 colonnes)
         if (i % 3 === 1 && plants[i + 1]) {
           return (
             <div key={`row-${i}`} className="flex gap-4 h-60">
@@ -60,7 +93,7 @@ const PlantCard: React.FC = () => {
           );
         }
 
-  // Ligne 3 : une seule grande centrée (sur 2 colonnes)
+        // Ligne 3 : une seule grande centrée (sur 2 colonnes)
         if (i % 3 === 2) {
           return (
             <div key={`row-${i}`} className="flex justify-center h-80">

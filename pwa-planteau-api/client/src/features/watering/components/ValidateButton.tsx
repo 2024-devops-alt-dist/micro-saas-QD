@@ -8,10 +8,7 @@ interface ValidateButtonProps {
 const ValidateButton: React.FC<ValidateButtonProps> = ({
   label = 'Encore une bonne action à faire',
 }) => (
-  <button
-    type="submit"
-    className="validate-btn"
-  >
+  <button type="submit" className="validate-btn">
     {label}
   </button>
 );

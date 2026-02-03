@@ -12,7 +12,7 @@ const FilterCarousel: React.FC<FilterCarouselProps> = ({ filters, active, onSele
 
   return (
     <div className="plant-filter-carousel" ref={containerRef}>
-      {filters.map((filter) => (
+      {filters.map(filter => (
         <button
           key={filter}
           className={active === filter ? 'active' : ''}
