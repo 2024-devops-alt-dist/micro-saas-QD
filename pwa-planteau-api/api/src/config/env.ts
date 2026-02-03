@@ -1,5 +1,14 @@
+import { existsSync } from 'node:fs';
 import dotenv from 'dotenv';
-dotenv.config();
+
+const envCandidates =
+  process.env.NODE_ENV === 'test' ? ['.env.test', '.env'] : ['.env', '.env.test'];
+const envFile = envCandidates.find(candidate => existsSync(candidate));
+
+if (envFile) {
+  // Load matching env file, falling back when the primary file is absent
+  dotenv.config({ path: envFile });
+}
 
 export const config = {
   API_PORT: process.env.API_PORT || 3000,
