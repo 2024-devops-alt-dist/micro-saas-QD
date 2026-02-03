@@ -2,8 +2,12 @@ import { Request, Response } from 'express';
 import * as service from '../services/userService';
 
 export const getAll = async (_req: Request, res: Response) => {
-  const items = await service.findAll();
-  res.json(items);
+  try {
+    const items = await service.findAll();
+    res.json(items);
+  } catch (err: any) {
+    res.status(500).json({ error: 'Failed to fetch users', details: err.message });
+  }
 };
 
 export const getById = async (req: Request, res: Response) => {
