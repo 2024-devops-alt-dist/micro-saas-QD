@@ -72,7 +72,7 @@ jobs:
       - name: Run database migrations
         run: npx prisma migrate deploy
       - name: Create test fixtures
-        run: npm run create-fixtures
+        run: NODE_ENV=test npm run create-fixtures
       - name: Security audit
         run: npm audit --audit-level=high
       - name: Run linter
