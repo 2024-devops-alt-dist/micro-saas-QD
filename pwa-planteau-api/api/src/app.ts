@@ -1,6 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import logger from './middlewares/logger';
+import { config } from './config/env';
 import { router as healthRouter } from './routes/healthRoutes';
 import { router as householdRouter } from './routes/householdRoutes';
 import { router as userRouter } from './routes/userRoutes';
@@ -12,9 +13,10 @@ import { errorHandler } from './middlewares/errorHandler';
 const app = express();
 app.use(express.json());
 
+// CORS configuration: allow frontend origin to communicate with API
 app.use(
   cors({
-    origin: 'http://localhost:5173',
+    origin: config.FRONT_URL,
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true,
