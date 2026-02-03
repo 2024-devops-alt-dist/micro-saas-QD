@@ -41,6 +41,7 @@ jobs:
         working-directory: ./pwa-planteau-api/api
     env:
       DATABASE_URL: postgresql://postgres:postgres@localhost:5433/planteau_db
+      NODE_ENV: test
     services:
       postgres:
         image: postgres:latest
