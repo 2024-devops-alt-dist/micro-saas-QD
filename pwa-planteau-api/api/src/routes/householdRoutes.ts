@@ -13,7 +13,7 @@ export const router = Router();
 
 /**
  * @swagger
- * /:
+ * /households:
  *   get:
  *     summary: Get all households
  *     description: Retrieve a list of all households
@@ -35,7 +35,7 @@ router.get('/', getAll);
 
 /**
  * @swagger
- * /{id}:
+ * /households/{id}:
  *   get:
  *     summary: Get household by ID
  *     description: Retrieve a specific household
@@ -61,7 +61,7 @@ router.get('/:id', getById);
 
 /**
  * @swagger
- * /:
+ * /households:
  *   post:
  *     summary: Create a new household
  *     description: Create a new household group
@@ -96,7 +96,7 @@ router.post('/', validateBody(HouseholdCreateSchema), createOne);
 
 /**
  * @swagger
- * /{id}:
+ * /households/{id}:
  *   put:
  *     summary: Update a household
  *     description: Update household information
@@ -135,7 +135,7 @@ router.put('/:id', validateBody(HouseholdCreateSchema), updateOne);
 
 /**
  * @swagger
- * /{id}:
+ * /households/{id}:
  *   delete:
  *     summary: Delete a household
  *     description: Delete a household permanently

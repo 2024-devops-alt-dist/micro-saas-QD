@@ -7,7 +7,7 @@ export const router = Router();
 
 /**
  * @swagger
- * /:
+ * /plants:
  *   get:
  *     summary: Get all plants
  *     description: Retrieve a list of all plants
@@ -29,7 +29,7 @@ router.get('/', getAll);
 
 /**
  * @swagger
- * /{id}:
+ * /plants/{id}:
  *   get:
  *     summary: Get plant by ID
  *     description: Retrieve a specific plant by its ID
@@ -56,7 +56,7 @@ router.get('/:id', getById);
 
 /**
  * @swagger
- * /:
+ * /plants:
  *   post:
  *     summary: Create a new plant
  *     description: Add a new plant to the system
@@ -112,7 +112,7 @@ router.post('/', validateBody(PlantCreateSchema), createOne);
 
 /**
  * @swagger
- * /{id}:
+ * /plants/{id}:
  *   put:
  *     summary: Update a plant
  *     description: Update plant information
@@ -163,7 +163,7 @@ router.put('/:id', validateBody(PlantCreateSchema), updateOne);
 
 /**
  * @swagger
- * /{id}:
+ * /plants/{id}:
  *   delete:
  *     summary: Delete a plant
  *     description: Delete a plant from the system
