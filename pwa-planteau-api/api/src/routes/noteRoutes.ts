@@ -7,7 +7,7 @@ export const router = Router();
 
 /**
  * @swagger
- * /:
+ * /notes:
  *   get:
  *     summary: Get all notes
  *     description: Retrieve all plant care notes
@@ -29,7 +29,7 @@ router.get('/', getAll);
 
 /**
  * @swagger
- * /{id}:
+ * /notes/{id}:
  *   get:
  *     summary: Get note by ID
  *     description: Retrieve a specific note
@@ -55,7 +55,7 @@ router.get('/:id', getById);
 
 /**
  * @swagger
- * /:
+ * /notes:
  *   post:
  *     summary: Create a new note
  *     description: Add a note about a plant (observations, care history, etc.)
@@ -94,7 +94,7 @@ router.post('/', validateBody(NoteCreateSchema), createOne);
 
 /**
  * @swagger
- * /{id}:
+ * /notes/{id}:
  *   put:
  *     summary: Update a note
  *     description: Update note content
@@ -135,7 +135,7 @@ router.put('/:id', validateBody(NoteCreateSchema), updateOne);
 
 /**
  * @swagger
- * /{id}:
+ * /notes/{id}:
  *   delete:
  *     summary: Delete a note
  *     description: Delete a note permanently

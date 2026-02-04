@@ -7,7 +7,7 @@ export const router = Router();
 
 /**
  * @swagger
- * /:
+ * /tasks:
  *   get:
  *     summary: Get all tasks
  *     description: Retrieve a list of all watering and maintenance tasks
@@ -29,7 +29,7 @@ router.get('/', getAll);
 
 /**
  * @swagger
- * /{id}:
+ * /tasks/{id}:
  *   get:
  *     summary: Get task by ID
  *     description: Retrieve a specific task by its ID
@@ -55,7 +55,7 @@ router.get('/:id', getById);
 
 /**
  * @swagger
- * /:
+ * /tasks:
  *   post:
  *     summary: Create a new task
  *     description: Create a watering or maintenance task for a plant
@@ -104,7 +104,7 @@ router.post('/', validateBody(TasksCreateSchema), createOne);
 
 /**
  * @swagger
- * /{id}:
+ * /tasks/{id}:
  *   put:
  *     summary: Update a task
  *     description: Update task information (status, date, etc.)
@@ -152,7 +152,7 @@ router.put('/:id', validateBody(TasksCreateSchema), updateOne);
 
 /**
  * @swagger
- * /{id}:
+ * /tasks/{id}:
  *   delete:
  *     summary: Delete a task
  *     description: Delete a task from the system
