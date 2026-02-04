@@ -13,7 +13,7 @@ import { router as plantRouter } from './routes/plantRoutes';
 import { router as tasksRouter } from './routes/tasksRoutes';
 import { router as noteRouter } from './routes/noteRoutes';
 import { errorHandler } from './middlewares/errorHandler';
-import authMiddleware from './middlewares/auth';
+import authMiddleware from './middlewares/authMiddleware';
 
 const app = express();
 app.use(express.json());
