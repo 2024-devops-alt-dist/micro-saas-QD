@@ -21,4 +21,11 @@ export const config = {
   DATABASE_URL:
     process.env.DATABASE_URL ||
     `postgresql://${process.env.DB_USER || 'user'}:${process.env.DB_PASSWORD || 'password'}@${process.env.DB_HOST || 'localhost'}:${process.env.DB_PORT || '5432'}/${process.env.DB_NAME || 'database'}`,
+  JWT_ACCESS_SECRET: process.env.JWT_ACCESS_SECRET || 'dev_secret_access_key_change_in_production',
+  JWT_REFRESH_SECRET:
+    process.env.JWT_REFRESH_SECRET || 'dev_secret_refresh_key_change_in_production',
+  JWT_ACCESS_EXPIRES_IN: process.env.JWT_ACCESS_EXPIRES_IN || '15m',
+  JWT_REFRESH_EXPIRES_IN: process.env.JWT_REFRESH_EXPIRES_IN || '7d',
+  NODE_ENV: process.env.NODE_ENV || 'development',
+  LOG_LEVEL: process.env.LOG_LEVEL || 'info',
 };
