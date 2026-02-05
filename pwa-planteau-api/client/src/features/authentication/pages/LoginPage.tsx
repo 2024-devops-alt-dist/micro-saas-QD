@@ -23,7 +23,11 @@ export default function LoginPage() {
 
     try {
       setIsLoading(true);
-      await authService.login({ email, password });
+      const response = await authService.login({ email, password });
+      // Sauvegarder le firstname dans localStorage
+      if (response.user?.firstname) {
+        localStorage.setItem('user_firstname', response.user.firstname);
+      }
       // Redirect to home on success
       navigate('/', { replace: true });
     } catch (err) {

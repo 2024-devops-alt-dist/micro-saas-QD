@@ -21,6 +21,7 @@ interface AuthResponse {
     id: number;
     email: string;
     role: string;
+    firstname?: string;
   };
 }
 
@@ -60,9 +61,11 @@ export const authService = {
   /**
    * Get current authenticated user info
    */
-  async getCurrentUser(): Promise<{ user: { id: number; email: string; role: string } }> {
+  async getCurrentUser(): Promise<{
+    user: { id: number; email: string; firstname: string; role: string };
+  }> {
     const response = await httpClient.get('/auth/me');
-    return response as { user: { id: number; email: string; role: string } };
+    return response as { user: { id: number; email: string; firstname: string; role: string } };
   },
 
   /**

@@ -4,14 +4,36 @@ import { authService } from '../../authentication/service/authService';
 import '../css/Header.css';
 
 interface HeaderProps {
-  name: string;
   avatarSrc: string;
 }
 
-const Header: React.FC<HeaderProps> = ({ name, avatarSrc }) => {
+const Header: React.FC<HeaderProps> = ({ avatarSrc }) => {
   const [showPopup, setShowPopup] = useState(false);
+  const [userName, setUserName] = useState<string>('Utilisateur');
   const popupRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
+
+  // Charger le nom de l'utilisateur connecté
+  useEffect(() => {
+    const loadUserName = async () => {
+      try {
+        // Essayer d'abord récupérer du localStorage (sauvegardé au login)
+        const storedName = localStorage.getItem('user_firstname');
+        if (storedName) {
+          setUserName(storedName);
+          return;
+        }
+
+        // Fallback : appeler l'API si pas en localStorage
+        const response = await authService.getCurrentUser();
+        setUserName(response.user.firstname);
+        localStorage.setItem('user_firstname', response.user.firstname);
+      } catch (error) {
+        console.error('Failed to load user name:', error);
+      }
+    };
+    loadUserName();
+  }, []);
 
   useEffect(() => {
     if (!showPopup) return;
@@ -26,7 +48,7 @@ const Header: React.FC<HeaderProps> = ({ name, avatarSrc }) => {
 
   return (
     <div className="flex items-center justify-between mb-2 header-container">
-      <h2 className="header-title">Bonjour {name}</h2>
+      <h2 className="header-title">Bonjour {userName}</h2>
       <div className="header-avatar-wrapper">
         <img
           src={avatarSrc}
