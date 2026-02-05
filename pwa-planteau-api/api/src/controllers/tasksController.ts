@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import * as service from '../services/tasksService';
+import logger from '../middlewares/logger';
 
 export const getAll = async (_req: Request, res: Response) => {
   try {
@@ -18,8 +19,15 @@ export const getById = async (req: Request, res: Response) => {
 };
 
 export const createOne = async (req: Request, res: Response) => {
-  const created = await service.create(req.body);
-  res.status(201).json(created);
+  try {
+    logger.info(`Creating task with data:`, JSON.stringify(req.body));
+    const created = await service.create(req.body);
+    logger.info(`Task created:`, JSON.stringify(created));
+    res.status(201).json(created);
+  } catch (err: any) {
+    logger.error(`Error creating task: ${err.message}`);
+    res.status(500).json({ error: 'Failed to create task', details: err.message });
+  }
 };
 
 export const deleteOne = async (req: Request, res: Response) => {
