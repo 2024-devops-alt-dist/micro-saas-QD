@@ -1,4 +1,4 @@
-import { httpClient } from './httpClient';
+import { httpClient } from '../../../services/httpClient';
 
 const TOKEN_KEY = 'jwt_token';
 

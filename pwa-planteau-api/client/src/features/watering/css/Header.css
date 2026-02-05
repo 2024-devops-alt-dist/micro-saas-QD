@@ -11,4 +11,46 @@
   border-color: var(--color-primary);
 }
 
+.header-container {
+  position: relative;
+}
+
+.header-avatar-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.header-popup {
+  position: absolute;
+  top: 110%;
+  right: 0;
+  background: var(--color-secondary);
+  border: 0.1rem solid var(--color-primary);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-md);
+  padding: var(--space-sm) calc(var(--space-sm) + var(--space-sm));
+  z-index: var(--z-header);
+  min-width: 8.75rem; 
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.header-logout-btn {
+  color: var(--color-primary);
+  font-weight: 700;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: var(--text-sm);
+  letter-spacing: 0.03125rem;
+  padding: var(--space-xs) 0;
+  transition: color 0.2s;
+}
+.header-logout-btn:hover {
+  color: var(--color-tertiary);
+}
+
+
 
