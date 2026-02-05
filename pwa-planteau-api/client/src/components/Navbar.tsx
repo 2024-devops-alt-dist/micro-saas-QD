@@ -10,17 +10,16 @@ const icons = [
 
 export default function Navbar() {
   const location = useLocation();
-  // Détermine l'index de l'icône active selon la route (match exact ou logique spécifique)
+
   const selected = icons.findIndex(icon => {
-    // Pour la maison, sélectionne si on est exactement sur /
     if (icon.to === '/') {
       return location.pathname === '/';
     }
-    // Pour la cloche, sélectionne si on est exactement sur /test-connect
+
     if (icon.to === '/test-connect') {
       return location.pathname === '/test-connect';
     }
-    // Pour les autres, sélectionne si la route commence exactement par le chemin (évite le double highlight)
+
     return location.pathname === icon.to;
   });
   return (

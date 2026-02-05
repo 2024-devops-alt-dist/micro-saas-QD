@@ -92,16 +92,13 @@ export default function RegisterPage() {
   return (
     <div className="auth-page">
       <div className="auth-container">
+        <h1 className="auth-page-title">PLANT'EAU</h1>
         <div className="auth-card">
-          <div className="auth-header">
-            <h1 className="auth-title">PLANT'EAU</h1>
-          </div>
-
           <div className="auth-content">
             <div className="auth-form-section">
               <h2 className="auth-form-title">Créer un compte</h2>
               <p className="auth-form-subtitle">
-                Vous avez déjà un compte ?{' '}
+                Vous avez déjà un compte ?&nbsp;&nbsp;&nbsp;
                 <Link to="/login" className="auth-link">
                   Se connecter
                 </Link>
