@@ -16,6 +16,10 @@ type TaskResponse = {
   scheduled_date: string;
   status: string;
   plant_id: number;
+  plant?: {
+    id: number;
+    name: string;
+  };
 };
 
 const mockApi = {
@@ -41,28 +45,44 @@ const realApi = {
         .filter(task => task.type === 'WATERING')
         .map(task => ({
           id_watering: task.id,
-          plantName: `Plant ${task.plant_id}`,
+          plantName: task.plant?.name || `Plant ${task.plant_id}`,
           frequency: 'À déterminer',
-          nextWatering: new Date(task.scheduled_date).toLocaleDateString(),
+          nextWatering: task.scheduled_date.slice(0, 10),
         }));
     } catch (error) {
       console.error('Failed to fetch watering tasks:', error);
       throw error;
     }
   },
-  async create(watering: Omit<Watering, 'id_watering'>): Promise<Watering> {
+  async create(
+    watering: Omit<Watering, 'id_watering'>,
+    options?: {
+      startHour?: string;
+      endHour?: string;
+      note?: string;
+      thirst?: number;
+      plantId?: number;
+    }
+  ): Promise<Watering> {
     try {
+      // Combiner la date et l'heure de début
+      const dateOnly = watering.nextWatering; // Format: YYYY-MM-DD
+      const hour = options?.startHour || '00:00'; // Format: HH:mm
+      const [h, m] = hour.split(':');
+      // Format: YYYY-MM-DDTHH:mm:ss (sans millisecondes ni Z)
+      const scheduledDateString = `${dateOnly}T${h.padStart(2, '0')}:${m.padStart(2, '0')}:00`;
+
       const response = await httpClient.post<TaskResponse>('/tasks', {
         type: 'WATERING',
-        scheduled_date: new Date().toISOString(),
+        scheduled_date: scheduledDateString,
         status: 'TODO',
-        plant_id: 1, // À adapter selon le contexte
+        plant_id: options?.plantId || 1,
       });
       return {
         id_watering: response.id,
         plantName: watering.plantName,
         frequency: watering.frequency,
-        nextWatering: new Date(response.scheduled_date).toLocaleDateString(),
+        nextWatering: response.scheduled_date.slice(0, 10),
       };
     } catch (error) {
       console.error('Failed to create watering task:', error);
