@@ -1,6 +1,7 @@
 /**
  * HTTP Client for API communication
- * Centralized fetch wrapper with error handling
+ * Centralized fetch wrapper with error handling and automatic credential inclusion
+ * (for httpOnly cookie authentication)
  */
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000/api';
@@ -10,12 +11,21 @@ export interface ApiError extends Error {
   response?: unknown;
 }
 
+/**
+ * Common fetch options for all requests
+ * includes: 'credentials' enables sending httpOnly cookies with each request
+ */
+const commonOptions: RequestInit = {
+  credentials: 'include', // Include httpOnly cookies in requests
+};
+
 export const httpClient = {
   async get<T>(endpoint: string): Promise<T> {
     try {
       const response = await fetch(`${API_BASE_URL}${endpoint}`, {
         method: 'GET',
         headers: { 'Content-Type': 'application/json' },
+        ...commonOptions,
       });
 
       if (!response.ok) {
@@ -40,6 +50,7 @@ export const httpClient = {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data),
+        ...commonOptions,
       });
 
       if (!response.ok) {
@@ -64,6 +75,7 @@ export const httpClient = {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data),
+        ...commonOptions,
       });
 
       if (!response.ok) {
@@ -87,6 +99,7 @@ export const httpClient = {
       const response = await fetch(`${API_BASE_URL}${endpoint}`, {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json' },
+        ...commonOptions,
       });
 
       if (!response.ok) {
