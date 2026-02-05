@@ -3,6 +3,7 @@
 /* Override root padding and margin for auth pages */
 .auth-page #root,
 #root:has(.auth-page) {
+  max-width: 100%;
   padding: 0;
   margin: 0;
 }
@@ -260,13 +261,21 @@
 
 /* Desktop Responsive */
 @media (min-width: 1024px) {
+  body:has(.auth-page) {
+    background: linear-gradient(to bottom, var(--color-primary) 0%, var(--color-secondary) 100%);
+    overflow: auto;
+  }
+
   .auth-page {
-    padding: 40px;
-    min-height: calc(100vh - 72px);
+    padding: 120px 40px 40px 40px;
+    min-height: 100vh;
+    background: transparent;
   }
 
   .auth-container {
-    max-width: 450px;
+    width: 100%;
+    max-width: 800px;
+    margin-bottom: 80px;
   }
 
   .auth-page-title {
@@ -274,6 +283,7 @@
   }
 
   .auth-card {
+    background: var(--color-white);
     border-radius: 20px;
     box-shadow: 0 16px 48px rgba(0, 0, 0, 0.12);
   }
@@ -326,9 +336,3 @@
   }
 }
 
-/* Override root padding and margin for auth pages */
-.auth-page #root,
-#root:has(.auth-page) {
-  padding: 0;
-  margin: 0;
-}
