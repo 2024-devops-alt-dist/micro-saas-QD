@@ -1,0 +1,71 @@
+@import '../../../assets/css/variable.css';
+
+.week-tasks-section {
+  margin-top: 1.5rem;
+  text-align: left;
+}
+
+.week-tasks-title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  font-family: var(--font-h2);
+  color: var(--color-tertiary);
+  margin-bottom: 1rem;
+  
+}
+
+.week-tasks-day {
+  margin-bottom: 1rem;
+}
+
+.week-tasks-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.week-tasks-date {
+  font-size: 0.875rem;
+  font-weight: 600;
+  font-family: var(--font-p);
+  color: var(--color-tertiary);
+}
+
+.week-tasks-count {
+  font-size: 0.75rem;
+  background: var(--color-secondary);
+  color: var(--color-tertiary);
+  padding: 0.25rem 0.5rem;
+  border-radius: var(--radius-sm);
+  font-weight: 500;
+  font-family: var(--font-p);
+}
+
+.week-tasks-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.week-task-card {
+  padding: 0.75rem;
+  background: var(--color-secondary);
+  color: var(--color-tertiary);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-p);
+}
+
+.week-task-name {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--color-tertiary);
+  margin: 0;
+}
+
+.week-task-frequency {
+  font-size: 0.75rem;
+  color: var(--color-tertiary);
+  margin: 0.25rem 0 0 0;
+  opacity: 0.8;
+}
