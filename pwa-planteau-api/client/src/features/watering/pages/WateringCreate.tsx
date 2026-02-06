@@ -90,6 +90,7 @@ export default function WateringCreate() {
           frequency: categories.find(c => c.value === selectedCategory)?.label || selectedCategory,
           nextWatering: selectedDate,
           type: selectedCategory,
+          plantId: selectedPlantId,
         },
         {
           startHour,

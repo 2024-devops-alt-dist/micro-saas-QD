@@ -10,6 +10,7 @@ type Watering = {
   nextWatering: string;
   taskLabel?: string;
   type?: string;
+  plantId: number;
 };
 
 type TaskResponse = {
@@ -30,6 +31,7 @@ const mockApi = {
     return mockData.map(item => ({
       ...item,
       taskLabel: item.frequency || 'Arrosage',
+      plantId: item.plantId || 1,
     }));
   },
   async create(watering: Omit<Watering, 'id_watering'>): Promise<Watering> {
@@ -62,6 +64,7 @@ const realApi = {
       };
       return response.map(task => ({
         id_watering: task.id,
+        plantId: task.plant?.id || task.plant_id,
         plantName: task.plant?.name || `Plant ${task.plant_id}`,
         frequency: typeLabels[task.type] || task.type,
         nextWatering: task.scheduled_date,
@@ -104,6 +107,7 @@ const realApi = {
         nextWatering: response.scheduled_date.slice(0, 10),
         taskLabel: watering.frequency || 'Arrosage',
         type: options?.type || 'WATERING',
+        plantId: options?.plantId || 1,
       };
     } catch (error) {
       console.error('Failed to create watering task:', error);

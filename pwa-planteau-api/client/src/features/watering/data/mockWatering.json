@@ -3,48 +3,56 @@
     "id_watering": 101,
     "plantName": "Monstera",
     "frequency": "Tous les 3 jours",
-    "nextWatering": "2025-10-17"
+    "nextWatering": "2025-10-17",
+    "plantId": 1
   },
   {
     "id_watering": 102,
     "plantName": "Ficus",
     "frequency": "Tous les 5 jours",
-    "nextWatering": "2025-11-12"
+    "nextWatering": "2025-11-12",
+    "plantId": 2
   },
   {
     "id_watering": 103,
     "plantName": "Calathea",
     "frequency": "Tous les 4 jours",
-    "nextWatering": "2025-11-13"
+    "nextWatering": "2025-11-13",
+    "plantId": 3
   },
   {
     "id_watering": 104,
     "plantName": "Pothos",
     "frequency": "Tous les 7 jours",
-    "nextWatering": "2025-10-30"
+    "nextWatering": "2025-10-30",
+    "plantId": 4
   },
   {
     "id_watering": 105,
     "plantName": "Maranta",
     "frequency": "Tous les 4 jours",
-    "nextWatering": "2025-10-19"
+    "nextWatering": "2025-10-19",
+    "plantId": 5
   },
   {
     "id_watering": 106,
     "plantName": "Alocasia",
     "frequency": "Tous les 6 jours",
-    "nextWatering": "2025-10-21"
+    "nextWatering": "2025-10-21",
+    "plantId": 6
   },
   {
     "id_watering": 107,
     "plantName": "Lierre",
     "frequency": "Tous les 5 jours",
-    "nextWatering": "2025-10-20"
+    "nextWatering": "2025-10-20",
+    "plantId": 7
   },
   {
     "id_watering": 108,
     "plantName": "Palmier Areca",
     "frequency": "Tous les 3 jours",
-    "nextWatering": "2025-10-18"
+    "nextWatering": "2025-10-18",
+    "plantId": 8
   }
 ]

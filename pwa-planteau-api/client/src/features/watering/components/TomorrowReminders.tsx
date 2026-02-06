@@ -1,8 +1,10 @@
 import React from 'react';
 import '../css/TomorrowReminders.css';
+import { Link } from 'react-router-dom';
 
 interface WateringTask {
   id_watering: number;
+  plantId: number;
   plantName: string;
   frequency: string;
   nextWatering: string;
@@ -35,7 +37,11 @@ const TomorrowReminders: React.FC<TomorrowRemindersProps> = ({ tomorrowTasks }) 
           time = '';
         }
         return (
-          <div key={task.id_watering} className="task-cards-reminder p-4 flex items-center gap-2">
+          <Link
+            key={task.id_watering}
+            to={`/plants/${task.plantId}`}
+            className="task-cards-reminder p-4 flex items-center gap-2 task-cards-hover"
+          >
             <img src="/assets/icons/icon-calendrier.png" alt="Calendrier" width={50} height={50} />
             <div>
               <div className="font-semibold text-green-900 text-sm">
@@ -45,7 +51,7 @@ const TomorrowReminders: React.FC<TomorrowRemindersProps> = ({ tomorrowTasks }) 
                 <span>{time}</span>
               </div>
             </div>
-          </div>
+          </Link>
         );
       })}
     </div>

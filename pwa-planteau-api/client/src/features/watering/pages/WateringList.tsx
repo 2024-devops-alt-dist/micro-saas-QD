@@ -15,6 +15,7 @@ type Watering = {
   frequency: string;
   nextWatering: string;
   taskLabel?: string;
+  plantId: number;
 };
 
 const weekDays = ['Di', 'Lu', 'Ma', 'Me', 'Je', 'Ve', 'Sa'];
@@ -100,12 +101,14 @@ export default function WateringList() {
               todayTasks={todayTasks.map(task => ({
                 ...task,
                 taskLabel: task.taskLabel || task.frequency || 'Arrosage',
+                plantId: task.plantId,
               }))}
             />
             <TomorrowReminders
               tomorrowTasks={tomorrowTasks.map(task => ({
                 ...task,
                 taskLabel: task.taskLabel ?? task.frequency ?? 'Arrosage',
+                plantId: task.plantId,
               }))}
             />
             <WeekTasks
