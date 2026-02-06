@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
-import { plantService } from '../services/plantService';
 
 type Plant = {
   id: number;
@@ -12,58 +11,79 @@ type Plant = {
   room: string;
 };
 
-const PlantCard: React.FC = () => {
-  const [plants, setPlants] = useState<Plant[]>([]);
-  const [error, setError] = useState<string | null>(null);
+interface PlantCardProps {
+  plants: Plant[];
+}
 
-  useEffect(() => {
-    plantService
-      .getAll()
-      .then(data => {
-        setPlants(data);
-        setError(null);
-      })
-      .catch(err => {
-        console.error('Error fetching plants:', err);
-        setError('Failed to load plants');
-      });
-  }, []);
-
-  if (error) {
-    return <div className="p-4 text-red-500">{error}</div>;
+const PlantCard: React.FC<PlantCardProps> = ({ plants }) => {
+  // Ne garder que les plantes valides
+  const validPlants = plants.filter(Boolean);
+  if (!validPlants.length) {
+    return <div className="p-4">Aucune plante à afficher</div>;
+  }
+  // Handle 1 or 2 plants: display them in a nice flex row
+  if (validPlants.length === 1) {
+    return (
+      <div className="flex justify-center p-4">
+        <Link to={`/plants/${validPlants[0].id}`} className="w-3/4 h-80 block">
+          <img
+            src={validPlants[0].image}
+            alt={validPlants[0].name}
+            className="w-full h-full object-cover rounded-xl shadow-md hover:scale-105 transition-transform duration-300"
+          />
+        </Link>
+      </div>
+    );
+  }
+  if (validPlants.length === 2) {
+    return (
+      <div className="flex gap-4 justify-center p-4">
+        <Link to={`/plants/${validPlants[0].id}`} className="w-1/2 h-80 block">
+          <img
+            src={validPlants[0].image}
+            alt={validPlants[0].name}
+            className="w-full h-full object-cover rounded-xl shadow-md hover:scale-105 transition-transform duration-300"
+          />
+        </Link>
+        <Link to={`/plants/${validPlants[1].id}`} className="w-1/2 h-80 block">
+          <img
+            src={validPlants[1].image}
+            alt={validPlants[1].name}
+            className="w-full h-full object-cover rounded-xl shadow-md hover:scale-105 transition-transform duration-300"
+          />
+        </Link>
+      </div>
+    );
   }
 
-  if (plants.length === 0) {
-    return <div className="p-4">Loading plants...</div>;
-  }
-
+  // Default: 3+ plants, use original grid logic
   return (
     <div className="flex flex-col gap-6 p-4">
-      {plants.map((_, i) => {
+      {validPlants.map((_, i) => {
         // Ligne 1 : deux petites à gauche + une grande à droite (2 colonnes)
-        if (i % 3 === 0 && plants[i + 2]) {
+        if (i % 3 === 0 && validPlants[i + 2]) {
           return (
             <div key={`row-${i}`} className="flex gap-4 h-64">
               <div className="flex flex-col gap-4 flex-1">
-                <Link to={`/plants/${plants[i].id}`} className="w-full h-1/2 block">
+                <Link to={`/plants/${validPlants[i].id}`} className="w-full h-1/2 block">
                   <img
-                    src={plants[i].image}
-                    alt={plants[i].name}
+                    src={validPlants[i].image}
+                    alt={validPlants[i].name}
                     className="w-full h-full object-cover rounded-xl shadow-md hover:scale-105 transition-transform duration-300"
                   />
                 </Link>
-                <Link to={`/plants/${plants[i + 1].id}`} className="w-full h-1/2 block">
+                <Link to={`/plants/${validPlants[i + 1].id}`} className="w-full h-1/2 block">
                   <img
-                    src={plants[i + 1].image}
-                    alt={plants[i + 1].name}
+                    src={validPlants[i + 1].image}
+                    alt={validPlants[i + 1].name}
                     className="w-full h-full object-cover rounded-xl shadow-md hover:scale-105 transition-transform duration-300"
                   />
                 </Link>
               </div>
-              <Link to={`/plants/${plants[i + 2].id}`} className="w-1/2 h-full block">
+              <Link to={`/plants/${validPlants[i + 2].id}`} className="w-1/2 h-full block">
                 <img
-                  src={plants[i + 2].image}
-                  alt={plants[i + 2].name}
+                  src={validPlants[i + 2].image}
+                  alt={validPlants[i + 2].name}
                   className="w-full h-full object-cover rounded-xl shadow-md hover:scale-105 transition-transform duration-300"
                 />
               </Link>
@@ -72,20 +92,20 @@ const PlantCard: React.FC = () => {
         }
 
         // Ligne 2 : deux moyennes côte à côte (2 colonnes)
-        if (i % 3 === 1 && plants[i + 1]) {
+        if (i % 3 === 1 && validPlants[i + 1]) {
           return (
             <div key={`row-${i}`} className="flex gap-4 h-60">
-              <Link to={`/plants/${plants[i].id}`} className="w-1/2 h-full block">
+              <Link to={`/plants/${validPlants[i].id}`} className="w-1/2 h-full block">
                 <img
-                  src={plants[i].image}
-                  alt={plants[i].name}
+                  src={validPlants[i].image}
+                  alt={validPlants[i].name}
                   className="w-full h-full object-cover rounded-xl shadow-md hover:scale-105 transition-transform duration-300"
                 />
               </Link>
-              <Link to={`/plants/${plants[i + 1].id}`} className="w-1/2 h-full block">
+              <Link to={`/plants/${validPlants[i + 1].id}`} className="w-1/2 h-full block">
                 <img
-                  src={plants[i + 1].image}
-                  alt={plants[i + 1].name}
+                  src={validPlants[i + 1].image}
+                  alt={validPlants[i + 1].name}
                   className="w-full h-full object-cover rounded-xl shadow-md hover:scale-105 transition-transform duration-300"
                 />
               </Link>
@@ -97,10 +117,10 @@ const PlantCard: React.FC = () => {
         if (i % 3 === 2) {
           return (
             <div key={`row-${i}`} className="flex justify-center h-80">
-              <Link to={`/plants/${plants[i].id}`} className="w-3/4 h-full block">
+              <Link to={`/plants/${validPlants[i].id}`} className="w-3/4 h-full block">
                 <img
-                  src={plants[i].image}
-                  alt={plants[i].name}
+                  src={validPlants[i].image}
+                  alt={validPlants[i].name}
                   className="w-full h-full object-cover rounded-xl shadow-md hover:scale-105 transition-transform duration-300"
                 />
               </Link>
