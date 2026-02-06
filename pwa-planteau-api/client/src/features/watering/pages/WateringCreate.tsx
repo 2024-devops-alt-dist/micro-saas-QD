@@ -13,11 +13,11 @@ import { plantService } from '../../plant/services/plantService';
 import '../css/WateringCreate.css';
 
 const categories = [
-  { label: 'Engrais', color: 'bg-yellow-300', value: 'engrais' },
-  { label: 'Rempotage', color: 'bg-purple-300', value: 'rempotage' },
-  { label: 'Vaporiser', color: 'bg-pink-300', value: 'vaporiser' },
-  { label: 'Arrosage', color: 'bg-gray-200', value: 'arrosage' },
-  { label: 'Autre', color: 'bg-green-300', value: 'autre' },
+  { label: 'Engrais', color: 'bg-yellow-300', value: 'FERTILIZING' },
+  { label: 'Rempotage', color: 'bg-purple-300', value: 'REPOTTING' },
+  { label: 'Vaporiser', color: 'bg-pink-300', value: 'SPRAYING' },
+  { label: 'Arrosage', color: 'bg-gray-200', value: 'WATERING' },
+  { label: 'Autre', color: 'bg-green-300', value: 'AUTRE' },
 ];
 
 const getMonthDays = () => {
@@ -42,7 +42,7 @@ const getMonthDays = () => {
 export default function WateringCreate() {
   const days = getMonthDays();
   const [selectedDate, setSelectedDate] = useState(days[new Date().getDate() - 1].iso);
-  const [selectedCategory, setSelectedCategory] = useState('arrosage');
+  const [selectedCategory, setSelectedCategory] = useState('WATERING');
   const [selectedPlantId, setSelectedPlantId] = useState<number | null>(null);
   const [plants, setPlants] = useState<Array<{ id: number; name: string }>>([]);
   const [note, setNote] = useState('');
@@ -87,8 +87,9 @@ export default function WateringCreate() {
       await wateringService.create(
         {
           plantName: plants.find(p => p.id === selectedPlantId)?.name || 'Plante',
-          frequency: selectedCategory,
+          frequency: categories.find(c => c.value === selectedCategory)?.label || selectedCategory,
           nextWatering: selectedDate,
+          type: selectedCategory,
         },
         {
           startHour,
@@ -96,6 +97,7 @@ export default function WateringCreate() {
           note,
           thirst,
           plantId: selectedPlantId,
+          type: selectedCategory,
         }
       );
 

@@ -14,6 +14,7 @@ type Watering = {
   plantName: string;
   frequency: string;
   nextWatering: string;
+  taskLabel?: string;
 };
 
 const weekDays = ['Di', 'Lu', 'Ma', 'Me', 'Je', 'Ve', 'Sa'];
@@ -57,15 +58,17 @@ export default function WateringList() {
   }, [location.pathname]);
 
   // Sépare les tâches du jour et les rappels (tâches du lendemain)
-  const todayTasks = waterings.filter(w => w.nextWatering === todayIso);
+
+  // Parse nextWatering as datetime, filter by date part
+  const todayTasks = waterings.filter(w => w.nextWatering.slice(0, 10) === todayIso);
   const tomorrowIso = new Date(Date.now() + 86400000).toISOString().slice(0, 10);
-  const tomorrowTasks = waterings.filter(w => w.nextWatering === tomorrowIso);
+  const tomorrowTasks = waterings.filter(w => w.nextWatering.slice(0, 10) === tomorrowIso);
 
   // Groupe les tâches par date pour la semaine
   const upcomingTasks = waterings.reduce(
     (acc, task) => {
-      const taskDate = task.nextWatering;
-      // Inclure seulement les tâches de la semaine (du jour au jour + 6)
+      // Use only the date part for grouping
+      const taskDate = task.nextWatering.slice(0, 10);
       const weekDates = week.map(d => d.iso);
       if (!weekDates.includes(taskDate)) return acc;
 
@@ -93,8 +96,18 @@ export default function WateringList() {
         )}
         {waterings.length > 0 && (
           <>
-            <TodayTasks todayTasks={todayTasks} />
-            <TomorrowReminders tomorrowTasks={tomorrowTasks} />
+            <TodayTasks
+              todayTasks={todayTasks.map(task => ({
+                ...task,
+                taskLabel: task.taskLabel || task.frequency || 'Arrosage',
+              }))}
+            />
+            <TomorrowReminders
+              tomorrowTasks={tomorrowTasks.map(task => ({
+                ...task,
+                taskLabel: task.taskLabel ?? task.frequency ?? 'Arrosage',
+              }))}
+            />
             <WeekTasks
               upcomingTasks={upcomingTasks}
               todayIso={todayIso}

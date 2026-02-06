@@ -6,6 +6,7 @@ interface WateringTask {
   plantName: string;
   frequency: string;
   nextWatering: string;
+  taskLabel: string;
 }
 
 interface TodayTasksProps {
@@ -22,7 +23,9 @@ const TodayTasks: React.FC<TodayTasksProps> = ({ todayTasks }) => (
           key={task.id_watering}
           className="task-cards px-4 py-2 font-semibold shadow flex items-center"
         >
-          <span>{task.plantName ? `Arroser le ${task.plantName}` : 'Tâche'}</span>
+          <span>
+            {task.taskLabel} {task.plantName}
+          </span>
         </div>
       ))}
     </div>

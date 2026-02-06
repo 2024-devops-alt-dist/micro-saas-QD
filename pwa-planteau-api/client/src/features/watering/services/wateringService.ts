@@ -8,6 +8,8 @@ type Watering = {
   plantName: string;
   frequency: string;
   nextWatering: string;
+  taskLabel?: string;
+  type?: string;
 };
 
 type TaskResponse = {
@@ -25,11 +27,18 @@ type TaskResponse = {
 const mockApi = {
   async getAll(): Promise<Watering[]> {
     // Retourne une copie des données mockées
-    return [...mockData];
+    return mockData.map(item => ({
+      ...item,
+      taskLabel: item.frequency || 'Arrosage',
+    }));
   },
   async create(watering: Omit<Watering, 'id_watering'>): Promise<Watering> {
     // Simule la création d'un arrosage (id généré)
-    return { id_watering: Date.now(), ...watering };
+    return {
+      id_watering: Date.now(),
+      ...watering,
+      taskLabel: watering.frequency || 'Arrosage',
+    };
   },
   async delete(_id: number): Promise<{ success: boolean }> {
     // Simule la suppression
@@ -41,14 +50,23 @@ const realApi = {
   async getAll(): Promise<Watering[]> {
     try {
       const response = await httpClient.get<TaskResponse[]>('/tasks');
-      return response
-        .filter(task => task.type === 'WATERING')
-        .map(task => ({
-          id_watering: task.id,
-          plantName: task.plant?.name || `Plant ${task.plant_id}`,
-          frequency: 'À déterminer',
-          nextWatering: task.scheduled_date.slice(0, 10),
-        }));
+      // Map type to readable label
+      const typeLabels: Record<string, string> = {
+        WATERING: 'Arrosage',
+        REPOTTING: 'Rempotage',
+        PRUNING: 'Taille',
+        SPRAYING: 'Vaporiser',
+        CLEAN_LEAVES: 'Nettoyer les feuilles',
+        FERTILIZING: 'Engrais',
+        DEADHEADING: 'Supprimer fleurs fanées',
+      };
+      return response.map(task => ({
+        id_watering: task.id,
+        plantName: task.plant?.name || `Plant ${task.plant_id}`,
+        frequency: typeLabels[task.type] || task.type,
+        nextWatering: task.scheduled_date,
+        taskLabel: typeLabels[task.type] || task.type,
+      }));
     } catch (error) {
       console.error('Failed to fetch watering tasks:', error);
       throw error;
@@ -62,6 +80,7 @@ const realApi = {
       note?: string;
       thirst?: number;
       plantId?: number;
+      type?: string;
     }
   ): Promise<Watering> {
     try {
@@ -73,7 +92,7 @@ const realApi = {
       const scheduledDateString = `${dateOnly}T${h.padStart(2, '0')}:${m.padStart(2, '0')}:00`;
 
       const response = await httpClient.post<TaskResponse>('/tasks', {
-        type: 'WATERING',
+        type: options?.type || 'WATERING',
         scheduled_date: scheduledDateString,
         status: 'TODO',
         plant_id: options?.plantId || 1,
@@ -83,6 +102,8 @@ const realApi = {
         plantName: watering.plantName,
         frequency: watering.frequency,
         nextWatering: response.scheduled_date.slice(0, 10),
+        taskLabel: watering.frequency || 'Arrosage',
+        type: options?.type || 'WATERING',
       };
     } catch (error) {
       console.error('Failed to create watering task:', error);
