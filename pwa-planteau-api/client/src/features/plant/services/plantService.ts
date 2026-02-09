@@ -13,6 +13,15 @@ type Plant = {
   room: string;
 };
 
+const getFullImageUrl = (photo: string | null | undefined): string => {
+  const API_BASE_URL = 'http://localhost:3000';
+  if (!photo) return '/placeholder.jpg';
+  if (photo.startsWith('http')) return photo;
+  if (photo.startsWith('/assets/')) return photo; // Sert par le client (Vite)
+  if (photo.startsWith('/uploads/')) return `${API_BASE_URL}${photo}`;
+  return photo;
+};
+
 const mockApi = {
   async getAll(): Promise<Plant[]> {
     // Retourne une copie des données mockées
@@ -37,7 +46,7 @@ const realApi = {
         name: plant.name,
         scientificName: plant.scientific_name,
         type: plant.type,
-        image: plant.photo,
+        image: getFullImageUrl(plant.photo),
         waterNeed: plant.water_need,
         room: plant.room,
       }));
@@ -61,7 +70,7 @@ const realApi = {
         name: response.name,
         scientificName: response.scientific_name,
         type: response.type,
-        image: response.photo,
+        image: getFullImageUrl(response.photo),
         waterNeed: response.water_need,
         room: response.room,
       };
