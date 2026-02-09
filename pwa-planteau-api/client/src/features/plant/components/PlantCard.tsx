@@ -59,9 +59,10 @@ const PlantCard: React.FC<PlantCardProps> = ({ plants }) => {
   // Default: 3+ plants, use original grid logic
   return (
     <div className="flex flex-col gap-6 p-4">
-      {validPlants.map((_, i) => {
+      {Array.from({ length: Math.ceil(validPlants.length / 3) }).map((_, groupIndex) => {
+        const i = groupIndex * 3;
         // Ligne 1 : deux petites à gauche + une grande à droite (2 colonnes)
-        if (i % 3 === 0 && validPlants[i + 2]) {
+        if (validPlants[i + 2]) {
           return (
             <div key={`row-${i}`} className="flex gap-4 h-64">
               <div className="flex flex-col gap-4 flex-1">
@@ -92,7 +93,7 @@ const PlantCard: React.FC<PlantCardProps> = ({ plants }) => {
         }
 
         // Ligne 2 : deux moyennes côte à côte (2 colonnes)
-        if (i % 3 === 1 && validPlants[i + 1]) {
+        if (validPlants[i + 1]) {
           return (
             <div key={`row-${i}`} className="flex gap-4 h-60">
               <Link to={`/plants/${validPlants[i].id}`} className="w-1/2 h-full block">
@@ -114,21 +115,17 @@ const PlantCard: React.FC<PlantCardProps> = ({ plants }) => {
         }
 
         // Ligne 3 : une seule grande centrée (sur 2 colonnes)
-        if (i % 3 === 2) {
-          return (
-            <div key={`row-${i}`} className="flex justify-center h-80">
-              <Link to={`/plants/${validPlants[i].id}`} className="w-3/4 h-full block">
-                <img
-                  src={validPlants[i].image}
-                  alt={validPlants[i].name}
-                  className="w-full h-full object-cover rounded-xl shadow-md hover:scale-105 transition-transform duration-300"
-                />
-              </Link>
-            </div>
-          );
-        }
-
-        return null;
+        return (
+          <div key={`row-${i}`} className="flex justify-center h-80">
+            <Link to={`/plants/${validPlants[i].id}`} className="w-3/4 h-full block">
+              <img
+                src={validPlants[i].image}
+                alt={validPlants[i].name}
+                className="w-full h-full object-cover rounded-xl shadow-md hover:scale-105 transition-transform duration-300"
+              />
+            </Link>
+          </div>
+        );
       })}
     </div>
   );
