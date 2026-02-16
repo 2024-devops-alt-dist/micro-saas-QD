@@ -193,3 +193,10 @@
 }
 
 /* Desktop layout is now harmonized via .navbar-layout and .page-centered (see layout.css) */
+
+/* Mobile */
+@media (max-width: 768px) {
+  .plant-detail-action-delete {
+    margin-bottom: 3rem;
+  }
+}
