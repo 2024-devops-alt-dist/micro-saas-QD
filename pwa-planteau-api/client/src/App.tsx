@@ -8,6 +8,7 @@ import TestConnectPage from './pages/TestConnectPage';
 import LoginPage from './features/authentication/pages/LoginPage';
 import RegisterPage from './features/authentication/pages/RegisterPage';
 import { ProtectedRoute } from './features/authentication/components/ProtectedRoute';
+import AddPlant from './features/plant/pages/AddPlant';
 
 function App() {
   return (
@@ -47,6 +48,14 @@ function App() {
           element={
             <ProtectedRoute>
               <PlantDetail />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/add-plant"
+          element={
+            <ProtectedRoute>
+              <AddPlant />
             </ProtectedRoute>
           }
         />

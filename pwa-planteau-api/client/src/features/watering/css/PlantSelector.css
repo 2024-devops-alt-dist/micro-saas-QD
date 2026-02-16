@@ -1,0 +1,60 @@
+@import '../../../assets/css/variable.css';
+
+.plant-selector-block {
+  margin-bottom: 1.5rem;
+}
+
+.plant-selector-label {
+  color: var(--color-tertiary);
+  font-size: var(--text-lg);
+  font-weight: 600;
+  display: block;
+  font-family: var(--font-p);
+  text-align: left;
+  margin-bottom: 0.75rem;
+}
+
+.plant-selector-card {
+  background: var(--color-gray-100);
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  padding: 1rem 2rem;
+  box-shadow: 0 2px 8px rgba(60, 60, 60, 0.06);
+  position: relative;
+}
+
+.plant-selector-dropdown {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  opacity: 0;
+  cursor: pointer;
+  appearance: none;
+  width: 100%;
+  height: 100%;
+  border: none;
+  background: transparent;
+}
+
+.plant-selector-display {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  pointer-events: none;
+}
+
+.plant-selector-value {
+  color: var(--color-tertiary);
+  font-size: var(--text-lg);
+  font-weight: 600;
+  font-family: var(--font-p);
+}
+
+.plant-selector-placeholder {
+  color: var(--color-gray-400);
+  font-size: var(--text-lg);
+  font-family: var(--font-p);
+}

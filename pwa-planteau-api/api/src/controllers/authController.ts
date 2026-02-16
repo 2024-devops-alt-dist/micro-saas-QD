@@ -97,7 +97,7 @@ export const authController = {
         .json({
           status: 200,
           message: 'Authenticated',
-          user: { id: user.id, email: user.email, role: user.role },
+          user: { id: user.id, email: user.email, role: user.role, firstname: user.firstname },
         });
 
       logger.info(`Login réussi : ${email}`);

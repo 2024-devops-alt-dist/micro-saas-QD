@@ -14,8 +14,13 @@ import { router as tasksRouter } from './routes/tasksRoutes';
 import { router as noteRouter } from './routes/noteRoutes';
 import { errorHandler } from './middlewares/errorHandler';
 import authMiddleware from './middlewares/authMiddleware';
+import { router as uploadRouter } from './routes/uploadRoutes';
 
 const app = express();
+// Expose public/uploads for uploaded files
+app.use('/uploads', express.static('public/uploads'));
+// Optionally keep assets if needed
+app.use('/assets', express.static('public/assets'));
 app.use(express.json());
 app.use(cookieParser());
 
@@ -52,6 +57,7 @@ app.use(`${API_BASE}/users`, authMiddleware, userRouter);
 app.use(`${API_BASE}/plants`, authMiddleware, plantRouter);
 app.use(`${API_BASE}/tasks`, authMiddleware, tasksRouter);
 app.use(`${API_BASE}/notes`, authMiddleware, noteRouter);
+app.use(`${API_BASE}/upload`, authMiddleware, uploadRouter);
 
 app.use(errorHandler);
 

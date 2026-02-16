@@ -8,6 +8,9 @@ type Watering = {
   plantName: string;
   frequency: string;
   nextWatering: string;
+  taskLabel?: string;
+  type?: string;
+  plantId: number;
 };
 
 type TaskResponse = {
@@ -16,16 +19,28 @@ type TaskResponse = {
   scheduled_date: string;
   status: string;
   plant_id: number;
+  plant?: {
+    id: number;
+    name: string;
+  };
 };
 
 const mockApi = {
   async getAll(): Promise<Watering[]> {
     // Retourne une copie des données mockées
-    return [...mockData];
+    return mockData.map(item => ({
+      ...item,
+      taskLabel: item.frequency || 'Arrosage',
+      plantId: item.plantId || 1,
+    }));
   },
   async create(watering: Omit<Watering, 'id_watering'>): Promise<Watering> {
     // Simule la création d'un arrosage (id généré)
-    return { id_watering: Date.now(), ...watering };
+    return {
+      id_watering: Date.now(),
+      ...watering,
+      taskLabel: watering.frequency || 'Arrosage',
+    };
   },
   async delete(_id: number): Promise<{ success: boolean }> {
     // Simule la suppression
@@ -37,32 +52,62 @@ const realApi = {
   async getAll(): Promise<Watering[]> {
     try {
       const response = await httpClient.get<TaskResponse[]>('/tasks');
-      return response
-        .filter(task => task.type === 'WATERING')
-        .map(task => ({
-          id_watering: task.id,
-          plantName: `Plant ${task.plant_id}`,
-          frequency: 'À déterminer',
-          nextWatering: new Date(task.scheduled_date).toLocaleDateString(),
-        }));
+      // Map type to readable label
+      const typeLabels: Record<string, string> = {
+        WATERING: 'Arrosage',
+        REPOTTING: 'Rempotage',
+        PRUNING: 'Taille',
+        SPRAYING: 'Vaporiser',
+        CLEAN_LEAVES: 'Nettoyer les feuilles',
+        FERTILIZING: 'Engrais',
+        DEADHEADING: 'Supprimer fleurs fanées',
+      };
+      return response.map(task => ({
+        id_watering: task.id,
+        plantId: task.plant?.id || task.plant_id,
+        plantName: task.plant?.name || `Plant ${task.plant_id}`,
+        frequency: typeLabels[task.type] || task.type,
+        nextWatering: task.scheduled_date,
+        taskLabel: typeLabels[task.type] || task.type,
+      }));
     } catch (error) {
       console.error('Failed to fetch watering tasks:', error);
       throw error;
     }
   },
-  async create(watering: Omit<Watering, 'id_watering'>): Promise<Watering> {
+  async create(
+    watering: Omit<Watering, 'id_watering'>,
+    options?: {
+      startHour?: string;
+      endHour?: string;
+      note?: string;
+      thirst?: number;
+      plantId?: number;
+      type?: string;
+    }
+  ): Promise<Watering> {
     try {
+      // Combiner la date et l'heure de début
+      const dateOnly = watering.nextWatering; // Format: YYYY-MM-DD
+      const hour = options?.startHour || '00:00'; // Format: HH:mm
+      const [h, m] = hour.split(':');
+      // Format: YYYY-MM-DDTHH:mm:ss (sans millisecondes ni Z)
+      const scheduledDateString = `${dateOnly}T${h.padStart(2, '0')}:${m.padStart(2, '0')}:00`;
+
       const response = await httpClient.post<TaskResponse>('/tasks', {
-        type: 'WATERING',
-        scheduled_date: new Date().toISOString(),
+        type: options?.type || 'WATERING',
+        scheduled_date: scheduledDateString,
         status: 'TODO',
-        plant_id: 1, // À adapter selon le contexte
+        plant_id: options?.plantId || 1,
       });
       return {
         id_watering: response.id,
         plantName: watering.plantName,
         frequency: watering.frequency,
-        nextWatering: new Date(response.scheduled_date).toLocaleDateString(),
+        nextWatering: response.scheduled_date.slice(0, 10),
+        taskLabel: watering.frequency || 'Arrosage',
+        type: options?.type || 'WATERING',
+        plantId: options?.plantId || 1,
       };
     } catch (error) {
       console.error('Failed to create watering task:', error);

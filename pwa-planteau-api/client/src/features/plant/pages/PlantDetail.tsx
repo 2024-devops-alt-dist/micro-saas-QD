@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import { plantService } from '../services/plantService';
 import Navbar from '../../../components/Navbar';
 import '../css/PlantDetail.css';
@@ -17,6 +17,7 @@ type Plant = {
 const PlantDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const [plant, setPlant] = useState<Plant | null>(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     plantService.getAll().then(plants => {
@@ -32,9 +33,9 @@ const PlantDetail: React.FC = () => {
       <Navbar />
       <div className="page-centered flex-1 flex flex-col">
         <div className="plant-detail-container">
-          <Link to="/plants" className="plant-detail-back">
+          <button onClick={() => navigate(-1)} className="plant-detail-back">
             &#8592;
-          </Link>
+          </button>
           <div className="plant-detail-title">Ma Plante</div>
           <div className="plant-detail-card">
             <img src={plant.image} alt={plant.name} className="plant-detail-img" />

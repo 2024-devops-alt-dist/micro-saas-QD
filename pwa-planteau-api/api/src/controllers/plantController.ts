@@ -1,9 +1,27 @@
 import { Request, Response } from 'express';
 import * as service from '../services/plantService';
+import prisma from '../prisma';
 
-export const getAll = async (_req: Request, res: Response) => {
+export const getAll = async (req: Request, res: Response) => {
   try {
-    const items = await service.findAll();
+    // Récupère l'utilisateur authentifié depuis la requête (ajouté par authMiddleware)
+    const user = (req as any).user;
+    if (!user || !user.id) {
+      return res.status(401).json({ error: 'Unauthorized' });
+    }
+
+    // Récupère l'utilisateur pour obtenir son household_id
+    const userRecord = await prisma.user.findUnique({
+      where: { id: Number(user.id) },
+    });
+    if (!userRecord) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    // Récupère uniquement les plantes du household de l'utilisateur
+    const items = await prisma.plant.findMany({
+      where: { household_id: userRecord.household_id },
+    });
     res.json(items);
   } catch (err: any) {
     res.status(500).json({ error: 'Failed to fetch plants', details: err.message });

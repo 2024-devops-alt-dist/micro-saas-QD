@@ -16,3 +16,11 @@
 	border-radius: var(--radius-sm);
 	font-family: var(--font-p);
 }
+
+.task-cards-hover:hover {
+  box-shadow: 0 4px 16px rgba(122,156,58,0.16);
+  transform: scale(1.03);
+  cursor: pointer;
+  background: var(--color-primary-hover, #a6c94a);
+  color: var(--color-white);
+}

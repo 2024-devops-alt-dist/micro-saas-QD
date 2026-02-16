@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { wateringService } from '../services/wateringService';
 import Header from '../components/Header';
 import WeekCarousel from '../components/WeekCarousel';
 import TodayTasks from '../components/TodayTasks';
 import TomorrowReminders from '../components/TomorrowReminders';
+import WeekTasks from '../components/WeekTasks';
 import Navbar from '../../../components/Navbar';
 import '../css/WateringList.css';
 
@@ -13,6 +14,8 @@ type Watering = {
   plantName: string;
   frequency: string;
   nextWatering: string;
+  taskLabel?: string;
+  plantId: number;
 };
 
 const weekDays = ['Di', 'Lu', 'Ma', 'Me', 'Je', 'Ve', 'Sa'];
@@ -38,24 +41,46 @@ export default function WateringList() {
   const [error, setError] = useState<string | null>(null);
   const week = getWeekDates();
   const todayIso = new Date().toISOString().slice(0, 10);
+  const location = useLocation();
+
+  const fetchWaterings = async () => {
+    try {
+      const data = await wateringService.getAll();
+      setWaterings(data);
+      setError(null);
+    } catch (err) {
+      console.error('Failed to fetch watering tasks:', err);
+      setError('Failed to load watering tasks');
+    }
+  };
 
   useEffect(() => {
-    wateringService
-      .getAll()
-      .then(data => {
-        setWaterings(data);
-        setError(null);
-      })
-      .catch(err => {
-        console.error('Failed to fetch watering tasks:', err);
-        setError('Failed to load watering tasks');
-      });
-  }, []);
+    fetchWaterings();
+  }, [location.pathname]);
 
   // Sépare les tâches du jour et les rappels (tâches du lendemain)
-  const todayTasks = waterings.filter(w => w.nextWatering === todayIso);
+
+  // Parse nextWatering as datetime, filter by date part
+  const todayTasks = waterings.filter(w => w.nextWatering.slice(0, 10) === todayIso);
   const tomorrowIso = new Date(Date.now() + 86400000).toISOString().slice(0, 10);
-  const tomorrowTasks = waterings.filter(w => w.nextWatering === tomorrowIso);
+  const tomorrowTasks = waterings.filter(w => w.nextWatering.slice(0, 10) === tomorrowIso);
+
+  // Groupe les tâches par date pour la semaine
+  const upcomingTasks = waterings.reduce(
+    (acc, task) => {
+      // Use only the date part for grouping
+      const taskDate = task.nextWatering.slice(0, 10);
+      const weekDates = week.map(d => d.iso);
+      if (!weekDates.includes(taskDate)) return acc;
+
+      if (!acc[taskDate]) {
+        acc[taskDate] = [];
+      }
+      acc[taskDate].push(task);
+      return acc;
+    },
+    {} as Record<string, typeof waterings>
+  );
 
   return (
     <div className="navbar-layout">
@@ -64,7 +89,7 @@ export default function WateringList() {
         className="page-centered p-2 flex-1 flex flex-col overflow-y-auto bg-gray-50"
         style={{ height: '90vh', maxHeight: '90vh' }}
       >
-        <Header name="Quentin" avatarSrc="/assets/images/avatar-homme.webp" />
+        <Header avatarSrc="/assets/images/avatar-homme.webp" />
         <WeekCarousel week={week} />
         {error && <div className="text-red-500 p-4">{error}</div>}
         {waterings.length === 0 && !error && (
@@ -72,8 +97,26 @@ export default function WateringList() {
         )}
         {waterings.length > 0 && (
           <>
-            <TodayTasks todayTasks={todayTasks} />
-            <TomorrowReminders tomorrowTasks={tomorrowTasks} />
+            <TodayTasks
+              todayTasks={todayTasks.map(task => ({
+                ...task,
+                taskLabel: task.taskLabel || task.frequency || 'Arrosage',
+                plantId: task.plantId,
+              }))}
+            />
+            <TomorrowReminders
+              tomorrowTasks={tomorrowTasks.map(task => ({
+                ...task,
+                taskLabel: task.taskLabel ?? task.frequency ?? 'Arrosage',
+                plantId: task.plantId,
+              }))}
+            />
+            <WeekTasks
+              upcomingTasks={upcomingTasks}
+              todayIso={todayIso}
+              tomorrowIso={tomorrowIso}
+              weekDays={weekDays}
+            />
           </>
         )}
         <div className="flex justify-end mt-8">
