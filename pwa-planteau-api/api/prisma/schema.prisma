@@ -91,7 +91,7 @@ model Tasks {
   update_at     DateTime @updatedAt
   status        TaskStatus
   plant_id      Int
-  plant         Plant    @relation(fields: [plant_id], references: [id])
+  plant         Plant    @relation(fields: [plant_id], references: [id], onDelete: Cascade)
   notes         Note[]
 }
 
@@ -102,9 +102,9 @@ model Note {
   user_id       Int
   user          User     @relation(fields: [user_id], references: [id])
   plant_id      Int?
-  plant         Plant?   @relation(fields: [plant_id], references: [id])
+  plant         Plant?   @relation(fields: [plant_id], references: [id], onDelete: Cascade)
   task_id       Int?
-  task          Tasks?   @relation(fields: [task_id], references: [id])
+  task          Tasks?   @relation(fields: [task_id], references: [id], onDelete: Cascade)
 }
 
 

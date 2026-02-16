@@ -41,9 +41,14 @@ export const createOne = async (req: Request, res: Response) => {
 };
 
 export const deleteOne = async (req: Request, res: Response) => {
-  const id = Number(req.params.id);
-  await service.remove(id);
-  res.status(204).send();
+  try {
+    const id = Number(req.params.id);
+    await service.remove(id);
+    res.status(204).send();
+  } catch (err: any) {
+    console.error('Error deleting plant:', err);
+    res.status(500).json({ error: 'Failed to delete plant', details: err.message });
+  }
 };
 
 export const updateOne = async (req: Request, res: Response) => {

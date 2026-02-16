@@ -98,7 +98,18 @@ async function executeRequest<T>(
       throw error;
     }
 
-    return await response.json();
+    // Handle empty response bodies (e.g., 204 No Content or DELETE responses)
+    const contentType = response.headers.get('content-type');
+    if (!contentType || !contentType.includes('application/json')) {
+      return {} as T;
+    }
+
+    const text = await response.text();
+    if (!text) {
+      return {} as T;
+    }
+
+    return JSON.parse(text);
   } catch (error) {
     if (error instanceof Error) {
       throw error;

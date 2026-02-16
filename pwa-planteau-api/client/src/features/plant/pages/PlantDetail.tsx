@@ -17,6 +17,7 @@ type Plant = {
 const PlantDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const [plant, setPlant] = useState<Plant | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -25,6 +26,26 @@ const PlantDetail: React.FC = () => {
       setPlant(found || null);
     });
   }, [id]);
+
+  const handleDelete = async () => {
+    if (!plant) return;
+
+    const confirmed = window.confirm(
+      `Êtes-vous sûr(e) de vouloir supprimer "${plant.name}" ? Cette action est irréversible.`
+    );
+
+    if (!confirmed) return;
+
+    try {
+      setIsDeleting(true);
+      await plantService.delete(plant.id);
+      navigate('/plants');
+    } catch (error) {
+      alert('Erreur lors de la suppression de la plante');
+      console.error('Erreur suppression:', error);
+      setIsDeleting(false);
+    }
+  };
 
   if (!plant) return <div className="p-4">Plante introuvable.</div>;
 
@@ -69,6 +90,13 @@ const PlantDetail: React.FC = () => {
           <Link to="/watering/create" className="plant-detail-action">
             Planifier une tâche
           </Link>
+          <button
+            onClick={handleDelete}
+            disabled={isDeleting}
+            className="plant-detail-action-delete"
+          >
+            {isDeleting ? 'Suppression...' : 'Supprimer la plante'}
+          </button>
         </div>
       </div>
     </div>
