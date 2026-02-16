@@ -3,6 +3,7 @@ import { authService } from '../../authentication/service/authService';
 import Upload from '../../upload/Upload';
 import Navbar from '../../../components/Navbar';
 import '../css/AddPlant.css';
+import { useNavigate } from 'react-router-dom';
 
 const initialState = {
   name: '',
@@ -18,6 +19,7 @@ const AddPlant: React.FC = () => {
   const [form, setForm] = useState(initialState);
   const [file, setFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | undefined>(undefined);
+  const navigate = useNavigate();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -88,9 +90,23 @@ const AddPlant: React.FC = () => {
   return (
     <div className="navbar-layout">
       <Navbar />
-      <div className="page-centered flex-1 flex flex-col">
+      <div
+        className="page-centered p-2 flex-1 flex flex-col overflow-y-auto"
+        style={{ height: '90vh', maxHeight: '90vh' }}
+      >
+        {/* Header */}
+        <div className="flex items-center justify-between mb-2">
+          <div />
+          <span className="add-plant-header text-xl text-center flex-1">Ajouter une plante</span>
+          <button
+            className="text-gray-400 text-2xl font-bold"
+            type="button"
+            onClick={() => navigate(-1)}
+          >
+            &times;
+          </button>
+        </div>
         <form className="add-plant-form" onSubmit={handleSubmit}>
-          <h2>Ajouter une plante</h2>
           <label>
             Nom commun
             <input name="name" value={form.name} onChange={handleChange} required />
