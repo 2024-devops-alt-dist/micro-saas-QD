@@ -18,7 +18,7 @@ interface TomorrowRemindersProps {
 const TomorrowReminders: React.FC<TomorrowRemindersProps> = ({ tomorrowTasks }) => (
   <div className="mt-6">
     <div className="subtitle mb-2 text-left text-lg">Rappel</div>
-    <div className="text-info mb-2 text-left">N'oubliez pas vos tâches de demain</div>
+    <div className="text-info mb-2 text-left">N'oubliez pas vos tâches du lendemain</div>
     <div className="flex flex-col gap-3">
       {tomorrowTasks.length === 0 && (
         <div className="task-cards p-4 text-gray-400 text-sm">Aucun rappel</div>
