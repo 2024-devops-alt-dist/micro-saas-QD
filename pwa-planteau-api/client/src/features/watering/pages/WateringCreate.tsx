@@ -20,12 +20,9 @@ const categories = [
   { label: 'Autre', color: 'bg-green-300', value: 'AUTRE' },
 ];
 
-const getMonthDays = () => {
+const getMonthDays = (year: number, month: number) => {
   const days = [];
   const weekDays = ['Di', 'Lu', 'Ma', 'Me', 'Je', 'Ve', 'Sa'];
-  const now = new Date();
-  const year = now.getFullYear();
-  const month = now.getMonth();
   const lastDay = new Date(year, month + 1, 0).getDate();
   for (let i = 1; i <= lastDay; i++) {
     const date = new Date(year, month, i);
@@ -40,8 +37,13 @@ const getMonthDays = () => {
 };
 
 export default function WateringCreate() {
-  const days = getMonthDays();
-  const [selectedDate, setSelectedDate] = useState(days[new Date().getDate() - 1].iso);
+  const now = new Date();
+  const [currentMonth, setCurrentMonth] = useState(now.getMonth());
+  const [currentYear, setCurrentYear] = useState(now.getFullYear());
+  const days = getMonthDays(currentYear, currentMonth);
+  const [selectedDate, setSelectedDate] = useState(
+    days[new Date().getDate() - 1]?.iso || days[0]?.iso || ''
+  );
   const [selectedCategory, setSelectedCategory] = useState('WATERING');
   const [selectedPlantId, setSelectedPlantId] = useState<number | null>(null);
   const [plants, setPlants] = useState<Array<{ id: number; name: string }>>([]);
@@ -53,6 +55,24 @@ export default function WateringCreate() {
   const [error, setError] = useState<string | null>(null);
   const hours = Array.from({ length: 24 }, (_, i) => `${i.toString().padStart(2, '0')}:00`);
   const navigate = useNavigate();
+
+  const handlePrevMonth = () => {
+    if (currentMonth === 0) {
+      setCurrentMonth(11);
+      setCurrentYear(currentYear - 1);
+    } else {
+      setCurrentMonth(currentMonth - 1);
+    }
+  };
+
+  const handleNextMonth = () => {
+    if (currentMonth === 11) {
+      setCurrentMonth(0);
+      setCurrentYear(currentYear + 1);
+    } else {
+      setCurrentMonth(currentMonth + 1);
+    }
+  };
 
   // Charger les plantes au montage
   useEffect(() => {
@@ -155,6 +175,10 @@ export default function WateringCreate() {
               days={days}
               selectedDate={selectedDate}
               setSelectedDate={setSelectedDate}
+              currentMonth={currentMonth}
+              currentYear={currentYear}
+              onNextMonth={handleNextMonth}
+              onPrevMonth={handlePrevMonth}
             />
           </div>
 
