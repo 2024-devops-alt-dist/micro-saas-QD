@@ -1,10 +1,21 @@
 import { Request, Response } from 'express';
 import * as service from '../services/tasksService';
+import prisma from '../prisma';
 import logger from '../middlewares/logger';
 
-export const getAll = async (_req: Request, res: Response) => {
+export const getAll = async (req: Request, res: Response) => {
   try {
-    const items = await service.findAll();
+    // On suppose que req.user est bien rempli par le middleware d'auth
+    const user = (req as any).user;
+    if (!user) {
+      return res.status(401).json({ error: 'Non authentifié' });
+    }
+    // On récupère le household_id de l'utilisateur
+    const dbUser = await prisma.user.findUnique({ where: { id: Number(user.id) } });
+    if (!dbUser) {
+      return res.status(401).json({ error: 'Utilisateur inconnu' });
+    }
+    const items = await service.findAllByHousehold(dbUser.household_id);
     res.json(items);
   } catch (err: any) {
     res.status(500).json({ error: 'Failed to fetch tasks', details: err.message });

@@ -1,7 +1,12 @@
 import prisma from '../prisma';
 
-export const findAll = async () =>
+export const findAllByHousehold = async (householdId: number) =>
   prisma.tasks.findMany({
+    where: {
+      plant: {
+        household_id: householdId,
+      },
+    },
     include: {
       plant: {
         select: {

@@ -93,7 +93,13 @@ export default function WateringList() {
         <WeekCarousel week={week} />
         {error && <div className="text-red-500 p-4">{error}</div>}
         {waterings.length === 0 && !error && (
-          <div className="text-gray-500 p-4">Loading watering tasks...</div>
+          <div className="text-center text-lg my-8 watering-empty-message">
+            Commence par{' '}
+            <Link to="/plants" className="watering-empty-link">
+              ajouter ta première plante
+            </Link>{' '}
+            !
+          </div>
         )}
         {waterings.length > 0 && (
           <>

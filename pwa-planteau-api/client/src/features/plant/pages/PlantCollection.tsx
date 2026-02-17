@@ -100,6 +100,12 @@ const PlantCollection: React.FC = () => {
             />
           </svg>
         </Link>
+        {/* Message si aucune plante */}
+        {plants.length === 0 && !error && (
+          <div className="text-center text-lg my-8 plant-empty-message">
+            Ajoute la première plante de ton foyer !
+          </div>
+        )}
       </div>
     </div>
   );

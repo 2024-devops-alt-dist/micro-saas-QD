@@ -85,3 +85,9 @@
     height: 56px;
   }
 }
+
+.plant-empty-message {
+  font-family: var(--font-h2);
+  color: var(--color-tertiary-hover);
+  font-size: var(--text-xl);
+}
