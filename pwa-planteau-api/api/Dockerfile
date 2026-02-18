@@ -4,6 +4,8 @@ FROM node:24-alpine
 # Étape 2: Créer et définir le répertoire de travail dans le conteneur
 WORKDIR /app
 
+RUN npm install -g prisma
+
 # Étape 3: Copier les fichiers package.json et package-lock.json (ou yarn.lock) dans le conteneur
 COPY package*.json ./
 
