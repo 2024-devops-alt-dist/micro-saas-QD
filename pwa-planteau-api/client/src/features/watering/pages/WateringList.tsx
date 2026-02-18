@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { wateringService } from '../services/wateringService';
 import Header from '../components/Header';
+import { authService } from '../../authentication/service/authService';
 import WeekCarousel from '../components/WeekCarousel';
 import TodayTasks from '../components/TodayTasks';
 import TomorrowReminders from '../components/TomorrowReminders';
@@ -39,6 +40,7 @@ function getWeekDates() {
 export default function WateringList() {
   const [waterings, setWaterings] = useState<Watering[]>([]);
   const [error, setError] = useState<string | null>(null);
+  const [user, setUser] = useState<any>(null);
   const week = getWeekDates();
   const todayIso = new Date().toISOString().slice(0, 10);
   const location = useLocation();
@@ -56,6 +58,15 @@ export default function WateringList() {
 
   useEffect(() => {
     fetchWaterings();
+    // Récupérer l'utilisateur pour la photo de profil
+    (async () => {
+      try {
+        const res = await authService.getCurrentUser();
+        setUser(res.user);
+      } catch (e) {
+        setUser(null);
+      }
+    })();
   }, [location.pathname]);
 
   // Sépare les tâches du jour et les rappels (tâches du lendemain)
@@ -89,11 +100,17 @@ export default function WateringList() {
         className="page-centered p-2 flex-1 flex flex-col overflow-y-auto bg-gray-50"
         style={{ height: '90vh', maxHeight: '90vh' }}
       >
-        <Header avatarSrc="/assets/images/avatar-homme.webp" />
+        <Header avatarSrc={user?.photo || ''} />
         <WeekCarousel week={week} />
         {error && <div className="text-red-500 p-4">{error}</div>}
         {waterings.length === 0 && !error && (
-          <div className="text-gray-500 p-4">Loading watering tasks...</div>
+          <div className="text-center text-lg my-8 watering-empty-message">
+            Commence par{' '}
+            <Link to="/plants" className="watering-empty-link">
+              ajouter ta première plante
+            </Link>{' '}
+            !
+          </div>
         )}
         {waterings.length > 0 && (
           <>
@@ -102,7 +119,9 @@ export default function WateringList() {
                 ...task,
                 taskLabel: task.taskLabel || task.frequency || 'Arrosage',
                 plantId: task.plantId,
+                status: (task as any).status || 'TODO',
               }))}
+              onStatusChange={fetchWaterings}
             />
             <TomorrowReminders
               tomorrowTasks={tomorrowTasks.map(task => ({

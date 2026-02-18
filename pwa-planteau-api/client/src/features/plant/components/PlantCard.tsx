@@ -21,16 +21,23 @@ const PlantCard: React.FC<PlantCardProps> = ({ plants }) => {
   if (!validPlants.length) {
     return <div className="p-4">Aucune plante à afficher</div>;
   }
+
+  const PlantImage: React.FC<{ plant: Plant }> = ({ plant }) => (
+    <div className="w-full h-full block overflow-hidden rounded-xl">
+      <img
+        src={plant.image}
+        alt={plant.name}
+        className="w-full h-full object-cover rounded-xl shadow-md hover:scale-105 transition-transform duration-300"
+      />
+    </div>
+  );
+
   // Handle 1 or 2 plants: display them in a nice flex row
   if (validPlants.length === 1) {
     return (
       <div className="flex justify-center p-4">
         <Link to={`/plants/${validPlants[0].id}`} className="w-3/4 h-80 block">
-          <img
-            src={validPlants[0].image}
-            alt={validPlants[0].name}
-            className="w-full h-full object-cover rounded-xl shadow-md hover:scale-105 transition-transform duration-300"
-          />
+          <PlantImage plant={validPlants[0]} />
         </Link>
       </div>
     );
@@ -39,18 +46,10 @@ const PlantCard: React.FC<PlantCardProps> = ({ plants }) => {
     return (
       <div className="flex gap-4 justify-center p-4">
         <Link to={`/plants/${validPlants[0].id}`} className="w-1/2 h-80 block">
-          <img
-            src={validPlants[0].image}
-            alt={validPlants[0].name}
-            className="w-full h-full object-cover rounded-xl shadow-md hover:scale-105 transition-transform duration-300"
-          />
+          <PlantImage plant={validPlants[0]} />
         </Link>
         <Link to={`/plants/${validPlants[1].id}`} className="w-1/2 h-80 block">
-          <img
-            src={validPlants[1].image}
-            alt={validPlants[1].name}
-            className="w-full h-full object-cover rounded-xl shadow-md hover:scale-105 transition-transform duration-300"
-          />
+          <PlantImage plant={validPlants[1]} />
         </Link>
       </div>
     );
@@ -67,26 +66,14 @@ const PlantCard: React.FC<PlantCardProps> = ({ plants }) => {
             <div key={`row-${i}`} className="flex gap-4 h-64">
               <div className="flex flex-col gap-4 flex-1">
                 <Link to={`/plants/${validPlants[i].id}`} className="w-full h-1/2 block">
-                  <img
-                    src={validPlants[i].image}
-                    alt={validPlants[i].name}
-                    className="w-full h-full object-cover rounded-xl shadow-md hover:scale-105 transition-transform duration-300"
-                  />
+                  <PlantImage plant={validPlants[i]} />
                 </Link>
                 <Link to={`/plants/${validPlants[i + 1].id}`} className="w-full h-1/2 block">
-                  <img
-                    src={validPlants[i + 1].image}
-                    alt={validPlants[i + 1].name}
-                    className="w-full h-full object-cover rounded-xl shadow-md hover:scale-105 transition-transform duration-300"
-                  />
+                  <PlantImage plant={validPlants[i + 1]} />
                 </Link>
               </div>
               <Link to={`/plants/${validPlants[i + 2].id}`} className="w-1/2 h-full block">
-                <img
-                  src={validPlants[i + 2].image}
-                  alt={validPlants[i + 2].name}
-                  className="w-full h-full object-cover rounded-xl shadow-md hover:scale-105 transition-transform duration-300"
-                />
+                <PlantImage plant={validPlants[i + 2]} />
               </Link>
             </div>
           );
@@ -97,18 +84,10 @@ const PlantCard: React.FC<PlantCardProps> = ({ plants }) => {
           return (
             <div key={`row-${i}`} className="flex gap-4 h-60">
               <Link to={`/plants/${validPlants[i].id}`} className="w-1/2 h-full block">
-                <img
-                  src={validPlants[i].image}
-                  alt={validPlants[i].name}
-                  className="w-full h-full object-cover rounded-xl shadow-md hover:scale-105 transition-transform duration-300"
-                />
+                <PlantImage plant={validPlants[i]} />
               </Link>
               <Link to={`/plants/${validPlants[i + 1].id}`} className="w-1/2 h-full block">
-                <img
-                  src={validPlants[i + 1].image}
-                  alt={validPlants[i + 1].name}
-                  className="w-full h-full object-cover rounded-xl shadow-md hover:scale-105 transition-transform duration-300"
-                />
+                <PlantImage plant={validPlants[i + 1]} />
               </Link>
             </div>
           );
@@ -118,11 +97,7 @@ const PlantCard: React.FC<PlantCardProps> = ({ plants }) => {
         return (
           <div key={`row-${i}`} className="flex justify-center h-80">
             <Link to={`/plants/${validPlants[i].id}`} className="w-3/4 h-full block">
-              <img
-                src={validPlants[i].image}
-                alt={validPlants[i].name}
-                className="w-full h-full object-cover rounded-xl shadow-md hover:scale-105 transition-transform duration-300"
-              />
+              <PlantImage plant={validPlants[i]} />
             </Link>
           </div>
         );

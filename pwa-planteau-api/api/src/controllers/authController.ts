@@ -21,7 +21,7 @@ const REFRESH_TOKEN_MAX_AGE = 7 * 24 * 60 * 60 * 1000; // 7 jours
 export const authController = {
   register: async (req: Request, res: Response) => {
     try {
-      const { email, password, firstname, name } = req.body;
+      const { email, password, firstname, name, inviteCode, householdName } = req.body;
 
       if (!email || !password) {
         return res.status(400).json({ message: 'Email et mot de passe requis.' });
@@ -33,6 +33,35 @@ export const authController = {
         return res.status(400).json({ message: 'Cet email est déjà utilisé.' });
       }
 
+      let householdId: number | null = null;
+
+      if (inviteCode && !householdName) {
+        // Rejoindre un foyer existant
+        const household = await prisma.household.findFirst({ where: { invite_code: inviteCode } });
+        if (!household) {
+          return res.status(400).json({ message: "Code d'invitation invalide." });
+        }
+        householdId = household.id;
+      } else if (inviteCode && householdName) {
+        // Créer un nouveau foyer
+        const existingHousehold = await prisma.household.findFirst({
+          where: { invite_code: inviteCode },
+        });
+        if (existingHousehold) {
+          return res.status(400).json({ message: "Ce code d'invitation est déjà utilisé." });
+        }
+        const newHousehold = await prisma.household.create({
+          data: {
+            name: householdName,
+            invite_code: inviteCode,
+          },
+        });
+        householdId = newHousehold.id;
+      } else {
+        // fallback: aucun code fourni
+        return res.status(400).json({ message: "Code d'invitation requis." });
+      }
+
       const hashedPassword = await bcrypt.hash(password, 10);
       const user = await prisma.user.create({
         data: {
@@ -41,7 +70,7 @@ export const authController = {
           firstname: firstname || 'User',
           name: name || 'User',
           role: 'MEMBER',
-          household_id: 1, // À adapter selon le contexte
+          household_id: householdId,
         },
       });
 
@@ -170,14 +199,26 @@ export const authController = {
         return res.status(401).json({ message: 'Non authentifié.' });
       }
 
-      const user = await prisma.user.findUnique({ where: { id: userPayload.id } });
+      const user = await prisma.user.findUnique({
+        where: { id: userPayload.id },
+        include: { household: true },
+      });
       if (!user) {
         return res.status(401).json({ message: 'Utilisateur introuvable.' });
       }
 
       logger.info(`ME : ${user.email}`);
       return res.status(200).json({
-        user: { id: user.id, email: user.email, role: user.role },
+        user: {
+          id: user.id,
+          email: user.email,
+          firstname: user.firstname,
+          name: user.name,
+          role: user.role,
+          photo: user.photo,
+          household_id: user.household_id,
+          inviteCode: user.household?.invite_code,
+        },
       });
     } catch (error) {
       logger.error(`Erreur me : ${error}`);

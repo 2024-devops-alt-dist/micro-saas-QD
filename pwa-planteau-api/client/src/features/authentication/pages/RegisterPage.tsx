@@ -11,11 +11,26 @@ const registerSchema = z
     passwordConfirm: z.string().min(8, 'La confirmation doit contenir au moins 8 caractères'),
     firstname: z.string().optional().default(''),
     name: z.string().optional().default(''),
+    joinOrCreate: z.enum(['join', 'create']),
+    householdName: z.string().optional(),
+    inviteCode: z.string().min(4, 'Le code doit contenir au moins 4 caractères'),
   })
   .refine(data => data.password === data.passwordConfirm, {
     message: 'Les mots de passe ne correspondent pas',
     path: ['passwordConfirm'],
-  });
+  })
+  .refine(
+    data => {
+      if (data.joinOrCreate === 'create') {
+        return data.householdName && data.householdName.length > 0;
+      }
+      return true;
+    },
+    {
+      message: 'Le nom du foyer est requis',
+      path: ['householdName'],
+    }
+  );
 
 type RegisterFormData = z.infer<typeof registerSchema>;
 
@@ -27,12 +42,15 @@ export default function RegisterPage() {
     passwordConfirm: '',
     firstname: '',
     name: '',
+    joinOrCreate: 'join', // 'join' ou 'create'
+    householdName: '',
+    inviteCode: '',
   });
   const [errors, setErrors] = useState<Partial<Record<keyof RegisterFormData, string>>>({});
   const [generalError, setGeneralError] = useState<string>('');
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
@@ -57,12 +75,25 @@ export default function RegisterPage() {
       const validatedData = registerSchema.parse(formData);
 
       setIsLoading(true);
-      await authService.register({
-        email: validatedData.email,
-        password: validatedData.password,
-        firstname: validatedData.firstname,
-        name: validatedData.name,
-      });
+      // Appel API adapté :
+      if (validatedData.joinOrCreate === 'join') {
+        await authService.register({
+          email: validatedData.email,
+          password: validatedData.password,
+          firstname: validatedData.firstname,
+          name: validatedData.name,
+          inviteCode: validatedData.inviteCode,
+        });
+      } else {
+        await authService.register({
+          email: validatedData.email,
+          password: validatedData.password,
+          firstname: validatedData.firstname,
+          name: validatedData.name,
+          householdName: validatedData.householdName,
+          inviteCode: validatedData.inviteCode,
+        });
+      }
 
       // Redirect to login on success
       navigate('/login', {
@@ -107,6 +138,73 @@ export default function RegisterPage() {
               {generalError && <div className="error-message">{generalError}</div>}
 
               <form onSubmit={handleSubmit} className="auth-form">
+                <div
+                  className="form-group"
+                  style={{ display: 'flex', gap: '1rem', marginBottom: '1rem' }}
+                >
+                  <label style={{ display: 'flex', alignItems: 'center', gap: '0.3rem' }}>
+                    <input
+                      type="radio"
+                      name="joinOrCreate"
+                      value="join"
+                      checked={formData.joinOrCreate === 'join'}
+                      onChange={handleInputChange}
+                      disabled={isLoading}
+                    />
+                    Rejoindre un foyer existant
+                  </label>
+                  <label style={{ display: 'flex', alignItems: 'center', gap: '0.3rem' }}>
+                    <input
+                      type="radio"
+                      name="joinOrCreate"
+                      value="create"
+                      checked={formData.joinOrCreate === 'create'}
+                      onChange={handleInputChange}
+                      disabled={isLoading}
+                    />
+                    Créer un nouveau foyer
+                  </label>
+                </div>
+
+                {formData.joinOrCreate === 'create' && (
+                  <div className="form-group">
+                    <label htmlFor="householdName" className="form-label">
+                      Nom du foyer
+                    </label>
+                    <input
+                      type="text"
+                      id="householdName"
+                      name="householdName"
+                      className="form-input"
+                      value={formData.householdName}
+                      onChange={handleInputChange}
+                      disabled={isLoading}
+                      placeholder="Ma famille, Coloc, ..."
+                    />
+                    {errors.householdName && (
+                      <span className="field-error">{errors.householdName}</span>
+                    )}
+                  </div>
+                )}
+                <div className="form-group">
+                  <label htmlFor="inviteCode" className="form-label">
+                    Code d'invitation{' '}
+                    {formData.joinOrCreate === 'create' ? 'à choisir' : 'du foyer'}
+                  </label>
+                  <input
+                    type="text"
+                    id="inviteCode"
+                    name="inviteCode"
+                    className="form-input"
+                    value={formData.inviteCode}
+                    onChange={handleInputChange}
+                    disabled={isLoading}
+                    placeholder={
+                      formData.joinOrCreate === 'create' ? 'Ex: FAMILLE2024' : 'Ex: code reçu'
+                    }
+                  />
+                  {errors.inviteCode && <span className="field-error">{errors.inviteCode}</span>}
+                </div>
                 <div className="form-group">
                   <label htmlFor="firstname" className="form-label">
                     Prénom

@@ -7,6 +7,8 @@ interface RegisterData {
   password: string;
   firstname?: string;
   name?: string;
+  inviteCode?: string;
+  householdName?: string;
 }
 
 interface LoginData {

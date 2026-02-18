@@ -164,4 +164,39 @@
   background: var(--color-primary-hover);
 }
 
+.plant-detail-action-delete {
+  display: block;
+  width: 100%;
+  background: #F5C6C6;
+  color: #8B5A5A;
+  text-align: center;
+  border-radius: var(--radius-md);
+  padding: 0.9rem 0;
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-top: 0.5rem;
+  margin-bottom: 1rem;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(245, 198, 198, 0.2);
+  transition: background 0.2s;
+  font-family: inherit;
+}
+
+.plant-detail-action-delete:hover {
+  background: #EDB9B9;
+}
+
+.plant-detail-action-delete:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
 /* Desktop layout is now harmonized via .navbar-layout and .page-centered (see layout.css) */
+
+/* Mobile */
+@media (max-width: 768px) {
+  .plant-detail-action-delete {
+    margin-bottom: 3rem;
+  }
+}

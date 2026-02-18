@@ -26,6 +26,10 @@ type TaskResponse = {
 };
 
 const mockApi = {
+  async updateStatus(_id: number, _status: string): Promise<void> {
+    // No-op for mock
+    return;
+  },
   async getAll(): Promise<Watering[]> {
     // Retourne une copie des données mockées
     return mockData.map(item => ({
@@ -49,6 +53,9 @@ const mockApi = {
 };
 
 const realApi = {
+  async updateStatus(id: number, status: string): Promise<void> {
+    await httpClient.put(`/tasks/${id}`, { status });
+  },
   async getAll(): Promise<Watering[]> {
     try {
       const response = await httpClient.get<TaskResponse[]>('/tasks');
@@ -69,6 +76,7 @@ const realApi = {
         frequency: typeLabels[task.type] || task.type,
         nextWatering: task.scheduled_date,
         taskLabel: typeLabels[task.type] || task.type,
+        status: task.status,
       }));
     } catch (error) {
       console.error('Failed to fetch watering tasks:', error);
@@ -99,6 +107,7 @@ const realApi = {
         scheduled_date: scheduledDateString,
         status: 'TODO',
         plant_id: options?.plantId || 1,
+        frequency_days: options?.thirst || undefined,
       });
       return {
         id_watering: response.id,
@@ -125,4 +134,4 @@ const realApi = {
   },
 };
 
-export const wateringService = USE_MOCK ? mockApi : realApi;
+export const wateringService: typeof realApi = USE_MOCK ? mockApi : realApi;

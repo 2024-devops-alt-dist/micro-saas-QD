@@ -61,6 +61,7 @@ model User {
   email        String   @unique @db.VarChar(255)
   password     String   @db.VarChar(255)
   role         Role
+  photo        String?  @db.VarChar(255)
   household_id Int
   household    Household @relation(fields: [household_id], references: [id])
   plants       Plant[]
@@ -91,8 +92,9 @@ model Tasks {
   update_at     DateTime @updatedAt
   status        TaskStatus
   plant_id      Int
-  plant         Plant    @relation(fields: [plant_id], references: [id])
+  plant         Plant    @relation(fields: [plant_id], references: [id], onDelete: Cascade)
   notes         Note[]
+  frequency_days Int?    @db.Integer
 }
 
 model Note {
@@ -102,9 +104,9 @@ model Note {
   user_id       Int
   user          User     @relation(fields: [user_id], references: [id])
   plant_id      Int?
-  plant         Plant?   @relation(fields: [plant_id], references: [id])
+  plant         Plant?   @relation(fields: [plant_id], references: [id], onDelete: Cascade)
   task_id       Int?
-  task          Tasks?   @relation(fields: [task_id], references: [id])
+  task          Tasks?   @relation(fields: [task_id], references: [id], onDelete: Cascade)
 }
 
 

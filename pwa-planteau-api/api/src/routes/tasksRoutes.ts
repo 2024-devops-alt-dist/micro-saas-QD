@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { getAll, getById, createOne, deleteOne, updateOne } from '../controllers/tasksController';
 import { validateBody } from '../middlewares/validate';
-import { TasksCreateSchema } from '../models/tasksSchema';
+import { TasksCreateSchema, TasksUpdateSchema } from '../models/tasksSchema';
 
 export const router = Router();
 
@@ -148,7 +148,7 @@ router.post('/', validateBody(TasksCreateSchema), createOne);
  *       404:
  *         $ref: '#/components/responses/NotFound'
  */
-router.put('/:id', validateBody(TasksCreateSchema), updateOne);
+router.put('/:id', validateBody(TasksUpdateSchema), updateOne);
 
 /**
  * @swagger

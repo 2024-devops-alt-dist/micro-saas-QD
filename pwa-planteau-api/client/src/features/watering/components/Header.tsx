@@ -51,7 +51,13 @@ const Header: React.FC<HeaderProps> = ({ avatarSrc }) => {
       <h2 className="header-title">Bonjour {userName}</h2>
       <div className="header-avatar-wrapper">
         <img
-          src={avatarSrc}
+          src={
+            avatarSrc
+              ? avatarSrc.startsWith('/uploads/')
+                ? import.meta.env.VITE_API_BASE_URL?.replace('/api', '') + avatarSrc
+                : avatarSrc
+              : '/assets/images/avatar.png'
+          }
           alt="avatar"
           className="w-15 h-15 rounded-full border-4 avatar-border object-cover cursor-pointer"
           onClick={() => setShowPopup(v => !v)}
@@ -59,16 +65,28 @@ const Header: React.FC<HeaderProps> = ({ avatarSrc }) => {
         />
         {showPopup && (
           <div ref={popupRef} className="header-popup">
-            <button
-              className="header-logout-btn"
-              onClick={async () => {
-                await authService.logout();
-                navigate('/login', { replace: true });
-              }}
-              onMouseDown={e => e.stopPropagation()}
-            >
-              Déconnexion
-            </button>
+            <div className="header-popup-btns">
+              <button
+                className="header-logout-btn header-profile-btn"
+                onClick={() => {
+                  setShowPopup(false);
+                  navigate('/profil');
+                }}
+                onMouseDown={e => e.stopPropagation()}
+              >
+                Mon Profil
+              </button>
+              <button
+                className="header-logout-btn"
+                onClick={async () => {
+                  await authService.logout();
+                  navigate('/login', { replace: true });
+                }}
+                onMouseDown={e => e.stopPropagation()}
+              >
+                Déconnexion
+              </button>
+            </div>
           </div>
         )}
       </div>

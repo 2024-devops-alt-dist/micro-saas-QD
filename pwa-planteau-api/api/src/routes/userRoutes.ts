@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { getAll, getById, createOne, deleteOne, updateOne } from '../controllers/userController';
 import { validateBody } from '../middlewares/validate';
-import { UserCreateSchema } from '../models/userSchema';
+import { UserCreateSchema, UserUpdateSchema } from '../models/userSchema';
 
 export const router = Router();
 
@@ -151,7 +151,7 @@ router.post('/', validateBody(UserCreateSchema), createOne);
  *       404:
  *         $ref: '#/components/responses/NotFound'
  */
-router.put('/:id', validateBody(UserCreateSchema), updateOne);
+router.put('/:id', validateBody(UserUpdateSchema), updateOne);
 
 /**
  * @swagger

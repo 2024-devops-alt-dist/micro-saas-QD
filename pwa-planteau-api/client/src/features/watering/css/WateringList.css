@@ -29,3 +29,14 @@
 .add-task-btn:hover svg path {
 	fill: var(--color-tertiary);
 }
+
+.watering-empty-message {
+  font-family: var(--font-h2);
+  color: var(--color-tertiary-hover);
+  font-size: var(--text-xl);
+}
+
+.watering-empty-link {
+  color: var(--color-tertiary-hover);
+  text-decoration: underline;
+}
