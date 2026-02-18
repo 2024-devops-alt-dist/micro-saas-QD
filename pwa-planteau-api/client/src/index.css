@@ -18,11 +18,11 @@ html, body {
 
 @media (min-width: 1024px) {
   html, body {
-    background-color: var(--color-tertiary);
+    background: url('/assets/images/fond-monstera.webp') center center/cover no-repeat;
     overflow: hidden;
   }
   .navbar-layout {
-    background-color: var(--color-tertiary);
+    background: transparent;
   }
 }
 
