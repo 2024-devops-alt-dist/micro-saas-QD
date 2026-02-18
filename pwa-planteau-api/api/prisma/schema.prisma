@@ -61,6 +61,7 @@ model User {
   email        String   @unique @db.VarChar(255)
   password     String   @db.VarChar(255)
   role         Role
+  photo        String?  @db.VarChar(255)
   household_id Int
   household    Household @relation(fields: [household_id], references: [id])
   plants       Plant[]

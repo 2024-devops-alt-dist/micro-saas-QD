@@ -31,9 +31,11 @@ export const deleteOne = async (req: Request, res: Response) => {
 export const updateOne = async (req: Request, res: Response) => {
   const id = Number(req.params.id);
   try {
+    console.log('[UserController][updateOne] Body reçu :', req.body);
     const updated = await service.update(id, req.body);
     res.json(updated);
   } catch (err: any) {
+    console.error('[UserController][updateOne] Erreur :', err);
     res.status(400).json({ error: err.message });
   }
 };

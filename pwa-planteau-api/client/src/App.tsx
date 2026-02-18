@@ -9,6 +9,7 @@ import LoginPage from './features/authentication/pages/LoginPage';
 import RegisterPage from './features/authentication/pages/RegisterPage';
 import { ProtectedRoute } from './features/authentication/components/ProtectedRoute';
 import AddPlant from './features/plant/pages/AddPlant';
+import Profil from './features/authentication/pages/Profil';
 
 function App() {
   return (
@@ -72,6 +73,14 @@ function App() {
           element={
             <ProtectedRoute>
               <WateringList />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/profil"
+          element={
+            <ProtectedRoute>
+              <Profil />
             </ProtectedRoute>
           }
         />

@@ -199,14 +199,26 @@ export const authController = {
         return res.status(401).json({ message: 'Non authentifié.' });
       }
 
-      const user = await prisma.user.findUnique({ where: { id: userPayload.id } });
+      const user = await prisma.user.findUnique({
+        where: { id: userPayload.id },
+        include: { household: true },
+      });
       if (!user) {
         return res.status(401).json({ message: 'Utilisateur introuvable.' });
       }
 
       logger.info(`ME : ${user.email}`);
       return res.status(200).json({
-        user: { id: user.id, email: user.email, role: user.role },
+        user: {
+          id: user.id,
+          email: user.email,
+          firstname: user.firstname,
+          name: user.name,
+          role: user.role,
+          photo: user.photo,
+          household_id: user.household_id,
+          inviteCode: user.household?.invite_code,
+        },
       });
     } catch (error) {
       logger.error(`Erreur me : ${error}`);
