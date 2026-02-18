@@ -15,4 +15,23 @@
   color: var(--color-tertiary);
   border-radius: var(--radius-sm);
   font-family: var(--font-p);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.task-cards input[type="checkbox"] {
+  margin-left: 1rem;
+  accent-color: var(--color-secondary, #7a9c3a);
+  width: 1.2em;
+  height: 1.2em;
+}
+
+.task-cards-hover:hover {
+  box-shadow: 0 4px 16px rgba(122,156,58,0.16);
+  transform: scale(1.03);
+  cursor: pointer;
+  background: var(--color-primary-hover, #a6c94a);
+  color: var(--color-white);
 }

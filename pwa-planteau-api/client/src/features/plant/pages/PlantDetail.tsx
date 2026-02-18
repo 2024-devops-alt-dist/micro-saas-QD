@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import { plantService } from '../services/plantService';
 import Navbar from '../../../components/Navbar';
 import '../css/PlantDetail.css';
@@ -17,6 +17,8 @@ type Plant = {
 const PlantDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const [plant, setPlant] = useState<Plant | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     plantService.getAll().then(plants => {
@@ -25,6 +27,26 @@ const PlantDetail: React.FC = () => {
     });
   }, [id]);
 
+  const handleDelete = async () => {
+    if (!plant) return;
+
+    const confirmed = window.confirm(
+      `Êtes-vous sûr(e) de vouloir supprimer "${plant.name}" ? Cette action est irréversible.`
+    );
+
+    if (!confirmed) return;
+
+    try {
+      setIsDeleting(true);
+      await plantService.delete(plant.id);
+      navigate('/plants');
+    } catch (error) {
+      alert('Erreur lors de la suppression de la plante');
+      console.error('Erreur suppression:', error);
+      setIsDeleting(false);
+    }
+  };
+
   if (!plant) return <div className="p-4">Plante introuvable.</div>;
 
   return (
@@ -32,7 +54,9 @@ const PlantDetail: React.FC = () => {
       <Navbar />
       <div className="page-centered flex-1 flex flex-col">
         <div className="plant-detail-container">
-          <Link to="/plants" className="plant-detail-back">&#8592;</Link>
+          <button onClick={() => navigate(-1)} className="plant-detail-back">
+            &#8592;
+          </button>
           <div className="plant-detail-title">Ma Plante</div>
           <div className="plant-detail-card">
             <img src={plant.image} alt={plant.name} className="plant-detail-img" />
@@ -61,17 +85,18 @@ const PlantDetail: React.FC = () => {
           </div>
           <div className="plant-detail-section">
             <div className="plant-detail-section-title text-left text-lg">Soins détaillés</div>
-            <div className="plant-detail-section-content">
-              
-              
-            </div>
+            <div className="plant-detail-section-content"></div>
           </div>
-          <Link
-            to="/watering/create"
-            className="plant-detail-action"
-          >
+          <Link to="/watering/create" className="plant-detail-action">
             Planifier une tâche
           </Link>
+          <button
+            onClick={handleDelete}
+            disabled={isDeleting}
+            className="plant-detail-action-delete"
+          >
+            {isDeleting ? 'Suppression...' : 'Supprimer la plante'}
+          </button>
         </div>
       </div>
     </div>

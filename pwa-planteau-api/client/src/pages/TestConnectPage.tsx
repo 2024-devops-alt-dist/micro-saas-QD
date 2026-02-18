@@ -7,7 +7,7 @@ const API_URL = (import.meta.env.VITE_API_URL as string) || 'http://localhost:30
 
 type ApiResponse = { status: string; message: string };
 
-export default function Home() {
+export default function TestConnectPage() {
   const [result, setResult] = useState<ApiResponse | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -39,7 +39,7 @@ export default function Home() {
         style={{ height: '90vh', maxHeight: '90vh' }}
       >
         <div className="flex flex-col items-center justify-center gap-4 home-card w-full">
-          <h1>Bienvenue sur la première page de Planteau</h1>
+          <h1>Test de connexion à l’API</h1>
           <CustomButton onClick={handleTestApi} disabled={loading}>
             {loading ? 'Connexion...' : 'Tester la connexion'}
           </CustomButton>

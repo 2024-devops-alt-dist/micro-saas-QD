@@ -1,9 +1,9 @@
 @import '../../../assets/css/variable.css';
 
 .add-task-btn {
-	position: absolute;
-	right: 2rem;
-	bottom: 2rem;
+	position: fixed;
+	right: 22rem;
+	bottom: 4rem;
 	z-index: 100;
 }
 
@@ -28,4 +28,15 @@
 }
 .add-task-btn:hover svg path {
 	fill: var(--color-tertiary);
+}
+
+.watering-empty-message {
+  font-family: var(--font-h2);
+  color: var(--color-tertiary-hover);
+  font-size: var(--text-xl);
+}
+
+.watering-empty-link {
+  color: var(--color-tertiary-hover);
+  text-decoration: underline;
 }

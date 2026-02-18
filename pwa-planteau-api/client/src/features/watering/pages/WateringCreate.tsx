@@ -1,55 +1,136 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import DateCarousel from '../components/DateCarousel';
 import HourSelect from '../components/HourSelect';
 import CategorySelector from '../components/CategorySelector';
 import ThirstInput from '../components/ThirstInput';
 import NoteInput from '../components/NoteInput';
+import PlantSelector from '../components/PlantSelector';
 import ValidateButton from '../components/ValidateButton';
 import Navbar from '../../../components/Navbar';
+import { wateringService } from '../services/wateringService';
+import { plantService } from '../../plant/services/plantService';
 import '../css/WateringCreate.css';
 
 const categories = [
-  { label: 'Engrais', color: 'bg-yellow-300', value: 'engrais' },
-  { label: 'Rempotage', color: 'bg-purple-300', value: 'rempotage' },
-  { label: 'Vaporiser', color: 'bg-pink-300', value: 'vaporiser' },
-  { label: 'Arrosage', color: 'bg-gray-200', value: 'arrosage' },
-  { label: 'Autre', color: 'bg-green-300', value: 'autre' },
+  { label: 'Engrais', color: 'bg-yellow-300', value: 'FERTILIZING' },
+  { label: 'Rempotage', color: 'bg-purple-300', value: 'REPOTTING' },
+  { label: 'Vaporiser', color: 'bg-pink-300', value: 'SPRAYING' },
+  { label: 'Arrosage', color: 'bg-gray-200', value: 'WATERING' },
+  { label: 'Autre', color: 'bg-green-300', value: 'AUTRE' },
 ];
 
-const getMonthDays = () => {
+const getMonthDays = (year: number, month: number) => {
   const days = [];
   const weekDays = ['Di', 'Lu', 'Ma', 'Me', 'Je', 'Ve', 'Sa'];
-  const now = new Date();
-  const year = now.getFullYear();
-  const month = now.getMonth();
   const lastDay = new Date(year, month + 1, 0).getDate();
   for (let i = 1; i <= lastDay; i++) {
     const date = new Date(year, month, i);
+    const iso = `${year}-${String(month + 1).padStart(2, '0')}-${String(i).padStart(2, '0')}`;
     days.push({
       label: i.toString(),
       week: weekDays[date.getDay()],
-      iso: date.toISOString().slice(0, 10),
+      iso: iso,
     });
   }
   return days;
 };
 
 export default function WateringCreate() {
-  const days = getMonthDays();
-  const [selectedDate, setSelectedDate] = useState(days[new Date().getDate() - 1].iso);
-  const [selectedCategory, setSelectedCategory] = useState('arrosage');
+  const now = new Date();
+  const [currentMonth, setCurrentMonth] = useState(now.getMonth());
+  const [currentYear, setCurrentYear] = useState(now.getFullYear());
+  const days = getMonthDays(currentYear, currentMonth);
+  const [selectedDate, setSelectedDate] = useState(
+    days[new Date().getDate() - 1]?.iso || days[0]?.iso || ''
+  );
+  const [selectedCategory, setSelectedCategory] = useState('WATERING');
+  const [selectedPlantId, setSelectedPlantId] = useState<number | null>(null);
+  const [plants, setPlants] = useState<Array<{ id: number; name: string }>>([]);
   const [note, setNote] = useState('');
   const [thirst, setThirst] = useState(1);
   const [startHour, setStartHour] = useState('12:00');
   const [endHour, setEndHour] = useState('14:00');
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const hours = Array.from({ length: 24 }, (_, i) => `${i.toString().padStart(2, '0')}:00`);
   const navigate = useNavigate();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handlePrevMonth = () => {
+    if (currentMonth === 0) {
+      setCurrentMonth(11);
+      setCurrentYear(currentYear - 1);
+    } else {
+      setCurrentMonth(currentMonth - 1);
+    }
+  };
+
+  const handleNextMonth = () => {
+    if (currentMonth === 11) {
+      setCurrentMonth(0);
+      setCurrentYear(currentYear + 1);
+    } else {
+      setCurrentMonth(currentMonth + 1);
+    }
+  };
+
+  // Charger les plantes au montage
+  useEffect(() => {
+    const loadPlants = async () => {
+      try {
+        const allPlants = await plantService.getAll();
+        const plantsData = allPlants.map(p => ({ id: p.id, name: p.name }));
+        setPlants(plantsData);
+        if (plantsData.length > 0) {
+          setSelectedPlantId(plantsData[0].id);
+        }
+      } catch (err) {
+        console.error('Failed to load plants:', err);
+      }
+    };
+    loadPlants();
+  }, []);
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Ajoute ici la logique de création de la tâche (appel service, etc.)
-    alert('Tâche créée !');
+    setError(null);
+
+    if (!selectedPlantId) {
+      setError('Veuillez sélectionner une plante');
+      return;
+    }
+
+    setIsLoading(true);
+
+    try {
+      // Créer la tâche via le service
+      await wateringService.create(
+        {
+          plantName: plants.find(p => p.id === selectedPlantId)?.name || 'Plante',
+          frequency: categories.find(c => c.value === selectedCategory)?.label || selectedCategory,
+          nextWatering: selectedDate,
+          type: selectedCategory,
+          plantId: selectedPlantId,
+        },
+        {
+          startHour,
+          endHour,
+          note,
+          thirst,
+          plantId: selectedPlantId,
+          type: selectedCategory,
+        }
+      );
+
+      // Rediriger vers la liste après succès
+      navigate('/', { replace: true });
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Erreur lors de la création de la tâche';
+      setError(message);
+      console.error('Failed to create watering task:', err);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -77,9 +158,28 @@ export default function WateringCreate() {
             </button>
           </div>
 
+          {error && <div className="text-red-500 p-4 rounded">{error}</div>}
+
+          {/* Sélection de la plante */}
+          <div className="watering-date-padding">
+            <PlantSelector
+              plants={plants}
+              selectedPlantId={selectedPlantId}
+              onPlantChange={setSelectedPlantId}
+            />
+          </div>
+
           {/* Sélection date */}
           <div className="watering-date-padding">
-            <DateCarousel days={days} selectedDate={selectedDate} setSelectedDate={setSelectedDate} />
+            <DateCarousel
+              days={days}
+              selectedDate={selectedDate}
+              setSelectedDate={setSelectedDate}
+              currentMonth={currentMonth}
+              currentYear={currentYear}
+              onNextMonth={handleNextMonth}
+              onPrevMonth={handlePrevMonth}
+            />
           </div>
 
           {/* Sélection heure */}
@@ -105,7 +205,7 @@ export default function WateringCreate() {
           <NoteInput note={note} setNote={setNote} />
 
           {/* Bouton valider */}
-          <ValidateButton />
+          <ValidateButton disabled={isLoading} />
         </form>
       </div>
     </div>

@@ -1,13 +1,33 @@
 import express from 'express';
 import cors from 'cors';
+import cookieParser from 'cookie-parser';
+import swaggerUi from 'swagger-ui-express';
 import logger from './middlewares/logger';
+import { config } from './config/env';
+import { swaggerSpec } from './config/swagger';
+import { router as healthRouter } from './routes/healthRoutes';
+import { router as authRouter } from './routes/authRoutes';
+import { router as householdRouter } from './routes/householdRoutes';
+import { router as userRouter } from './routes/userRoutes';
+import { router as plantRouter } from './routes/plantRoutes';
+import { router as tasksRouter } from './routes/tasksRoutes';
+import { router as noteRouter } from './routes/noteRoutes';
+import { errorHandler } from './middlewares/errorHandler';
+import authMiddleware from './middlewares/authMiddleware';
+import { router as uploadRouter } from './routes/uploadRoutes';
 
-const app = express(); // crée l'application Express
+const app = express();
+// Expose public/uploads for uploaded files
+app.use('/uploads', express.static('public/uploads'));
+// Optionally keep assets if needed
+app.use('/assets', express.static('public/assets'));
 app.use(express.json());
+app.use(cookieParser());
 
+// CORS configuration: allow frontend origin to communicate with API
 app.use(
   cors({
-    origin: 'http://localhost:5173',
+    origin: config.FRONT_URL,
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true,
@@ -23,16 +43,22 @@ app.use((req, _res, next) => {
 // base path pour les routes API (ex: '/api') — configurable via env
 const API_BASE = process.env.API_BASE_PATH || '/api';
 
-// endpoint GET /api/health
-app.get(`${API_BASE}/health`, async (_req, res) => {
-  const dbConnected = true; // Simule la vérification de la connexion à la BDD
-  if (dbConnected) {
-    logger.info('Health check succeeded');
-    res.status(200).json({ status: 'ok', message: 'API connected to database!' });
-  } else {
-    logger.error('Health check failed');
-    res.status(500).json({ status: 'error', message: 'Database connection failed' });
-  }
-});
+// Swagger documentation
+app.use('/swagger', swaggerUi.serve);
+app.get('/swagger', swaggerUi.setup(swaggerSpec));
+
+// Routes publiques (pas d'authentification)
+app.use(`${API_BASE}/health`, healthRouter);
+app.use(`${API_BASE}/auth`, authRouter);
+
+// Routes protégées par authentification
+app.use(`${API_BASE}/households`, authMiddleware, householdRouter);
+app.use(`${API_BASE}/users`, authMiddleware, userRouter);
+app.use(`${API_BASE}/plants`, authMiddleware, plantRouter);
+app.use(`${API_BASE}/tasks`, authMiddleware, tasksRouter);
+app.use(`${API_BASE}/notes`, authMiddleware, noteRouter);
+app.use(`${API_BASE}/upload`, authMiddleware, uploadRouter);
+
+app.use(errorHandler);
 
 export default app;

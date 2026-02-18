@@ -8,6 +8,10 @@ Plant'eau est une application ludique de gestion de plantes d’intérieur, con�
 
 Grâce à Plant’eau, plus d’oublis d’arrosage ou de confusion : chacun sait quoi faire, quand, et pour quelle plante.
 
+---
+
+## 🌐 Front-end déployé
+[https://micro-saas-qd.vercel.app/](https://micro-saas-qd.vercel.app/)
 
 ---
 

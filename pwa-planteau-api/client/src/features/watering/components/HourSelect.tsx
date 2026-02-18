@@ -29,7 +29,9 @@ const HourSelect: React.FC<HourSelectProps> = ({
             onChange={e => setStartHour(e.target.value)}
           >
             {hours.map(h => (
-              <option key={h} value={h}>{h}</option>
+              <option key={h} value={h}>
+                {h}
+              </option>
             ))}
           </select>
         </div>
@@ -47,7 +49,9 @@ const HourSelect: React.FC<HourSelectProps> = ({
             onChange={e => setEndHour(e.target.value)}
           >
             {hours.map(h => (
-              <option key={h} value={h}>{h}</option>
+              <option key={h} value={h}>
+                {h}
+              </option>
             ))}
           </select>
         </div>
