@@ -37,8 +37,38 @@ export const create = async (data: any) => {
 };
 export const remove = async (id: number) => prisma.tasks.delete({ where: { id } });
 
-export const update = async (id: number, data: any) =>
-  prisma.tasks.update({
+export const update = async (id: number, data: any) => {
+  // Met à jour la tâche
+  const updated = await prisma.tasks.update({
     where: { id },
     data,
   });
+
+  // Si la tâche passe à DONE et qu'elle est périodique, crée la prochaine tâche (si elle n'existe pas déjà)
+  if (data.status === 'DONE' && updated.frequency_days && updated.frequency_days > 0) {
+    // Calcule la date de la prochaine tâche
+    const nextDate = new Date(updated.scheduled_date);
+    nextDate.setDate(nextDate.getDate() + updated.frequency_days);
+
+    // Vérifie si une tâche existe déjà pour cette plante, ce type, à cette date
+    const existing = await prisma.tasks.findFirst({
+      where: {
+        plant_id: updated.plant_id,
+        type: updated.type,
+        scheduled_date: nextDate,
+      },
+    });
+    if (!existing) {
+      await prisma.tasks.create({
+        data: {
+          type: updated.type,
+          scheduled_date: nextDate,
+          status: 'TODO',
+          plant_id: updated.plant_id,
+          frequency_days: updated.frequency_days,
+        },
+      });
+    }
+  }
+  return updated;
+};

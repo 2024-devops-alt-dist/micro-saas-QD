@@ -94,6 +94,7 @@ model Tasks {
   plant_id      Int
   plant         Plant    @relation(fields: [plant_id], references: [id], onDelete: Cascade)
   notes         Note[]
+  frequency_days Int?    @db.Integer
 }
 
 model Note {

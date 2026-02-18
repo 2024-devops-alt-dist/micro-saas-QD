@@ -119,7 +119,9 @@ export default function WateringList() {
                 ...task,
                 taskLabel: task.taskLabel || task.frequency || 'Arrosage',
                 plantId: task.plantId,
+                status: (task as any).status || 'TODO',
               }))}
+              onStatusChange={fetchWaterings}
             />
             <TomorrowReminders
               tomorrowTasks={tomorrowTasks.map(task => ({
