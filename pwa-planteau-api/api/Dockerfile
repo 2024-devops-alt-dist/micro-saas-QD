@@ -15,8 +15,10 @@ RUN npm install
 # Étape 5: Copier tous les fichiers source dans le conteneur
 COPY . .
 
+RUN mkdir -p public/uploads
+
 # Étape 6: Exposer le port que l'API va utiliser
 EXPOSE 3000
 
 # Étape 7: Démarrer le serveur
-CMD ["sh", "-c", "npx prisma generate && npx prisma migrate deploy && npx prisma db seed && npm run start"]
+CMD ["sh", "-c", "npx prisma generate && npx prisma migrate deploy && npm run start"]
