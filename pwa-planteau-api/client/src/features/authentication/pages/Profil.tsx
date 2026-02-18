@@ -39,7 +39,7 @@ export default function Profil() {
         withCredentials: true,
       });
       // Update user photo in DB
-      const photoUrl = res.data.url;
+      const photoUrl = (res.data as { url: string }).url;
       await axios.put(`${apiUrl}/users/${user.id}`, { photo: photoUrl }, { withCredentials: true });
       setUser((u: any) => ({ ...u, photo: photoUrl }));
     } catch (err) {
