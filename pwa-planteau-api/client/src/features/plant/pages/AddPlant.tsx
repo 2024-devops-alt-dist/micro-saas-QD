@@ -42,7 +42,7 @@ const AddPlant: React.FC = () => {
       formData.append('file', file);
       // Récupère le token JWT du localStorage
       const token = localStorage.getItem('jwt_token');
-      const API_URL = 'http://localhost:3000/api/upload';
+      const API_URL = `${import.meta.env.VITE_API_BASE_URL}/upload`;
       try {
         const res = await fetch(API_URL, {
           method: 'POST',
@@ -64,7 +64,7 @@ const AddPlant: React.FC = () => {
       const user_id = userInfo.user.id;
       // TODO: Récupérer household_id via un autre appel ou contexte si besoin
       const household_id = 1; // Remplace 1 par la vraie logique si besoin
-      const API_PLANTS_URL = 'http://localhost:3000/api/plants';
+      const API_PLANTS_URL = `${import.meta.env.VITE_API_BASE_URL}/plants`;
       const res = await fetch(API_PLANTS_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
