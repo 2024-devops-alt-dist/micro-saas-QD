@@ -18,6 +18,10 @@ const options = {
         description: 'Development server',
       },
       {
+        url: 'https://planteau-api.onrender.com/swagger/',
+        description: 'Production server (Swagger UI)',
+      },
+      {
         url: '/api',
         description: 'Relative server',
       },

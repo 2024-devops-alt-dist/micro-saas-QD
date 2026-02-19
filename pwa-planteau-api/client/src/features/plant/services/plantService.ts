@@ -14,7 +14,7 @@ type Plant = {
 };
 
 const getFullImageUrl = (photo: string | null | undefined): string => {
-  const API_BASE_URL = 'http://localhost:3000';
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000';
   if (!photo) return '/placeholder.jpg';
   if (photo.startsWith('http')) return photo;
   if (photo.startsWith('/assets/')) return photo; // Sert par le client (Vite)
