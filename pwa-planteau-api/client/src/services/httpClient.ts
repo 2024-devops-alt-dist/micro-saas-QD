@@ -1,9 +1,10 @@
 /**
  * HTTP Client for API communication
  * Centralized fetch wrapper with error handling and automatic credential inclusion
- * (for httpOnly cookie authentication)
  *
  * Features:
+ * - JWT stored in localStorage, sent in Authorization header (Bearer)
+ * - Fallback support for httpOnly cookies for progressive enhancement
  * - Automatic JWT refresh on 401 errors
  * - Automatic retry of failed requests after token refresh
  * - Prevention of multiple simultaneous refresh attempts
@@ -18,10 +19,10 @@ export interface ApiError extends Error {
 
 /**
  * Common fetch options for all requests
- * includes: 'credentials' enables sending httpOnly cookies with each request
+ * includes: 'credentials' for fallback httpOnly cookie support
  */
 const commonOptions: RequestInit = {
-  credentials: 'include', // Include httpOnly cookies in requests
+  credentials: 'include', // Include cookies as fallback for progressive enhancement
 };
 
 /**
@@ -68,9 +69,18 @@ async function executeRequest<T>(
   isRetry = false
 ): Promise<T> {
   try {
+    // Get JWT token from localStorage
+    const token = localStorage.getItem('jwt_token');
+    const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+
+    // Add Authorization header if token exists
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`;
+    }
+
     const response = await fetch(`${API_BASE_URL}${endpoint}`, {
       method,
-      headers: { 'Content-Type': 'application/json' },
+      headers,
       ...(data !== undefined && { body: JSON.stringify(data) }),
       ...commonOptions,
     });
