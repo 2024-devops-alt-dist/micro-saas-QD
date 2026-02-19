@@ -34,13 +34,26 @@ export default function Profil() {
       const formData = new FormData();
       formData.append('file', file);
       const apiUrl = import.meta.env.VITE_API_BASE_URL || '';
+      const token = localStorage.getItem('jwt_token');
       const res = await axios.post(`${apiUrl}/upload`, formData, {
-        headers: { 'Content-Type': 'multipart/form-data' },
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
         withCredentials: true,
       });
       // Update user photo in DB
       const photoUrl = (res.data as { url: string }).url;
-      await axios.put(`${apiUrl}/users/${user.id}`, { photo: photoUrl }, { withCredentials: true });
+      await axios.put(
+        `${apiUrl}/users/${user.id}`,
+        { photo: photoUrl },
+        {
+          withCredentials: true,
+          headers: {
+            ...(token ? { Authorization: `Bearer ${token}` } : {}),
+          },
+        }
+      );
       setUser((u: any) => ({ ...u, photo: photoUrl }));
     } catch (err) {
       alert("Erreur lors de l'upload de la photo");

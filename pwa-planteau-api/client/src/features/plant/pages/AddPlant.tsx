@@ -65,9 +65,13 @@ const AddPlant: React.FC = () => {
       // TODO: Récupérer household_id via un autre appel ou contexte si besoin
       const household_id = 1; // Remplace 1 par la vraie logique si besoin
       const API_PLANTS_URL = `${import.meta.env.VITE_API_BASE_URL}/plants`;
+      const token = localStorage.getItem('jwt_token');
       const res = await fetch(API_PLANTS_URL, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
         body: JSON.stringify({
           name: form.name,
           scientific_name: form.scientificName,
