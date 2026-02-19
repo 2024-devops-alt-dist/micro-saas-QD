@@ -17,7 +17,9 @@ export const config = {
   DB_USER: process.env.DB_USER || 'user',
   DB_PASSWORD: process.env.DB_PASSWORD || 'password',
   DB_NAME: process.env.DB_NAME || 'database',
-  FRONT_URL: process.env.FRONT_URL || 'http://localhost:5173',
+  FRONT_URL: process.env.FRONT_URL
+    ? process.env.FRONT_URL.split(',').map(url => url.trim())
+    : ['http://localhost:5173', 'https://micro-saas-qd.vercel.app'],
   DATABASE_URL:
     process.env.DATABASE_URL ||
     `postgresql://${process.env.DB_USER || 'user'}:${process.env.DB_PASSWORD || 'password'}@${process.env.DB_HOST || 'localhost'}:${process.env.DB_PORT || '5432'}/${process.env.DB_NAME || 'database'}`,
