@@ -12,7 +12,17 @@ export default function authMiddleware(
   next: NextFunction
 ) {
   try {
-    const token = (req as any).cookies?.access_token;
+    // Chercher le token d'abord dans Authorization header (Bearer <token>), puis dans le cookie httpOnly
+    let token = null;
+    const authHeader = req.headers.authorization;
+
+    if (authHeader && authHeader.startsWith('Bearer ')) {
+      // Token dans Authorization header
+      token = authHeader.substring(7); // Enlever "Bearer "
+    } else {
+      // Fallback sur le cookie httpOnly
+      token = (req as any).cookies?.access_token;
+    }
 
     if (!token) {
       logger.http("Jeton d'accès manquant");

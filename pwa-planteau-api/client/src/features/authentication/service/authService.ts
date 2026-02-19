@@ -19,6 +19,7 @@ interface LoginData {
 interface AuthResponse {
   status: number;
   message: string;
+  accessToken?: string;
   user: {
     id: number;
     email: string;
@@ -33,7 +34,10 @@ export const authService = {
    */
   async register(data: RegisterData): Promise<AuthResponse> {
     const response = await httpClient.post<AuthResponse>('/auth/register', data);
-    // Token is stored in httpOnly cookie by the server
+    // Store JWT token from response
+    if (response.accessToken) {
+      this.setToken(response.accessToken);
+    }
     return response;
   },
 
@@ -42,7 +46,10 @@ export const authService = {
    */
   async login(data: LoginData): Promise<AuthResponse> {
     const response = await httpClient.post<AuthResponse>('/auth/login', data);
-    // Token is stored in httpOnly cookie by the server
+    // Store JWT token from response
+    if (response.accessToken) {
+      this.setToken(response.accessToken);
+    }
     return response;
   },
 
@@ -74,21 +81,18 @@ export const authService = {
    * Check if user is authenticated
    */
   isAuthenticated(): boolean {
-    // Since we're using httpOnly cookies, we just check if we can access protected routes
-    // A better approach would be to check with the server or use a context
-    return true; // Let the server handle authentication via cookies
+    return !!this.getToken();
   },
 
   /**
-   * Get token from localStorage (for optional use in headers)
-   * Note: We primarily rely on httpOnly cookies sent automatically by the browser
+   * Get token from localStorage
    */
   getToken(): string | null {
     return localStorage.getItem(TOKEN_KEY);
   },
 
   /**
-   * Store token in localStorage (optional, primarily use httpOnly cookies)
+   * Store token in localStorage
    */
   setToken(token: string): void {
     localStorage.setItem(TOKEN_KEY, token);
@@ -106,7 +110,11 @@ export const authService = {
    */
   async refreshToken(): Promise<void> {
     try {
-      await httpClient.post('/auth/refresh', {});
+      const response = await httpClient.post<AuthResponse>('/auth/refresh', {});
+      // Store refreshed JWT token from response
+      if (response.accessToken) {
+        this.setToken(response.accessToken);
+      }
     } catch (error) {
       // If refresh fails, clear authentication
       this.clearToken();
