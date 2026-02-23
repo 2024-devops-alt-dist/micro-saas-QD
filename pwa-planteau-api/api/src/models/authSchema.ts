@@ -3,8 +3,10 @@ import { z } from 'zod';
 export const RegisterSchema = z.object({
   email: z.string().email('Email invalide'),
   password: z.string().min(8, 'Le mot de passe doit contenir au moins 8 caractères'),
-  first_name: z.string().optional(),
-  last_name: z.string().optional(),
+  firstname: z.string().optional(),
+  name: z.string().optional(),
+  inviteCode: z.string().optional(),
+  householdName: z.string().optional(),
 });
 
 export const LoginSchema = z.object({
