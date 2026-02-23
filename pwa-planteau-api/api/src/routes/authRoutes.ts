@@ -1,6 +1,8 @@
 import { Router } from 'express';
 import { authController } from '../controllers/authController';
 import authMiddleware from '../middlewares/authMiddleware';
+import { validateBody } from '../middlewares/validate';
+import { RegisterSchema, LoginSchema } from '../models/authSchema';
 
 export const router = Router();
 
@@ -67,7 +69,7 @@ export const router = Router();
  *       500:
  *         description: Erreur serveur
  */
-router.post('/register', authController.register);
+router.post('/register', validateBody(RegisterSchema), authController.register);
 
 /**
  * @swagger
@@ -126,7 +128,7 @@ router.post('/register', authController.register);
  *       500:
  *         description: Erreur serveur
  */
-router.post('/login', authController.login);
+router.post('/login', validateBody(LoginSchema), authController.login);
 
 /**
  * @swagger
