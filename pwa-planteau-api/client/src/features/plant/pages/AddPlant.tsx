@@ -19,10 +19,20 @@ const AddPlant: React.FC = () => {
   const [form, setForm] = useState(initialState);
   const [file, setFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | undefined>(undefined);
+  const [error, setError] = useState<string>('');
+  const [fieldErrors, setFieldErrors] = useState<Partial<Record<string, string>>>({});
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
+    // Clear error for this field when user starts typing
+    if (fieldErrors[e.target.name]) {
+      setFieldErrors(prev => ({
+        ...prev,
+        [e.target.name]: undefined,
+      }));
+    }
   };
 
   const handleFileSelect = (file: File | null) => {
@@ -36,6 +46,22 @@ const AddPlant: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError('');
+    setFieldErrors({});
+
+    // Validation
+    const errors: Partial<Record<string, string>> = {};
+    if (!form.name) errors.name = 'Le nom commun est requis';
+    if (!form.scientificName) errors.scientificName = 'Le nom scientifique est requis';
+    if (!form.type) errors.type = 'Le type est requis';
+    if (!form.waterNeed) errors.waterNeed = 'Les besoins en eau sont requis';
+    if (!form.room) errors.room = 'La pièce est requise';
+
+    if (Object.keys(errors).length > 0) {
+      setFieldErrors(errors);
+      return;
+    }
+
     let imageUrl = form.image;
     if (file) {
       const formData = new FormData();
@@ -45,6 +71,7 @@ const AddPlant: React.FC = () => {
       const token = localStorage.getItem('jwt_token');
       const API_URL = `${import.meta.env.VITE_API_BASE_URL}/upload`;
       try {
+        setIsLoading(true);
         const res = await fetch(API_URL, {
           method: 'POST',
           body: formData,
@@ -54,12 +81,14 @@ const AddPlant: React.FC = () => {
         const data = await res.json();
         imageUrl = data.url;
       } catch (err) {
-        alert('Erreur lors de l’upload de la photo');
+        setError("Erreur lors de l'upload de la photo");
+        setIsLoading(false);
         return;
       }
     }
     // Récupère user_id et household_id automatiquement via l'utilisateur connecté
     try {
+      if (!file) setIsLoading(true);
       const userInfo = await authService.getCurrentUser();
       const user_id = userInfo.user.id;
       const household_id = userInfo.user.household_id;
@@ -84,9 +113,14 @@ const AddPlant: React.FC = () => {
         credentials: 'include',
       });
       if (!res.ok) throw new Error('Erreur lors de la création de la plante');
-      alert('Plante ajoutée avec succès !');
+      // Rediriger vers la collection de plantes après succès
+      navigate('/plants', { replace: true });
     } catch (err) {
-      alert('Erreur lors de la création de la plante');
+      const message =
+        err instanceof Error ? err.message : 'Erreur lors de la création de la plante';
+      setError(message);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -109,10 +143,18 @@ const AddPlant: React.FC = () => {
             &times;
           </button>
         </div>
-        <form className="add-plant-form" onSubmit={handleSubmit}>
+        {error && <div className="error-message">{error}</div>}
+        <form className="add-plant-form" onSubmit={handleSubmit} noValidate>
           <label>
             Nom commun
-            <input name="name" value={form.name} onChange={handleChange} required />
+            <input
+              name="name"
+              value={form.name}
+              onChange={handleChange}
+              required
+              className={fieldErrors.name ? 'form-input-error' : ''}
+            />
+            {fieldErrors.name && <div className="field-error">{fieldErrors.name}</div>}
           </label>
           <label>
             Nom scientifique
@@ -121,11 +163,21 @@ const AddPlant: React.FC = () => {
               value={form.scientificName}
               onChange={handleChange}
               required
+              className={fieldErrors.scientificName ? 'form-input-error' : ''}
             />
+            {fieldErrors.scientificName && (
+              <div className="field-error">{fieldErrors.scientificName}</div>
+            )}
           </label>
           <label>
             Type
-            <select name="type" value={form.type} onChange={handleChange} required>
+            <select
+              name="type"
+              value={form.type}
+              onChange={handleChange}
+              required
+              className={fieldErrors.type ? 'form-input-error' : ''}
+            >
               <option value="">Sélectionner un type</option>
               <option value="TROPICAL">Tropical</option>
               <option value="DESERT">Désert</option>
@@ -136,6 +188,7 @@ const AddPlant: React.FC = () => {
               <option value="BONSAI">Bonsaï</option>
               <option value="ORCHID">Orchidée</option>
             </select>
+            {fieldErrors.type && <div className="field-error">{fieldErrors.type}</div>}
           </label>
           <label>
             Photo
@@ -143,18 +196,28 @@ const AddPlant: React.FC = () => {
           </label>
           <label>
             Besoins en eau
-            <input name="waterNeed" value={form.waterNeed} onChange={handleChange} required />
+            <input
+              name="waterNeed"
+              value={form.waterNeed}
+              onChange={handleChange}
+              required
+              className={fieldErrors.waterNeed ? 'form-input-error' : ''}
+            />
+            {fieldErrors.waterNeed && <div className="field-error">{fieldErrors.waterNeed}</div>}
           </label>
           <label>
             Pièce
-            <input name="room" value={form.room} onChange={handleChange} required />
+            <input
+              name="room"
+              value={form.room}
+              onChange={handleChange}
+              required
+              className={fieldErrors.room ? 'form-input-error' : ''}
+            />
+            {fieldErrors.room && <div className="field-error">{fieldErrors.room}</div>}
           </label>
-          {/*
-            Les champs User ID et Household ID sont renseignés automatiquement côté client.
-            TODO: Récupérer household_id via un autre appel ou contexte si besoin.
-          */}
-          <button type="submit" className="add-plant-btn">
-            Ajouter
+          <button type="submit" className="add-plant-btn" disabled={isLoading}>
+            {isLoading ? 'Ajout en cours...' : 'Ajouter'}
           </button>
         </form>
       </div>

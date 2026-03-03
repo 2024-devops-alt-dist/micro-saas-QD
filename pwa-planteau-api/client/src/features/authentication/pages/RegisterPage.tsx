@@ -137,7 +137,7 @@ export default function RegisterPage() {
 
               {generalError && <div className="error-message">{generalError}</div>}
 
-              <form onSubmit={handleSubmit} className="auth-form">
+              <form onSubmit={handleSubmit} className="auth-form" noValidate>
                 <div
                   className="form-group"
                   style={{ display: 'flex', gap: '1rem', marginBottom: '1rem' }}

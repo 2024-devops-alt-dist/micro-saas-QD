@@ -52,6 +52,37 @@
   background: var(--color-primary-hover, #a6c94a);
 }
 
+.error-message {
+  padding: 12px 16px;
+  background-color: #ffebee;
+  border: 1px solid #ef5350;
+  border-radius: var(--radius-sm);
+  color: #c62828;
+  font-size: 0.875rem;
+  font-weight: 500;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.error-message::before {
+  content: '⚠️';
+  flex-shrink: 0;
+}
+
+.field-error {
+  color: #ef5350;
+  font-size: 0.75rem;
+  margin-top: 4px;
+  font-weight: 400;
+}
+
+.form-input-error {
+  border-color: #ef5350 !important;
+  background-color: #ffebee !important;
+}
+
 /* Desktop */
 @media (min-width: 769px) {
   .add-plant-form {

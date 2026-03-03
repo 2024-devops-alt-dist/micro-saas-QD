@@ -11,13 +11,26 @@ export default function LoginPage() {
   const [rememberMe, setRememberMe] = useState(false);
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [fieldErrors, setFieldErrors] = useState<{ email?: string; password?: string }>({});
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
+    setFieldErrors({});
 
-    if (!email || !password) {
-      setError('Veuillez remplir tous les champs');
+    // Validation
+    const errors: { email?: string; password?: string } = {};
+    if (!email) {
+      errors.email = "L'email est requis";
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      errors.email = 'Email invalide';
+    }
+    if (!password) {
+      errors.password = 'Le mot de passe est requis';
+    }
+
+    if (Object.keys(errors).length > 0) {
+      setFieldErrors(errors);
       return;
     }
 
@@ -58,7 +71,7 @@ export default function LoginPage() {
 
               {error && <div className="error-message">{error}</div>}
 
-              <form onSubmit={handleSubmit} className="auth-form">
+              <form onSubmit={handleSubmit} className="auth-form" noValidate>
                 <div className="form-group">
                   <label htmlFor="email" className="form-label">
                     Email
@@ -66,13 +79,19 @@ export default function LoginPage() {
                   <input
                     type="email"
                     id="email"
-                    className="form-input"
+                    className={`form-input ${fieldErrors.email ? 'error' : ''}`}
                     placeholder="lostbucket@gmail.com"
                     value={email}
-                    onChange={e => setEmail(e.target.value)}
+                    onChange={e => {
+                      setEmail(e.target.value);
+                      if (fieldErrors.email) {
+                        setFieldErrors(prev => ({ ...prev, email: undefined }));
+                      }
+                    }}
                     disabled={isLoading}
                     required
                   />
+                  {fieldErrors.email && <div className="field-error">{fieldErrors.email}</div>}
                 </div>
 
                 <div className="form-group">
@@ -83,10 +102,15 @@ export default function LoginPage() {
                     <input
                       type={showPassword ? 'text' : 'password'}
                       id="password"
-                      className="form-input"
+                      className={`form-input ${fieldErrors.password ? 'error' : ''}`}
                       placeholder="••••••••"
                       value={password}
-                      onChange={e => setPassword(e.target.value)}
+                      onChange={e => {
+                        setPassword(e.target.value);
+                        if (fieldErrors.password) {
+                          setFieldErrors(prev => ({ ...prev, password: undefined }));
+                        }
+                      }}
                       disabled={isLoading}
                       required
                     />
@@ -99,6 +123,9 @@ export default function LoginPage() {
                       {showPassword ? '👁️' : '👁️‍🗨️'}
                     </button>
                   </div>
+                  {fieldErrors.password && (
+                    <div className="field-error">{fieldErrors.password}</div>
+                  )}
                 </div>
 
                 <div className="form-checkbox">
@@ -129,11 +156,11 @@ export default function LoginPage() {
 
             <div className="auth-social">
               <button className="social-button google">
-                <img src="/assets/icons/google.svg" alt="Google" />
+                <img src="/assets/icons/google.webp" alt="Google" />
                 Via Google
               </button>
               <button className="social-button facebook">
-                <img src="/assets/icons/facebook.svg" alt="Facebook" />
+                <img src="/assets/icons/facebook.webp" alt="Facebook" />
                 Via Facebook
               </button>
             </div>

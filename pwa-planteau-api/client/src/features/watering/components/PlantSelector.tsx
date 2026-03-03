@@ -18,15 +18,31 @@ const PlantSelector: React.FC<PlantSelectorProps> = ({
       <div className="plant-selector-card">
         <select
           value={selectedPlantId || ''}
-          onChange={e => onPlantChange(Number(e.target.value))}
+          onChange={e => {
+            const value = e.target.value;
+            if (value) {
+              onPlantChange(Number(value));
+            }
+          }}
           className="plant-selector-dropdown"
+          required
         >
-          <option value="">-- Choisir une plante --</option>
-          {plants.map(plant => (
-            <option key={plant.id} value={plant.id}>
-              {plant.name}
+          {plants.length === 0 ? (
+            <option value="" disabled>
+              Aucune plante disponible
             </option>
-          ))}
+          ) : (
+            <>
+              <option value="" disabled>
+                -- Choisir une plante --
+              </option>
+              {plants.map(plant => (
+                <option key={plant.id} value={plant.id}>
+                  {plant.name}
+                </option>
+              ))}
+            </>
+          )}
         </select>
         <div className="plant-selector-display">
           {selectedPlantId ? (
