@@ -17,8 +17,6 @@ import authMiddleware from './middlewares/authMiddleware';
 import { router as uploadRouter } from './routes/uploadRoutes';
 
 const app = express();
-// Expose public/uploads for uploaded files
-app.use('/uploads', express.static('public/uploads'));
 // Optionally keep assets if needed
 app.use('/assets', express.static('public/assets'));
 app.use(express.json());
