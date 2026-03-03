@@ -53,6 +53,7 @@ export default function WateringCreate() {
   const [endHour, setEndHour] = useState('14:00');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [fieldError, setFieldError] = useState<string | null>(null);
   const hours = Array.from({ length: 24 }, (_, i) => `${i.toString().padStart(2, '0')}:00`);
   const navigate = useNavigate();
 
@@ -81,9 +82,7 @@ export default function WateringCreate() {
         const allPlants = await plantService.getAll();
         const plantsData = allPlants.map(p => ({ id: p.id, name: p.name }));
         setPlants(plantsData);
-        if (plantsData.length > 0) {
-          setSelectedPlantId(plantsData[0].id);
-        }
+        // Ne pas pré-sélectionner - forcer l'utilisateur à faire un choix
       } catch (err) {
         console.error('Failed to load plants:', err);
       }
@@ -94,9 +93,17 @@ export default function WateringCreate() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
+    setFieldError(null);
 
     if (!selectedPlantId) {
-      setError('Veuillez sélectionner une plante');
+      setFieldError('Veuillez sélectionner une plante');
+      return;
+    }
+
+    // Vérifier que la plante sélectionnée existe
+    const selectedPlant = plants.find(p => p.id === selectedPlantId);
+    if (!selectedPlant) {
+      setFieldError('La plante sélectionnée est invalide');
       return;
     }
 
@@ -140,7 +147,7 @@ export default function WateringCreate() {
         className="page-centered p-2 flex-1 flex flex-col overflow-y-auto"
         style={{ height: '90vh', maxHeight: '90vh' }}
       >
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} noValidate>
           {/* Header */}
           <div className="flex items-center justify-between mb-2">
             <div />
@@ -158,7 +165,7 @@ export default function WateringCreate() {
             </button>
           </div>
 
-          {error && <div className="text-red-500 p-4 rounded">{error}</div>}
+          {error && <div className="error-message">{error}</div>}
 
           {/* Sélection de la plante */}
           <div className="watering-date-padding">
@@ -167,6 +174,7 @@ export default function WateringCreate() {
               selectedPlantId={selectedPlantId}
               onPlantChange={setSelectedPlantId}
             />
+            {fieldError && <div className="field-error">{fieldError}</div>}
           </div>
 
           {/* Sélection date */}
