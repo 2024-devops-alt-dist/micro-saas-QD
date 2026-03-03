@@ -33,6 +33,7 @@ export default function Profil() {
       // Upload image
       const formData = new FormData();
       formData.append('file', file);
+      formData.append('type', 'user');
       const apiUrl = import.meta.env.VITE_API_BASE_URL || '';
       const token = localStorage.getItem('jwt_token');
       const res = await axios.post(`${apiUrl}/upload`, formData, {
@@ -88,7 +89,9 @@ export default function Profil() {
             <img
               src={
                 user.photo
-                  ? import.meta.env.VITE_API_BASE_URL?.replace('/api', '') + user.photo
+                  ? user.photo.startsWith('http://') || user.photo.startsWith('https://')
+                    ? user.photo
+                    : import.meta.env.VITE_API_BASE_URL?.replace('/api', '') + user.photo
                   : '/assets/images/avatar.png'
               }
               alt="Avatar"

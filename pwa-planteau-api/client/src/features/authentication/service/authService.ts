@@ -71,10 +71,26 @@ export const authService = {
    * Get current authenticated user info
    */
   async getCurrentUser(): Promise<{
-    user: { id: number; email: string; firstname: string; role: string };
+    user: {
+      id: number;
+      email: string;
+      firstname: string;
+      role: string;
+      household_id: number;
+      photo?: string;
+    };
   }> {
     const response = await httpClient.get('/auth/me');
-    return response as { user: { id: number; email: string; firstname: string; role: string } };
+    return response as {
+      user: {
+        id: number;
+        email: string;
+        firstname: string;
+        role: string;
+        household_id: number;
+        photo?: string;
+      };
+    };
   },
 
   /**
