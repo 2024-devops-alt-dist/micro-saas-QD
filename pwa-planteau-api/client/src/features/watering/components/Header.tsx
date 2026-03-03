@@ -53,9 +53,11 @@ const Header: React.FC<HeaderProps> = ({ avatarSrc }) => {
         <img
           src={
             avatarSrc
-              ? avatarSrc.startsWith('/uploads/')
-                ? import.meta.env.VITE_API_BASE_URL?.replace('/api', '') + avatarSrc
-                : avatarSrc
+              ? avatarSrc.startsWith('http://') || avatarSrc.startsWith('https://')
+                ? avatarSrc
+                : avatarSrc.startsWith('/uploads/')
+                  ? import.meta.env.VITE_API_BASE_URL?.replace('/api', '') + avatarSrc
+                  : avatarSrc
               : '/assets/images/avatar.png'
           }
           alt="avatar"
