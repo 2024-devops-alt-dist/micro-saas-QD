@@ -203,6 +203,37 @@
   transform: translateY(0);
 }
 
+.error-message {
+  padding: 12px 16px;
+  background-color: #ffebee;
+  border: 1px solid #ef5350;
+  border-radius: var(--radius-sm);
+  color: #c62828;
+  font-size: var(--text-sm);
+  font-weight: 500;
+  margin-bottom: var(--space-md);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.error-message::before {
+  content: '⚠️';
+  flex-shrink: 0;
+}
+
+.field-error {
+  color: #ef5350;
+  font-size: var(--text-xs);
+  margin-top: 4px;
+  font-weight: 400;
+}
+
+.form-input.error {
+  border-color: #ef5350;
+  background-color: #ffebee;
+}
+
 .auth-divider {
   display: flex;
   align-items: center;
