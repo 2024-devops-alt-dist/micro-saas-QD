@@ -16,7 +16,10 @@ type Plant = {
 const getFullImageUrl = (photo: string | null | undefined): string => {
   const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000';
   if (!photo) return '/placeholder.jpg';
-  if (photo.startsWith('http')) return photo;
+  // Si l'URL commence par http/https, c'est Cloudinary → retourner tel quel
+  if (photo.startsWith('http://') || photo.startsWith('https://')) {
+    return photo;
+  }
   if (photo.startsWith('/assets/')) return photo; // Sert par le client (Vite)
   if (photo.startsWith('/uploads/')) return `${API_BASE_URL}${photo}`;
   return photo;

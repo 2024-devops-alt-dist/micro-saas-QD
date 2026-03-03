@@ -40,6 +40,7 @@ const AddPlant: React.FC = () => {
     if (file) {
       const formData = new FormData();
       formData.append('file', file);
+      formData.append('type', 'plant');
       // Récupère le token JWT du localStorage
       const token = localStorage.getItem('jwt_token');
       const API_URL = `${import.meta.env.VITE_API_BASE_URL}/upload`;
@@ -51,19 +52,17 @@ const AddPlant: React.FC = () => {
           credentials: 'include',
         });
         const data = await res.json();
-        // Correction: l'URL doit pointer vers /uploads
-        imageUrl = data.url.replace('/assets/images/', '/uploads/');
+        imageUrl = data.url;
       } catch (err) {
         alert('Erreur lors de l’upload de la photo');
         return;
       }
     }
-    // Récupère user_id automatiquement via l'utilisateur connecté
+    // Récupère user_id et household_id automatiquement via l'utilisateur connecté
     try {
       const userInfo = await authService.getCurrentUser();
       const user_id = userInfo.user.id;
-      // TODO: Récupérer household_id via un autre appel ou contexte si besoin
-      const household_id = 1; // Remplace 1 par la vraie logique si besoin
+      const household_id = userInfo.user.household_id;
       const API_PLANTS_URL = `${import.meta.env.VITE_API_BASE_URL}/plants`;
       const token = localStorage.getItem('jwt_token');
       const res = await fetch(API_PLANTS_URL, {
