@@ -37,6 +37,12 @@
   z-index: 2;
 }
 
+.hour-select-dropdown option:disabled {
+  color: #aaa;
+  background: #f3f3f3;
+  font-style: italic;
+}
+
 .hour-select-sub {
   color: var(--color-gray-400);
   font-size: var(--text-base);
