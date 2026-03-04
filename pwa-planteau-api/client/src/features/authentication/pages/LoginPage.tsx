@@ -80,7 +80,7 @@ export default function LoginPage() {
                     type="email"
                     id="email"
                     className={`form-input ${fieldErrors.email ? 'error' : ''}`}
-                    placeholder="lostbucket@gmail.com"
+                    placeholder="john@gmail.com"
                     value={email}
                     onChange={e => {
                       setEmail(e.target.value);
