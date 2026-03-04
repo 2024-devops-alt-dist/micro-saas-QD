@@ -85,7 +85,6 @@ export const authController = {
         .json({
           status: 201,
           message: 'Utilisateur créé avec succès.',
-          accessToken,
           user: { id: user.id, email: user.email, role: user.role },
         });
 
@@ -127,7 +126,6 @@ export const authController = {
         .json({
           status: 200,
           message: 'Authenticated',
-          accessToken,
           user: { id: user.id, email: user.email, role: user.role, firstname: user.firstname },
         });
 
@@ -176,7 +174,6 @@ export const authController = {
           maxAge: REFRESH_TOKEN_MAX_AGE,
         })
         .json({
-          accessToken: newAccessToken,
           user: { id: user.id, email: user.email, role: user.role },
         });
 

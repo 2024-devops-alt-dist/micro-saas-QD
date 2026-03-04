@@ -3,8 +3,7 @@
  * Centralized fetch wrapper with error handling and automatic credential inclusion
  *
  * Features:
- * - JWT stored in localStorage, sent in Authorization header (Bearer)
- * - Fallback support for httpOnly cookies for progressive enhancement
+ * - JWT stored in httpOnly cookies, sent automatically by browser
  * - Automatic JWT refresh on 401 errors
  * - Automatic retry of failed requests after token refresh
  * - Prevention of multiple simultaneous refresh attempts
@@ -19,10 +18,10 @@ export interface ApiError extends Error {
 
 /**
  * Common fetch options for all requests
- * includes: 'credentials' for fallback httpOnly cookie support
+ * includes: 'credentials' to send httpOnly cookies with every request
  */
 const commonOptions: RequestInit = {
-  credentials: 'include', // Include cookies as fallback for progressive enhancement
+  credentials: 'include', // Include httpOnly cookies with every request
 };
 
 /**
@@ -48,9 +47,7 @@ async function handleTokenRefresh(): Promise<void> {
     await refreshPromise;
   } catch (error) {
     console.error('[httpClient] Token refresh failed, redirecting to login', error);
-    // Clear auth state and redirect to login
-    const { authService } = await import('../features/authentication/service/authService');
-    authService.clearToken();
+    // Redirect to login on refresh failure
     window.location.href = '/login';
     throw error;
   } finally {
@@ -69,14 +66,7 @@ async function executeRequest<T>(
   isRetry = false
 ): Promise<T> {
   try {
-    // Get JWT token from localStorage
-    const token = localStorage.getItem('jwt_token');
     const headers: Record<string, string> = { 'Content-Type': 'application/json' };
-
-    // Add Authorization header if token exists
-    if (token) {
-      headers['Authorization'] = `Bearer ${token}`;
-    }
 
     const response = await fetch(`${API_BASE_URL}${endpoint}`, {
       method,

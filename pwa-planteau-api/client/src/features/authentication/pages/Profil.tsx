@@ -35,11 +35,9 @@ export default function Profil() {
       formData.append('file', file);
       formData.append('type', 'user');
       const apiUrl = import.meta.env.VITE_API_BASE_URL || '';
-      const token = localStorage.getItem('jwt_token');
       const res = await axios.post(`${apiUrl}/upload`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
-          ...(token ? { Authorization: `Bearer ${token}` } : {}),
         },
         withCredentials: true,
       });
@@ -50,9 +48,6 @@ export default function Profil() {
         { photo: photoUrl },
         {
           withCredentials: true,
-          headers: {
-            ...(token ? { Authorization: `Bearer ${token}` } : {}),
-          },
         }
       );
       setUser((u: any) => ({ ...u, photo: photoUrl }));
