@@ -251,7 +251,7 @@ export default function RegisterPage() {
                     value={formData.email}
                     onChange={handleInputChange}
                     disabled={isLoading}
-                    placeholder="john@example.com"
+                    placeholder="john@gmail.com"
                     required
                   />
                   {errors.email && <span className="field-error">{errors.email}</span>}
