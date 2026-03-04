@@ -67,15 +67,12 @@ const AddPlant: React.FC = () => {
       const formData = new FormData();
       formData.append('file', file);
       formData.append('type', 'plant');
-      // Récupère le token JWT du localStorage
-      const token = localStorage.getItem('jwt_token');
       const API_URL = `${import.meta.env.VITE_API_BASE_URL}/upload`;
       try {
         setIsLoading(true);
         const res = await fetch(API_URL, {
           method: 'POST',
           body: formData,
-          headers: token ? { Authorization: `Bearer ${token}` } : undefined,
           credentials: 'include',
         });
         const data = await res.json();
@@ -93,12 +90,10 @@ const AddPlant: React.FC = () => {
       const user_id = userInfo.user.id;
       const household_id = userInfo.user.household_id;
       const API_PLANTS_URL = `${import.meta.env.VITE_API_BASE_URL}/plants`;
-      const token = localStorage.getItem('jwt_token');
       const res = await fetch(API_PLANTS_URL, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          ...(token ? { Authorization: `Bearer ${token}` } : {}),
         },
         body: JSON.stringify({
           name: form.name,

@@ -1,7 +1,5 @@
 import { httpClient } from '../../../services/httpClient';
 
-const TOKEN_KEY = 'jwt_token';
-
 interface RegisterData {
   email: string;
   password: string;
@@ -19,7 +17,6 @@ interface LoginData {
 interface AuthResponse {
   status: number;
   message: string;
-  accessToken?: string;
   user: {
     id: number;
     email: string;
@@ -34,10 +31,6 @@ export const authService = {
    */
   async register(data: RegisterData): Promise<AuthResponse> {
     const response = await httpClient.post<AuthResponse>('/auth/register', data);
-    // Store JWT token from response
-    if (response.accessToken) {
-      this.setToken(response.accessToken);
-    }
     return response;
   },
 
@@ -46,24 +39,17 @@ export const authService = {
    */
   async login(data: LoginData): Promise<AuthResponse> {
     const response = await httpClient.post<AuthResponse>('/auth/login', data);
-    // Store JWT token from response
-    if (response.accessToken) {
-      this.setToken(response.accessToken);
-    }
     return response;
   },
 
   /**
-   * Logout - clear token and call server
+   * Logout - clear cookies and call server
    */
   async logout(): Promise<void> {
     try {
       await httpClient.post('/auth/logout', {});
     } catch (error) {
-      // Even if logout fails on server, clear local token
       console.error('Logout error:', error);
-    } finally {
-      localStorage.removeItem(TOKEN_KEY);
     }
   },
 
@@ -94,47 +80,21 @@ export const authService = {
   },
 
   /**
-   * Check if user is authenticated
+   * Check if user is authenticated by calling /auth/me
    */
-  isAuthenticated(): boolean {
-    return !!this.getToken();
-  },
-
-  /**
-   * Get token from localStorage
-   */
-  getToken(): string | null {
-    return localStorage.getItem(TOKEN_KEY);
-  },
-
-  /**
-   * Store token in localStorage
-   */
-  setToken(token: string): void {
-    localStorage.setItem(TOKEN_KEY, token);
-  },
-
-  /**
-   * Clear token from localStorage
-   */
-  clearToken(): void {
-    localStorage.removeItem(TOKEN_KEY);
+  async isAuthenticated(): Promise<boolean> {
+    try {
+      await this.getCurrentUser();
+      return true;
+    } catch {
+      return false;
+    }
   },
 
   /**
    * Refresh access token
    */
   async refreshToken(): Promise<void> {
-    try {
-      const response = await httpClient.post<AuthResponse>('/auth/refresh', {});
-      // Store refreshed JWT token from response
-      if (response.accessToken) {
-        this.setToken(response.accessToken);
-      }
-    } catch (error) {
-      // If refresh fails, clear authentication
-      this.clearToken();
-      throw error;
-    }
+    await httpClient.post<AuthResponse>('/auth/refresh', {});
   },
 };
