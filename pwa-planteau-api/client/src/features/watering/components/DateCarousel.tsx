@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import '../css/DateCarousel.css';
 
 type Day = {
@@ -32,6 +32,23 @@ const DateCarousel: React.FC<DateCarouselProps> = ({
     year: 'numeric',
   });
 
+  // Ref pour le wrapper du carrousel
+  const wrapperRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    // Centrer sur la date du jour si présente
+    const todayIso = new Date().toISOString().slice(0, 10);
+    const btn = wrapperRef.current?.querySelector<HTMLButtonElement>(
+      `button[data-iso='${todayIso}']`
+    );
+    if (btn && wrapperRef.current) {
+      const wrapper = wrapperRef.current;
+      const btnRect = btn.getBoundingClientRect();
+      const wrapperRect = wrapper.getBoundingClientRect();
+      wrapper.scrollLeft = btn.offsetLeft - wrapperRect.width / 2 + btnRect.width / 2;
+    }
+  }, [days, currentMonth, currentYear]);
+
   return (
     <div>
       <div className="date-carousel-header">
@@ -46,11 +63,12 @@ const DateCarousel: React.FC<DateCarouselProps> = ({
           →
         </button>
       </div>
-      <div className="date-carousel-wrapper">
+      <div className="date-carousel-wrapper" ref={wrapperRef}>
         <div className="date-carousel">
           {days.map(d => (
             <button
               key={d.iso}
+              data-iso={d.iso}
               className={`date-card${selectedDate === d.iso ? ' selected' : ''}`}
               onClick={() => setSelectedDate(d.iso)}
               type="button"
