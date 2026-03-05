@@ -25,7 +25,19 @@ app.use(cookieParser());
 // CORS configuration: allow frontend origin to communicate with API
 app.use(
   cors({
-    origin: config.FRONT_URL,
+    origin: (origin, callback) => {
+      // Convert FRONT_URL array to array of accepted origins
+      const allowedOrigins = Array.isArray(config.FRONT_URL)
+        ? config.FRONT_URL
+        : [config.FRONT_URL];
+
+      // Allow requests with no origin (mobile apps, curl requests)
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error('Not allowed by CORS'));
+      }
+    },
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true,
