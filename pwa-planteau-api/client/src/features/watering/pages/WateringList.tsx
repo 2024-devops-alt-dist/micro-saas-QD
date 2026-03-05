@@ -114,28 +114,34 @@ export default function WateringList() {
         )}
         {waterings.length > 0 && (
           <>
-            <TodayTasks
-              todayTasks={todayTasks.map(task => ({
-                ...task,
-                taskLabel: task.taskLabel || task.frequency || 'Arrosage',
-                plantId: task.plantId,
-                status: (task as any).status || 'TODO',
-              }))}
-              onStatusChange={fetchWaterings}
-            />
-            <TomorrowReminders
-              tomorrowTasks={tomorrowTasks.map(task => ({
-                ...task,
-                taskLabel: task.taskLabel ?? task.frequency ?? 'Arrosage',
-                plantId: task.plantId,
-              }))}
-            />
-            <WeekTasks
-              upcomingTasks={upcomingTasks}
-              todayIso={todayIso}
-              tomorrowIso={tomorrowIso}
-              weekDays={weekDays}
-            />
+            <section aria-labelledby="today-tasks-title">
+              <TodayTasks
+                todayTasks={todayTasks.map(task => ({
+                  ...task,
+                  taskLabel: task.taskLabel || task.frequency || 'Arrosage',
+                  plantId: task.plantId,
+                  status: (task as any).status || 'TODO',
+                }))}
+                onStatusChange={fetchWaterings}
+              />
+            </section>
+            <section aria-labelledby="tomorrow-tasks-title">
+              <TomorrowReminders
+                tomorrowTasks={tomorrowTasks.map(task => ({
+                  ...task,
+                  taskLabel: task.taskLabel ?? task.frequency ?? 'Arrosage',
+                  plantId: task.plantId,
+                }))}
+              />
+            </section>
+            <section aria-labelledby="week-tasks-title">
+              <WeekTasks
+                upcomingTasks={upcomingTasks}
+                todayIso={todayIso}
+                tomorrowIso={tomorrowIso}
+                weekDays={weekDays}
+              />
+            </section>
           </>
         )}
         <div className="flex justify-end mt-8">

@@ -138,33 +138,40 @@ export default function RegisterPage() {
               {generalError && <div className="error-message">{generalError}</div>}
 
               <form onSubmit={handleSubmit} className="auth-form" noValidate>
-                <div
-                  className="form-group"
-                  style={{ display: 'flex', gap: '1rem', marginBottom: '1rem' }}
-                >
-                  <label style={{ display: 'flex', alignItems: 'center', gap: '0.3rem' }}>
-                    <input
-                      type="radio"
-                      name="joinOrCreate"
-                      value="join"
-                      checked={formData.joinOrCreate === 'join'}
-                      onChange={handleInputChange}
-                      disabled={isLoading}
-                    />
-                    Rejoindre un foyer existant
-                  </label>
-                  <label style={{ display: 'flex', alignItems: 'center', gap: '0.3rem' }}>
-                    <input
-                      type="radio"
-                      name="joinOrCreate"
-                      value="create"
-                      checked={formData.joinOrCreate === 'create'}
-                      onChange={handleInputChange}
-                      disabled={isLoading}
-                    />
-                    Créer un nouveau foyer
-                  </label>
-                </div>
+                <fieldset style={{ border: 'none', padding: 0, margin: 0 }}>
+                  <legend style={{ fontSize: '0.875rem', fontWeight: 500, marginBottom: '0.5rem' }}>
+                    Type de compte
+                  </legend>
+                  <div
+                    className="form-group"
+                    style={{ display: 'flex', gap: '1rem', marginBottom: '1rem' }}
+                  >
+                    <label style={{ display: 'flex', alignItems: 'center', gap: '0.3rem' }}>
+                      <input
+                        id="joinOrCreate-join"
+                        type="radio"
+                        name="joinOrCreate"
+                        value="join"
+                        checked={formData.joinOrCreate === 'join'}
+                        onChange={handleInputChange}
+                        disabled={isLoading}
+                      />
+                      Rejoindre un foyer existant
+                    </label>
+                    <label style={{ display: 'flex', alignItems: 'center', gap: '0.3rem' }}>
+                      <input
+                        id="joinOrCreate-create"
+                        type="radio"
+                        name="joinOrCreate"
+                        value="create"
+                        checked={formData.joinOrCreate === 'create'}
+                        onChange={handleInputChange}
+                        disabled={isLoading}
+                      />
+                      Créer un nouveau foyer
+                    </label>
+                  </div>
+                </fieldset>
 
                 {formData.joinOrCreate === 'create' && (
                   <div className="form-group">
@@ -180,9 +187,13 @@ export default function RegisterPage() {
                       onChange={handleInputChange}
                       disabled={isLoading}
                       placeholder="Ma famille, Coloc, ..."
+                      aria-invalid={!!errors.householdName}
+                      aria-describedby={errors.householdName ? 'householdName-error' : undefined}
                     />
                     {errors.householdName && (
-                      <span className="field-error">{errors.householdName}</span>
+                      <span className="field-error" id="householdName-error">
+                        {errors.householdName}
+                      </span>
                     )}
                   </div>
                 )}
@@ -202,8 +213,14 @@ export default function RegisterPage() {
                     placeholder={
                       formData.joinOrCreate === 'create' ? 'Ex: FAMILLE2024' : 'Ex: code reçu'
                     }
+                    aria-invalid={!!errors.inviteCode}
+                    aria-describedby={errors.inviteCode ? 'inviteCode-error' : undefined}
                   />
-                  {errors.inviteCode && <span className="field-error">{errors.inviteCode}</span>}
+                  {errors.inviteCode && (
+                    <span className="field-error" id="inviteCode-error">
+                      {errors.inviteCode}
+                    </span>
+                  )}
                 </div>
                 <div className="form-group">
                   <label htmlFor="firstname" className="form-label">
@@ -218,8 +235,14 @@ export default function RegisterPage() {
                     onChange={handleInputChange}
                     disabled={isLoading}
                     placeholder="John"
+                    aria-invalid={!!errors.firstname}
+                    aria-describedby={errors.firstname ? 'firstname-error' : undefined}
                   />
-                  {errors.firstname && <span className="field-error">{errors.firstname}</span>}
+                  {errors.firstname && (
+                    <span className="field-error" id="firstname-error">
+                      {errors.firstname}
+                    </span>
+                  )}
                 </div>
 
                 <div className="form-group">
@@ -235,8 +258,14 @@ export default function RegisterPage() {
                     onChange={handleInputChange}
                     disabled={isLoading}
                     placeholder="Doe"
+                    aria-invalid={!!errors.name}
+                    aria-describedby={errors.name ? 'name-error' : undefined}
                   />
-                  {errors.name && <span className="field-error">{errors.name}</span>}
+                  {errors.name && (
+                    <span className="field-error" id="name-error">
+                      {errors.name}
+                    </span>
+                  )}
                 </div>
 
                 <div className="form-group">
@@ -253,8 +282,14 @@ export default function RegisterPage() {
                     disabled={isLoading}
                     placeholder="john@gmail.com"
                     required
+                    aria-invalid={!!errors.email}
+                    aria-describedby={errors.email ? 'email-error' : undefined}
                   />
-                  {errors.email && <span className="field-error">{errors.email}</span>}
+                  {errors.email && (
+                    <span className="field-error" id="email-error">
+                      {errors.email}
+                    </span>
+                  )}
                 </div>
 
                 <div className="form-group">
@@ -271,8 +306,14 @@ export default function RegisterPage() {
                     disabled={isLoading}
                     placeholder="••••••••"
                     required
+                    aria-invalid={!!errors.password}
+                    aria-describedby={errors.password ? 'password-error' : undefined}
                   />
-                  {errors.password && <span className="field-error">{errors.password}</span>}
+                  {errors.password && (
+                    <span className="field-error" id="password-error">
+                      {errors.password}
+                    </span>
+                  )}
                 </div>
 
                 <div className="form-group">
@@ -289,9 +330,13 @@ export default function RegisterPage() {
                     disabled={isLoading}
                     placeholder="••••••••"
                     required
+                    aria-invalid={!!errors.passwordConfirm}
+                    aria-describedby={errors.passwordConfirm ? 'passwordConfirm-error' : undefined}
                   />
                   {errors.passwordConfirm && (
-                    <span className="field-error">{errors.passwordConfirm}</span>
+                    <span className="field-error" id="passwordConfirm-error">
+                      {errors.passwordConfirm}
+                    </span>
                   )}
                 </div>
 

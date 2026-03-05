@@ -14,77 +14,79 @@ import Profil from './features/authentication/pages/Profil';
 function App() {
   return (
     <Router>
-      <Routes>
-        {/* Public routes */}
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/register" element={<RegisterPage />} />
+      <main>
+        <Routes>
+          {/* Public routes */}
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
 
-        {/* Protected routes */}
-        <Route
-          path="/"
-          element={
-            <ProtectedRoute>
-              <WateringList />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/test-connect"
-          element={
-            <ProtectedRoute>
-              <TestConnectPage />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/plants"
-          element={
-            <ProtectedRoute>
-              <PlantCollection />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/plants/:id"
-          element={
-            <ProtectedRoute>
-              <PlantDetail />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/add-plant"
-          element={
-            <ProtectedRoute>
-              <AddPlant />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/watering/create"
-          element={
-            <ProtectedRoute>
-              <WateringCreate />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/watering"
-          element={
-            <ProtectedRoute>
-              <WateringList />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/profil"
-          element={
-            <ProtectedRoute>
-              <Profil />
-            </ProtectedRoute>
-          }
-        />
-      </Routes>
+          {/* Protected routes */}
+          <Route
+            path="/"
+            element={
+              <ProtectedRoute>
+                <WateringList />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/test-connect"
+            element={
+              <ProtectedRoute>
+                <TestConnectPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/plants"
+            element={
+              <ProtectedRoute>
+                <PlantCollection />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/plants/:id"
+            element={
+              <ProtectedRoute>
+                <PlantDetail />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/add-plant"
+            element={
+              <ProtectedRoute>
+                <AddPlant />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/watering/create"
+            element={
+              <ProtectedRoute>
+                <WateringCreate />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/watering"
+            element={
+              <ProtectedRoute>
+                <WateringList />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/profil"
+            element={
+              <ProtectedRoute>
+                <Profil />
+              </ProtectedRoute>
+            }
+          />
+        </Routes>
+      </main>
     </Router>
   );
 }
