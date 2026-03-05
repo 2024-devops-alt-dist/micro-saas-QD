@@ -97,4 +97,20 @@ export const authService = {
   async refreshToken(): Promise<void> {
     await httpClient.post<AuthResponse>('/auth/refresh', {});
   },
+
+  /**
+   * Alias for getCurrentUser() for consistency with AuthContext
+   */
+  async me(): Promise<{
+    user: {
+      id: number;
+      email: string;
+      firstname: string;
+      role: string;
+      household_id: number;
+      photo?: string;
+    };
+  }> {
+    return this.getCurrentUser();
+  },
 };

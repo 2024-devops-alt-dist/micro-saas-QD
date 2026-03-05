@@ -1,16 +1,15 @@
 import { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
-import { authService } from '../service/authService';
+import { Link } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 import '../css/AuthPages.css';
 
 export default function LoginPage() {
-  const navigate = useNavigate();
+  const { login, loading } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
   const [error, setError] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
   const [fieldErrors, setFieldErrors] = useState<{ email?: string; password?: string }>({});
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -35,22 +34,14 @@ export default function LoginPage() {
     }
 
     try {
-      setIsLoading(true);
-      const response = await authService.login({ email, password });
-      // Sauvegarder le firstname dans localStorage
-      if (response.user?.firstname) {
-        localStorage.setItem('user_firstname', response.user.firstname);
-      }
-      // Redirect to home on success
-      navigate('/', { replace: true });
+      // Use the login method from AuthContext which handles navigation
+      await login(email, password);
     } catch (err) {
       if (err instanceof Error) {
         setError(err.message || 'Erreur lors de la connexion');
       } else {
         setError("Une erreur inconnue s'est produite");
       }
-    } finally {
-      setIsLoading(false);
     }
   };
 
@@ -88,7 +79,7 @@ export default function LoginPage() {
                         setFieldErrors(prev => ({ ...prev, email: undefined }));
                       }
                     }}
-                    disabled={isLoading}
+                    disabled={loading}
                     required
                     aria-invalid={!!fieldErrors.email}
                     aria-describedby={fieldErrors.email ? 'email-error' : undefined}
@@ -117,7 +108,7 @@ export default function LoginPage() {
                           setFieldErrors(prev => ({ ...prev, password: undefined }));
                         }
                       }}
-                      disabled={isLoading}
+                      disabled={loading}
                       required
                       aria-invalid={!!fieldErrors.password}
                       aria-describedby={fieldErrors.password ? 'password-error' : undefined}
@@ -156,8 +147,8 @@ export default function LoginPage() {
                   </Link>
                 </div>
 
-                <button type="submit" className="auth-button" disabled={isLoading}>
-                  {isLoading ? 'Connexion en cours...' : 'Se Connecter'}
+                <button type="submit" className="auth-button" disabled={loading}>
+                  {loading ? 'Connexion en cours...' : 'Se Connecter'}
                 </button>
               </form>
             </div>

@@ -1,33 +1,17 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useRef } from 'react';
 import Navbar from '../../../components/Navbar';
 import '../css/Profil.css';
-import { authService } from '../service/authService';
-import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 import axios from 'axios';
 
 export default function Profil() {
-  const [user, setUser] = useState<any>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
-  const navigate = useNavigate();
+  const { user, logout, loading } = useAuth();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [uploading, setUploading] = useState(false);
 
-  useEffect(() => {
-    async function fetchUser() {
-      try {
-        const res = await authService.getCurrentUser();
-        setUser(res.user);
-      } catch (err) {
-        setError('Erreur lors du chargement du profil');
-      } finally {
-        setLoading(false);
-      }
-    }
-    fetchUser();
-  }, []);
-
   const handlePhotoUpload = async (file: File) => {
+    if (!user) return;
+
     setUploading(true);
     try {
       // Upload image
@@ -50,7 +34,6 @@ export default function Profil() {
           withCredentials: true,
         }
       );
-      setUser((u: any) => ({ ...u, photo: photoUrl }));
     } catch (err) {
       alert("Erreur lors de l'upload de la photo");
     } finally {
@@ -63,13 +46,6 @@ export default function Profil() {
       <div className="navbar-layout">
         <Navbar />
         <div className="page-centered">Chargement...</div>
-      </div>
-    );
-  if (error)
-    return (
-      <div className="navbar-layout">
-        <Navbar />
-        <div className="page-centered text-red-500">{error}</div>
       </div>
     );
   if (!user) return null;
@@ -140,13 +116,7 @@ export default function Profil() {
           </section>
         </section>
         <div style={{ display: 'flex', justifyContent: 'center', marginTop: '2.5rem' }}>
-          <button
-            className="profil-logout-btn"
-            onClick={async () => {
-              await authService.logout();
-              navigate('/login');
-            }}
-          >
+          <button className="profil-logout-btn" onClick={() => logout()}>
             Se déconnecter
           </button>
         </div>

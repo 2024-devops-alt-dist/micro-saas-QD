@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { authService } from '../../authentication/service/authService';
+import { useAuth } from '../../authentication/context/AuthContext';
 import '../css/Header.css';
 
 interface HeaderProps {
@@ -8,32 +8,12 @@ interface HeaderProps {
 }
 
 const Header: React.FC<HeaderProps> = ({ avatarSrc }) => {
+  const { user, logout } = useAuth();
   const [showPopup, setShowPopup] = useState(false);
-  const [userName, setUserName] = useState<string>('Utilisateur');
   const popupRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
 
-  // Charger le nom de l'utilisateur connecté
-  useEffect(() => {
-    const loadUserName = async () => {
-      try {
-        // Essayer d'abord récupérer du localStorage (sauvegardé au login)
-        const storedName = localStorage.getItem('user_firstname');
-        if (storedName) {
-          setUserName(storedName);
-          return;
-        }
-
-        // Fallback : appeler l'API si pas en localStorage
-        const response = await authService.getCurrentUser();
-        setUserName(response.user.firstname);
-        localStorage.setItem('user_firstname', response.user.firstname);
-      } catch (error) {
-        console.error('Failed to load user name:', error);
-      }
-    };
-    loadUserName();
-  }, []);
+  const userName = user?.firstname || 'Utilisateur';
 
   useEffect(() => {
     if (!showPopup) return;
@@ -80,10 +60,7 @@ const Header: React.FC<HeaderProps> = ({ avatarSrc }) => {
               </button>
               <button
                 className="header-logout-btn"
-                onClick={async () => {
-                  await authService.logout();
-                  navigate('/login', { replace: true });
-                }}
+                onClick={() => logout()}
                 onMouseDown={e => e.stopPropagation()}
               >
                 Déconnexion
