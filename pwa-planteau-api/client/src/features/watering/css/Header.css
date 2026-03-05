@@ -1,3 +1,5 @@
+@import '../../../assets/css/variable.css';
+
 .header-popup-btns {
   display: flex;
   flex-direction: column;
@@ -11,7 +13,7 @@
   padding-bottom: 0.5rem;
   width: 100%;
 }
-@import '../../../assets/css/variable.css';
+
 
 .header-title {
   font-family: var(--font-h2);

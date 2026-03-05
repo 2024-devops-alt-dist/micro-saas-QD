@@ -8,11 +8,28 @@ import { config } from '../config/env';
 
 const isProd = config.NODE_ENV === 'production';
 
+// Extract domain from FRONT_URL for cookie domain setting
+const getCookieDomain = (): string | undefined => {
+  if (!isProd) return undefined; // No domain in dev (localhost)
+  // Extract domain from first FRONT_URL entry
+  const frontUrl = Array.isArray(config.FRONT_URL) ? config.FRONT_URL[0] : config.FRONT_URL;
+  if (!frontUrl) return undefined;
+  try {
+    const url = new URL(frontUrl);
+    // Return apex domain (e.g., 'vercel.app' from 'https://app.vercel.app')
+    const parts = url.hostname.split('.');
+    return parts.length > 2 ? `.${parts.slice(-2).join('.')}` : url.hostname;
+  } catch {
+    return undefined;
+  }
+};
+
 const COOKIE_OPTIONS: CookieOptions = {
   httpOnly: true,
   secure: isProd,
-  sameSite: isProd ? 'none' : 'lax',
+  sameSite: isProd ? 'lax' : 'lax', // Use 'lax' for better mobile compatibility instead of 'none'
   path: '/',
+  domain: getCookieDomain(),
 };
 
 const ACCESS_TOKEN_MAX_AGE = 15 * 60 * 1000; // 15 min
