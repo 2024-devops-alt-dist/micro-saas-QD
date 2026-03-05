@@ -73,12 +73,14 @@ const PlantCollection: React.FC = () => {
     <div className="navbar-layout">
       <Navbar />
       <div className="page-centered flex-1 flex flex-col relative">
-        <h2 className="plant-collection-title mb-2">Vos Plantes d'intérieur</h2>
+        <h2 className="plant-collection-title mb-2" id="plant-collection-title">
+          Vos Plantes d'intérieur
+        </h2>
         <FilterCarousel filters={filters} active={activeFilter} onSelect={setActiveFilter} />
         {/* Grille de cards */}
-        <div className="plant-collection-grid">
+        <section className="plant-collection-grid" aria-labelledby="plant-collection-title">
           <PlantCard plants={filteredPlants} />
-        </div>
+        </section>
         {error && <div className="text-red-500 p-4">{error}</div>}
         {/* Bouton flottant + */}
         <Link

@@ -35,23 +35,26 @@ const PlantCard: React.FC<PlantCardProps> = ({ plants }) => {
   // Handle 1 or 2 plants: display them in a nice flex row
   if (validPlants.length === 1) {
     return (
-      <div className="flex justify-center p-4">
+      <article className="flex justify-center p-4">
         <Link to={`/plants/${validPlants[0].id}`} className="w-3/4 h-80 block">
           <PlantImage plant={validPlants[0]} />
+          <span className="sr-only">{validPlants[0].name}</span>
         </Link>
-      </div>
+      </article>
     );
   }
   if (validPlants.length === 2) {
     return (
-      <div className="flex gap-4 justify-center p-4">
+      <article className="flex gap-4 justify-center p-4">
         <Link to={`/plants/${validPlants[0].id}`} className="w-1/2 h-80 block">
           <PlantImage plant={validPlants[0]} />
+          <span className="sr-only">{validPlants[0].name}</span>
         </Link>
         <Link to={`/plants/${validPlants[1].id}`} className="w-1/2 h-80 block">
           <PlantImage plant={validPlants[1]} />
+          <span className="sr-only">{validPlants[1].name}</span>
         </Link>
-      </div>
+      </article>
     );
   }
 
@@ -63,43 +66,49 @@ const PlantCard: React.FC<PlantCardProps> = ({ plants }) => {
         // Ligne 1 : deux petites à gauche + une grande à droite (2 colonnes)
         if (validPlants[i + 2]) {
           return (
-            <div key={`row-${i}`} className="flex gap-4 h-64">
+            <article key={`row-${i}`} className="flex gap-4 h-64">
               <div className="flex flex-col gap-4 flex-1">
                 <Link to={`/plants/${validPlants[i].id}`} className="w-full h-1/2 block">
                   <PlantImage plant={validPlants[i]} />
+                  <span className="sr-only">{validPlants[i].name}</span>
                 </Link>
                 <Link to={`/plants/${validPlants[i + 1].id}`} className="w-full h-1/2 block">
                   <PlantImage plant={validPlants[i + 1]} />
+                  <span className="sr-only">{validPlants[i + 1].name}</span>
                 </Link>
               </div>
               <Link to={`/plants/${validPlants[i + 2].id}`} className="w-1/2 h-full block">
                 <PlantImage plant={validPlants[i + 2]} />
+                <span className="sr-only">{validPlants[i + 2].name}</span>
               </Link>
-            </div>
+            </article>
           );
         }
 
         // Ligne 2 : deux moyennes côte à côte (2 colonnes)
         if (validPlants[i + 1]) {
           return (
-            <div key={`row-${i}`} className="flex gap-4 h-60">
+            <article key={`row-${i}`} className="flex gap-4 h-60">
               <Link to={`/plants/${validPlants[i].id}`} className="w-1/2 h-full block">
                 <PlantImage plant={validPlants[i]} />
+                <span className="sr-only">{validPlants[i].name}</span>
               </Link>
               <Link to={`/plants/${validPlants[i + 1].id}`} className="w-1/2 h-full block">
                 <PlantImage plant={validPlants[i + 1]} />
+                <span className="sr-only">{validPlants[i + 1].name}</span>
               </Link>
-            </div>
+            </article>
           );
         }
 
         // Ligne 3 : une seule grande centrée (sur 2 colonnes)
         return (
-          <div key={`row-${i}`} className="flex justify-center h-80">
+          <article key={`row-${i}`} className="flex justify-center h-80">
             <Link to={`/plants/${validPlants[i].id}`} className="w-3/4 h-full block">
               <PlantImage plant={validPlants[i]} />
+              <span className="sr-only">{validPlants[i].name}</span>
             </Link>
-          </div>
+          </article>
         );
       })}
     </div>

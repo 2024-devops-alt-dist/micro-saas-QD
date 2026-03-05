@@ -34,15 +34,14 @@ const WeekTasks: React.FC<WeekTasksProps> = ({
   const endOfWeekIso = endOfWeek.toISOString().split('T')[0];
 
   return (
-    <div className="week-tasks-section">
-      <h3 className="week-tasks-title">Tâches de la semaine</h3>
+    <section className="week-tasks-section" aria-labelledby="week-tasks-title">
+      <h3 id="week-tasks-title" className="week-tasks-title">
+        Tâches de la semaine
+      </h3>
       {Object.entries(upcomingTasks)
         .sort(([dateA], [dateB]) => dateA.localeCompare(dateB))
         .map(([date, tasks]) => {
-          // Ne pas afficher les tâches d'aujourd'hui et demain (déjà affichées)
           if (date === todayIso || date === tomorrowIso) return null;
-
-          // Ne pas afficher les tâches après dimanche
           if (date > endOfWeekIso) return null;
 
           const dateObj = new Date(date);
@@ -62,16 +61,16 @@ const WeekTasks: React.FC<WeekTasksProps> = ({
               </div>
               <div className="week-tasks-cards">
                 {tasks.map((task, idx) => (
-                  <div key={idx} className="week-task-card">
+                  <article key={idx} className="week-task-card">
                     <p className="week-task-name">{task.plantName}</p>
                     <p className="week-task-frequency">Fréquence: {task.frequency}</p>
-                  </div>
+                  </article>
                 ))}
               </div>
             </div>
           );
         })}
-    </div>
+    </section>
   );
 };
 

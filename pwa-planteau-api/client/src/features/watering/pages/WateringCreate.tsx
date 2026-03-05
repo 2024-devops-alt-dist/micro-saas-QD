@@ -147,74 +147,79 @@ export default function WateringCreate() {
         className="page-centered p-2 flex-1 flex flex-col overflow-y-auto"
         style={{ height: '90vh', maxHeight: '90vh' }}
       >
-        <form onSubmit={handleSubmit} noValidate>
-          {/* Header */}
-          <div className="flex items-center justify-between mb-2">
-            <div />
-            <span className="watering-create-header text-xl text-center flex-1">
-              Planifier votre
-              <br />
-              nouvelle Tâche
-            </span>
-            <button
-              className="text-gray-400 text-2xl font-bold"
-              type="button"
-              onClick={() => navigate(-1)}
-            >
-              &times;
-            </button>
-          </div>
+        <section aria-labelledby="watering-form-title">
+          <form onSubmit={handleSubmit} noValidate>
+            {/* Header */}
+            <div className="flex items-center justify-between mb-2">
+              <div />
+              <span
+                id="watering-form-title"
+                className="watering-create-header text-xl text-center flex-1"
+              >
+                Planifier votre
+                <br />
+                nouvelle Tâche
+              </span>
+              <button
+                className="text-gray-400 text-2xl font-bold"
+                type="button"
+                onClick={() => navigate(-1)}
+              >
+                &times;
+              </button>
+            </div>
 
-          {error && <div className="error-message">{error}</div>}
+            {error && <div className="error-message">{error}</div>}
 
-          {/* Sélection de la plante */}
-          <div className="watering-date-padding">
-            <PlantSelector
-              plants={plants}
-              selectedPlantId={selectedPlantId}
-              onPlantChange={setSelectedPlantId}
+            {/* Sélection de la plante */}
+            <div className="watering-date-padding">
+              <PlantSelector
+                plants={plants}
+                selectedPlantId={selectedPlantId}
+                onPlantChange={setSelectedPlantId}
+              />
+              {fieldError && <div className="field-error">{fieldError}</div>}
+            </div>
+
+            {/* Sélection date */}
+            <div className="watering-date-padding">
+              <DateCarousel
+                days={days}
+                selectedDate={selectedDate}
+                setSelectedDate={setSelectedDate}
+                currentMonth={currentMonth}
+                currentYear={currentYear}
+                onNextMonth={handleNextMonth}
+                onPrevMonth={handlePrevMonth}
+              />
+            </div>
+
+            {/* Sélection heure */}
+            <HourSelect
+              startHour={startHour}
+              endHour={endHour}
+              setStartHour={setStartHour}
+              setEndHour={setEndHour}
+              hours={hours}
             />
-            {fieldError && <div className="field-error">{fieldError}</div>}
-          </div>
 
-          {/* Sélection date */}
-          <div className="watering-date-padding">
-            <DateCarousel
-              days={days}
-              selectedDate={selectedDate}
-              setSelectedDate={setSelectedDate}
-              currentMonth={currentMonth}
-              currentYear={currentYear}
-              onNextMonth={handleNextMonth}
-              onPrevMonth={handlePrevMonth}
+            {/* Catégories */}
+            <CategorySelector
+              categories={categories}
+              selectedCategory={selectedCategory}
+              setSelectedCategory={setSelectedCategory}
             />
-          </div>
 
-          {/* Sélection heure */}
-          <HourSelect
-            startHour={startHour}
-            endHour={endHour}
-            setStartHour={setStartHour}
-            setEndHour={setEndHour}
-            hours={hours}
-          />
+            {/* Jauge de soif */}
+            <ThirstInput thirst={thirst} setThirst={setThirst} />
 
-          {/* Catégories */}
-          <CategorySelector
-            categories={categories}
-            selectedCategory={selectedCategory}
-            setSelectedCategory={setSelectedCategory}
-          />
+            {/* Note */}
+            <NoteInput note={note} setNote={setNote} />
 
-          {/* Jauge de soif */}
-          <ThirstInput thirst={thirst} setThirst={setThirst} />
-
-          {/* Note */}
-          <NoteInput note={note} setNote={setNote} />
-
-          {/* Bouton valider */}
-          <ValidateButton disabled={isLoading} />
-        </form>
+            {/* Bouton valider */}
+            <ValidateButton disabled={isLoading} />
+          </form>
+        </section>
       </div>
     </div>
   );

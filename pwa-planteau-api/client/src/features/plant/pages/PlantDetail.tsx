@@ -53,23 +53,25 @@ const PlantDetail: React.FC = () => {
     <div className="navbar-layout plant-detail-bg">
       <Navbar />
       <div className="page-centered flex-1 flex flex-col">
-        <div className="plant-detail-container">
+        <article className="plant-detail-container">
           <button onClick={() => navigate(-1)} className="plant-detail-back">
             &#8592;
           </button>
-          <div className="plant-detail-title">Ma Plante</div>
-          <div className="plant-detail-card">
+          <h1 className="plant-detail-title">Ma Plante</h1>
+          <section className="plant-detail-card" aria-labelledby="plant-name">
             <img src={plant.image} alt={plant.name} className="plant-detail-img" />
             <div className="plant-detail-info">
-              <div className="plant-detail-name">{plant.name}</div>
+              <div id="plant-name" className="plant-detail-name">
+                {plant.name}
+              </div>
               <div className="plant-detail-scientific">{plant.scientificName}</div>
               <div className="plant-detail-room">
                 <span className="plant-detail-room-dot"></span>
                 {plant.room}
               </div>
             </div>
-          </div>
-          <div className="plant-detail-stats">
+          </section>
+          <section className="plant-detail-stats" aria-label="Caractéristiques de la plante">
             <div className="plant-detail-stat">
               <div className="plant-detail-stat-label">Arrosage</div>
               <div className="plant-detail-stat-value">{plant.waterNeed}</div>
@@ -82,11 +84,13 @@ const PlantDetail: React.FC = () => {
               <div className="plant-detail-stat-label">Pièce</div>
               <div className="plant-detail-stat-value">{plant.room}</div>
             </div>
-          </div>
-          <div className="plant-detail-section">
-            <div className="plant-detail-section-title text-left text-lg">Soins détaillés</div>
+          </section>
+          <section className="plant-detail-section" aria-labelledby="soins-title">
+            <h2 id="soins-title" className="plant-detail-section-title text-left text-lg">
+              Soins détaillés
+            </h2>
             <div className="plant-detail-section-content"></div>
-          </div>
+          </section>
           <Link to="/watering/create" className="plant-detail-action">
             Planifier une tâche
           </Link>
@@ -97,7 +101,7 @@ const PlantDetail: React.FC = () => {
           >
             {isDeleting ? 'Suppression...' : 'Supprimer la plante'}
           </button>
-        </div>
+        </article>
       </div>
     </div>
   );
