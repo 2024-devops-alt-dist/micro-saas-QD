@@ -1,5 +1,6 @@
 import './App.css';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { AuthProvider } from './features/authentication/context/AuthContext';
 import PlantCollection from './features/plant/pages/PlantCollection';
 import PlantDetail from './features/plant/pages/PlantDetail';
 import WateringCreate from './features/watering/pages/WateringCreate';
@@ -14,79 +15,81 @@ import Profil from './features/authentication/pages/Profil';
 function App() {
   return (
     <Router>
-      <main>
-        <Routes>
-          {/* Public routes */}
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/register" element={<RegisterPage />} />
+      <AuthProvider>
+        <main>
+          <Routes>
+            {/* Public routes */}
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/register" element={<RegisterPage />} />
 
-          {/* Protected routes */}
-          <Route
-            path="/"
-            element={
-              <ProtectedRoute>
-                <WateringList />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/test-connect"
-            element={
-              <ProtectedRoute>
-                <TestConnectPage />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/plants"
-            element={
-              <ProtectedRoute>
-                <PlantCollection />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/plants/:id"
-            element={
-              <ProtectedRoute>
-                <PlantDetail />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/add-plant"
-            element={
-              <ProtectedRoute>
-                <AddPlant />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/watering/create"
-            element={
-              <ProtectedRoute>
-                <WateringCreate />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/watering"
-            element={
-              <ProtectedRoute>
-                <WateringList />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/profil"
-            element={
-              <ProtectedRoute>
-                <Profil />
-              </ProtectedRoute>
-            }
-          />
-        </Routes>
-      </main>
+            {/* Protected routes */}
+            <Route
+              path="/"
+              element={
+                <ProtectedRoute>
+                  <WateringList />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/test-connect"
+              element={
+                <ProtectedRoute>
+                  <TestConnectPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/plants"
+              element={
+                <ProtectedRoute>
+                  <PlantCollection />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/plants/:id"
+              element={
+                <ProtectedRoute>
+                  <PlantDetail />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/add-plant"
+              element={
+                <ProtectedRoute>
+                  <AddPlant />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/watering/create"
+              element={
+                <ProtectedRoute>
+                  <WateringCreate />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/watering"
+              element={
+                <ProtectedRoute>
+                  <WateringList />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/profil"
+              element={
+                <ProtectedRoute>
+                  <Profil />
+                </ProtectedRoute>
+              }
+            />
+          </Routes>
+        </main>
+      </AuthProvider>
     </Router>
   );
 }
