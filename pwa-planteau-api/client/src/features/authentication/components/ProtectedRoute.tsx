@@ -1,35 +1,16 @@
 import type { ReactNode } from 'react';
-import { useEffect, useState } from 'react';
 import { Navigate } from 'react-router-dom';
-import { authService } from '../service/authService';
+import { useAuth } from '../../../features/authentication/context/AuthContext';
 
 interface ProtectedRouteProps {
   children: ReactNode;
 }
 
 export function ProtectedRoute({ children }: ProtectedRouteProps) {
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    const checkAuth = async () => {
-      try {
-        // Try to fetch current user info to verify authentication
-        await authService.getCurrentUser();
-        setIsAuthenticated(true);
-      } catch (error) {
-        // If we get an error, the user is not authenticated
-        setIsAuthenticated(false);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    checkAuth();
-  }, []);
+  const { isAuthenticated, loading } = useAuth();
 
   // Show nothing while checking authentication
-  if (isLoading) {
+  if (loading) {
     return <div className="loading">Vérification de la session...</div>;
   }
 

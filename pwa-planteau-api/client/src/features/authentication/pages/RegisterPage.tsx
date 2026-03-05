@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { z } from 'zod';
-import { authService } from '../service/authService';
+import { useAuth } from '../context/AuthContext';
 import '../css/AuthPages.css';
 
 const registerSchema = z
@@ -35,7 +35,7 @@ const registerSchema = z
 type RegisterFormData = z.infer<typeof registerSchema>;
 
 export default function RegisterPage() {
-  const navigate = useNavigate();
+  const { register, loading } = useAuth();
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -48,7 +48,6 @@ export default function RegisterPage() {
   });
   const [errors, setErrors] = useState<Partial<Record<keyof RegisterFormData, string>>>({});
   const [generalError, setGeneralError] = useState<string>('');
-  const [isLoading, setIsLoading] = useState(false);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -74,31 +73,22 @@ export default function RegisterPage() {
       // Validate form data
       const validatedData = registerSchema.parse(formData);
 
-      setIsLoading(true);
-      // Appel API adapté :
-      if (validatedData.joinOrCreate === 'join') {
-        await authService.register({
-          email: validatedData.email,
-          password: validatedData.password,
-          firstname: validatedData.firstname,
-          name: validatedData.name,
-          inviteCode: validatedData.inviteCode,
-        });
-      } else {
-        await authService.register({
-          email: validatedData.email,
-          password: validatedData.password,
-          firstname: validatedData.firstname,
-          name: validatedData.name,
-          householdName: validatedData.householdName,
-          inviteCode: validatedData.inviteCode,
-        });
+      // Prepare the data for registration
+      const registerData: any = {
+        email: validatedData.email,
+        password: validatedData.password,
+        firstname: validatedData.firstname,
+        name: validatedData.name,
+        inviteCode: validatedData.inviteCode,
+      };
+
+      // Add householdName if creating a new household
+      if (validatedData.joinOrCreate === 'create') {
+        registerData.householdName = validatedData.householdName;
       }
 
-      // Redirect to login on success
-      navigate('/login', {
-        state: { message: 'Inscription réussie. Connectez-vous maintenant.' },
-      });
+      // Use the register method from AuthContext
+      await register(registerData);
     } catch (error) {
       if (error instanceof z.ZodError) {
         // Handle validation errors
@@ -115,8 +105,6 @@ export default function RegisterPage() {
       } else {
         setGeneralError("Une erreur inconnue s'est produite");
       }
-    } finally {
-      setIsLoading(false);
     }
   };
 
@@ -154,7 +142,7 @@ export default function RegisterPage() {
                         value="join"
                         checked={formData.joinOrCreate === 'join'}
                         onChange={handleInputChange}
-                        disabled={isLoading}
+                        disabled={loading}
                       />
                       Rejoindre un foyer existant
                     </label>
@@ -166,7 +154,7 @@ export default function RegisterPage() {
                         value="create"
                         checked={formData.joinOrCreate === 'create'}
                         onChange={handleInputChange}
-                        disabled={isLoading}
+                        disabled={loading}
                       />
                       Créer un nouveau foyer
                     </label>
@@ -185,7 +173,7 @@ export default function RegisterPage() {
                       className="form-input"
                       value={formData.householdName}
                       onChange={handleInputChange}
-                      disabled={isLoading}
+                      disabled={loading}
                       placeholder="Ma famille, Coloc, ..."
                       aria-invalid={!!errors.householdName}
                       aria-describedby={errors.householdName ? 'householdName-error' : undefined}
@@ -209,7 +197,7 @@ export default function RegisterPage() {
                     className="form-input"
                     value={formData.inviteCode}
                     onChange={handleInputChange}
-                    disabled={isLoading}
+                    disabled={loading}
                     placeholder={
                       formData.joinOrCreate === 'create' ? 'Ex: FAMILLE2024' : 'Ex: code reçu'
                     }
@@ -233,7 +221,7 @@ export default function RegisterPage() {
                     className="form-input"
                     value={formData.firstname}
                     onChange={handleInputChange}
-                    disabled={isLoading}
+                    disabled={loading}
                     placeholder="John"
                     aria-invalid={!!errors.firstname}
                     aria-describedby={errors.firstname ? 'firstname-error' : undefined}
@@ -256,7 +244,7 @@ export default function RegisterPage() {
                     className="form-input"
                     value={formData.name}
                     onChange={handleInputChange}
-                    disabled={isLoading}
+                    disabled={loading}
                     placeholder="Doe"
                     aria-invalid={!!errors.name}
                     aria-describedby={errors.name ? 'name-error' : undefined}
@@ -279,7 +267,7 @@ export default function RegisterPage() {
                     className="form-input"
                     value={formData.email}
                     onChange={handleInputChange}
-                    disabled={isLoading}
+                    disabled={loading}
                     placeholder="john@gmail.com"
                     required
                     aria-invalid={!!errors.email}
@@ -303,7 +291,7 @@ export default function RegisterPage() {
                     className="form-input"
                     value={formData.password}
                     onChange={handleInputChange}
-                    disabled={isLoading}
+                    disabled={loading}
                     placeholder="••••••••"
                     required
                     aria-invalid={!!errors.password}
@@ -327,7 +315,7 @@ export default function RegisterPage() {
                     className="form-input"
                     value={formData.passwordConfirm}
                     onChange={handleInputChange}
-                    disabled={isLoading}
+                    disabled={loading}
                     placeholder="••••••••"
                     required
                     aria-invalid={!!errors.passwordConfirm}
@@ -340,8 +328,8 @@ export default function RegisterPage() {
                   )}
                 </div>
 
-                <button type="submit" disabled={isLoading} className="auth-button">
-                  {isLoading ? 'Inscription en cours...' : "S'inscrire"}
+                <button type="submit" disabled={loading} className="auth-button">
+                  {loading ? 'Inscription en cours...' : "S'inscrire"}
                 </button>
               </form>
             </div>

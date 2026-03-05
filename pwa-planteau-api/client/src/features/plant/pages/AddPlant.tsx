@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { authService } from '../../authentication/service/authService';
+import { useAuth } from '../../authentication/context/AuthContext';
 import Upload from '../../upload/Upload';
 import Navbar from '../../../components/Navbar';
 import '../css/AddPlant.css';
@@ -16,6 +16,7 @@ const initialState = {
 };
 
 const AddPlant: React.FC = () => {
+  const { user } = useAuth();
   const [form, setForm] = useState(initialState);
   const [file, setFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | undefined>(undefined);
@@ -86,9 +87,16 @@ const AddPlant: React.FC = () => {
     // Récupère user_id et household_id automatiquement via l'utilisateur connecté
     try {
       if (!file) setIsLoading(true);
-      const userInfo = await authService.getCurrentUser();
-      const user_id = userInfo.user.id;
-      const household_id = userInfo.user.household_id;
+
+      // User is already available from AuthContext
+      if (!user) {
+        setError('Utilisateur non trouvé');
+        setIsLoading(false);
+        return;
+      }
+
+      const user_id = user.id;
+      const household_id = user.household_id;
       const API_PLANTS_URL = `${import.meta.env.VITE_API_BASE_URL}/plants`;
       const res = await fetch(API_PLANTS_URL, {
         method: 'POST',

@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { wateringService } from '../services/wateringService';
 import Header from '../components/Header';
-import { authService } from '../../authentication/service/authService';
+import { useAuth } from '../../authentication/context/AuthContext';
 import WeekCarousel from '../components/WeekCarousel';
 import TodayTasks from '../components/TodayTasks';
 import TomorrowReminders from '../components/TomorrowReminders';
@@ -38,9 +38,9 @@ function getWeekDates() {
 }
 
 export default function WateringList() {
+  const { user } = useAuth();
   const [waterings, setWaterings] = useState<Watering[]>([]);
   const [error, setError] = useState<string | null>(null);
-  const [user, setUser] = useState<any>(null);
   const week = getWeekDates();
   const todayIso = new Date().toISOString().slice(0, 10);
   const location = useLocation();
@@ -58,15 +58,6 @@ export default function WateringList() {
 
   useEffect(() => {
     fetchWaterings();
-    // Récupérer l'utilisateur pour la photo de profil
-    (async () => {
-      try {
-        const res = await authService.getCurrentUser();
-        setUser(res.user);
-      } catch (e) {
-        setUser(null);
-      }
-    })();
   }, [location.pathname]);
 
   // Sépare les tâches du jour et les rappels (tâches du lendemain)
