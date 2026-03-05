@@ -140,38 +140,53 @@ const AddPlant: React.FC = () => {
         </div>
         {error && <div className="error-message">{error}</div>}
         <form className="add-plant-form" onSubmit={handleSubmit} noValidate>
-          <label>
-            Nom commun
+          <div>
+            <label htmlFor="name">Nom commun</label>
             <input
+              id="name"
               name="name"
               value={form.name}
               onChange={handleChange}
               required
               className={fieldErrors.name ? 'form-input-error' : ''}
+              aria-invalid={!!fieldErrors.name}
+              aria-describedby={fieldErrors.name ? 'name-error' : undefined}
             />
-            {fieldErrors.name && <div className="field-error">{fieldErrors.name}</div>}
-          </label>
-          <label>
-            Nom scientifique
+            {fieldErrors.name && (
+              <div className="field-error" id="name-error">
+                {fieldErrors.name}
+              </div>
+            )}
+          </div>
+          <div>
+            <label htmlFor="scientificName">Nom scientifique</label>
             <input
+              id="scientificName"
               name="scientificName"
               value={form.scientificName}
               onChange={handleChange}
               required
               className={fieldErrors.scientificName ? 'form-input-error' : ''}
+              aria-invalid={!!fieldErrors.scientificName}
+              aria-describedby={fieldErrors.scientificName ? 'scientificName-error' : undefined}
             />
             {fieldErrors.scientificName && (
-              <div className="field-error">{fieldErrors.scientificName}</div>
+              <div className="field-error" id="scientificName-error">
+                {fieldErrors.scientificName}
+              </div>
             )}
-          </label>
-          <label>
-            Type
+          </div>
+          <div>
+            <label htmlFor="type">Type</label>
             <select
+              id="type"
               name="type"
               value={form.type}
               onChange={handleChange}
               required
               className={fieldErrors.type ? 'form-input-error' : ''}
+              aria-invalid={!!fieldErrors.type}
+              aria-describedby={fieldErrors.type ? 'type-error' : undefined}
             >
               <option value="">Sélectionner un type</option>
               <option value="TROPICAL">Tropical</option>
@@ -183,34 +198,52 @@ const AddPlant: React.FC = () => {
               <option value="BONSAI">Bonsaï</option>
               <option value="ORCHID">Orchidée</option>
             </select>
-            {fieldErrors.type && <div className="field-error">{fieldErrors.type}</div>}
-          </label>
-          <label>
-            Photo
+            {fieldErrors.type && (
+              <div className="field-error" id="type-error">
+                {fieldErrors.type}
+              </div>
+            )}
+          </div>
+          <div>
+            <label htmlFor="photo">Photo</label>
             <Upload onFileSelect={handleFileSelect} previewUrl={previewUrl} />
-          </label>
-          <label>
-            Besoins en eau
+          </div>
+          <div>
+            <label htmlFor="waterNeed">Besoins en eau</label>
             <input
+              id="waterNeed"
               name="waterNeed"
               value={form.waterNeed}
               onChange={handleChange}
               required
               className={fieldErrors.waterNeed ? 'form-input-error' : ''}
+              aria-invalid={!!fieldErrors.waterNeed}
+              aria-describedby={fieldErrors.waterNeed ? 'waterNeed-error' : undefined}
             />
-            {fieldErrors.waterNeed && <div className="field-error">{fieldErrors.waterNeed}</div>}
-          </label>
-          <label>
-            Pièce
+            {fieldErrors.waterNeed && (
+              <div className="field-error" id="waterNeed-error">
+                {fieldErrors.waterNeed}
+              </div>
+            )}
+          </div>
+          <div>
+            <label htmlFor="room">Pièce</label>
             <input
+              id="room"
               name="room"
               value={form.room}
               onChange={handleChange}
               required
               className={fieldErrors.room ? 'form-input-error' : ''}
+              aria-invalid={!!fieldErrors.room}
+              aria-describedby={fieldErrors.room ? 'room-error' : undefined}
             />
-            {fieldErrors.room && <div className="field-error">{fieldErrors.room}</div>}
-          </label>
+            {fieldErrors.room && (
+              <div className="field-error" id="room-error">
+                {fieldErrors.room}
+              </div>
+            )}
+          </div>
           <button type="submit" className="add-plant-btn" disabled={isLoading}>
             {isLoading ? 'Ajout en cours...' : 'Ajouter'}
           </button>

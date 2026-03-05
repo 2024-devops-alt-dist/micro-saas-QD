@@ -1,0 +1,12 @@
+# Plant'eau - Robots.txt configuration
+# Private app - only allow login and register pages to be indexed
+
+User-agent: *
+Allow: /login
+Allow: /register
+Disallow: /
+
+# Specific restrictions
+Disallow: /api
+Disallow: /admin
+Disallow: /test-connect

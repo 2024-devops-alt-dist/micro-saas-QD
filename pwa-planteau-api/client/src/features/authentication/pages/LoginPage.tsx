@@ -90,8 +90,14 @@ export default function LoginPage() {
                     }}
                     disabled={isLoading}
                     required
+                    aria-invalid={!!fieldErrors.email}
+                    aria-describedby={fieldErrors.email ? 'email-error' : undefined}
                   />
-                  {fieldErrors.email && <div className="field-error">{fieldErrors.email}</div>}
+                  {fieldErrors.email && (
+                    <div className="field-error" id="email-error">
+                      {fieldErrors.email}
+                    </div>
+                  )}
                 </div>
 
                 <div className="form-group">
@@ -113,18 +119,24 @@ export default function LoginPage() {
                       }}
                       disabled={isLoading}
                       required
+                      aria-invalid={!!fieldErrors.password}
+                      aria-describedby={fieldErrors.password ? 'password-error' : undefined}
                     />
                     <button
                       type="button"
                       className="password-toggle"
                       onClick={() => setShowPassword(!showPassword)}
-                      aria-label="Toggle password visibility"
+                      aria-label={
+                        showPassword ? 'Masquer le mot de passe' : 'Afficher le mot de passe'
+                      }
                     >
                       {showPassword ? '👁️' : '👁️‍🗨️'}
                     </button>
                   </div>
                   {fieldErrors.password && (
-                    <div className="field-error">{fieldErrors.password}</div>
+                    <div className="field-error" id="password-error">
+                      {fieldErrors.password}
+                    </div>
                   )}
                 </div>
 

@@ -14,9 +14,12 @@ const PlantSelector: React.FC<PlantSelectorProps> = ({
 }) => {
   return (
     <div className="plant-selector-block">
-      <label className="plant-selector-label">Sélectionner une plante</label>
+      <label htmlFor="plant-selector-dropdown" className="plant-selector-label">
+        Sélectionner une plante
+      </label>
       <div className="plant-selector-card">
         <select
+          id="plant-selector-dropdown"
           value={selectedPlantId || ''}
           onChange={e => {
             const value = e.target.value;
@@ -26,6 +29,7 @@ const PlantSelector: React.FC<PlantSelectorProps> = ({
           }}
           className="plant-selector-dropdown"
           required
+          aria-label="Choisir une plante"
         >
           {plants.length === 0 ? (
             <option value="" disabled>
