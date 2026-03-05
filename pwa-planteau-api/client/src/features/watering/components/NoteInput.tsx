@@ -8,14 +8,18 @@ interface NoteInputProps {
 
 const NoteInput: React.FC<NoteInputProps> = ({ note, setNote }) => (
   <div>
-    <label className="note-input-title">Note :</label>
+    <label htmlFor="note-input-field" className="note-input-title">
+      Note :
+    </label>
     <div className="note-input-container">
       <input
+        id="note-input-field"
         type="text"
         value={note}
         onChange={e => setNote(e.target.value)}
         className="note-input-field"
         placeholder="Ajouter une note..."
+        aria-label="Note supplémentaire"
       />
     </div>
   </div>

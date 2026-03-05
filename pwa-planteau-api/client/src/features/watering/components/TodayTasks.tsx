@@ -30,13 +30,15 @@ const TodayTasks: React.FC<TodayTasksProps> = ({ todayTasks, onStatusChange }) =
 
   return (
     <div className="mb-2">
-      <div className="subtitle text-lg mb-2 text-left">Vos Tâches du jour</div>
+      <div id="today-tasks-title" className="subtitle text-lg mb-2 text-left">
+        Vos Tâches du jour
+      </div>
       <div className="flex flex-col gap-3">
         {todayTasks.length === 0 && (
           <div className="text-info text-xs">Aucune tâche aujourd'hui</div>
         )}
         {todayTasks.map(task => (
-          <div
+          <article
             key={task.id_watering}
             className="task-cards px-4 py-2 font-semibold shadow flex flex-row items-center justify-between task-cards-hover"
           >
@@ -50,7 +52,7 @@ const TodayTasks: React.FC<TodayTasksProps> = ({ todayTasks, onStatusChange }) =
               onChange={() => handleCheckbox(task)}
               aria-label="Marquer comme faite"
             />
-          </div>
+          </article>
         ))}
       </div>
     </div>

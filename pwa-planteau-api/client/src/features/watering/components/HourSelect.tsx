@@ -33,18 +33,22 @@ const HourSelect: React.FC<HourSelectProps> = ({
 
   return (
     <div className="hour-select-block">
-      <label className="hour-select-label">Séléctionner l'heure:</label>
+      <label htmlFor="hour-select-start" className="hour-select-label">
+        Sélectionner l'heure:
+      </label>
       <div className="hour-select-card">
         <div className="hour-select-col">
           <span className="hour-select-sub">De</span>
           <div className="hour-select-value">
             {startHour}
             <select
+              id="hour-select-start"
               className="hour-select-dropdown"
               value={startHour}
               onChange={e => {
                 setStartHour(e.target.value);
               }}
+              aria-label="Heure de début"
             >
               {hours.map(h => (
                 <option key={h} value={h}>
@@ -55,16 +59,18 @@ const HourSelect: React.FC<HourSelectProps> = ({
           </div>
         </div>
         <div className="hour-select-arrow">
-          <span>&gt;</span>
+          <span aria-hidden="true">&gt;</span>
         </div>
         <div className="hour-select-col">
           <span className="hour-select-sub">à</span>
           <div className="hour-select-value">
             {endHour}
             <select
+              id="hour-select-end"
               className="hour-select-dropdown"
               value={endHour}
               onChange={e => setEndHour(e.target.value)}
+              aria-label="Heure de fin"
             >
               <option value="" disabled>
                 Choisir...

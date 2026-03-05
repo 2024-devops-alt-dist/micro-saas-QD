@@ -78,9 +78,14 @@ export default function Profil() {
     <div className="navbar-layout">
       <Navbar />
       <div className="page-centered profil-container">
-        <h2 className="profil-title">Mon Profil</h2>
-        <div className="profil-card">
-          <div className="profil-avatar-section">
+        <h1 className="profil-title" id="profil-title">
+          Mon Profil
+        </h1>
+        <section className="profil-card" aria-labelledby="profil-title">
+          <section aria-labelledby="avatar-title" className="profil-avatar-section">
+            <h2 id="avatar-title" style={{ display: 'none' }}>
+              Photo de profil
+            </h2>
             <img
               src={
                 user.photo
@@ -109,8 +114,11 @@ export default function Profil() {
             >
               {uploading ? 'Envoi...' : 'Changer la photo'}
             </button>
-          </div>
-          <div className="profil-info-section">
+          </section>
+          <section className="profil-info-section" aria-labelledby="info-title">
+            <h2 id="info-title" style={{ display: 'none' }}>
+              Informations personnelles
+            </h2>
             <div>
               <strong>Prénom :</strong> {user.firstname}
             </div>
@@ -129,8 +137,8 @@ export default function Profil() {
                 <span className="profil-invite-code">{user.inviteCode}</span>
               </div>
             )}
-          </div>
-        </div>
+          </section>
+        </section>
         <div style={{ display: 'flex', justifyContent: 'center', marginTop: '2.5rem' }}>
           <button
             className="profil-logout-btn"

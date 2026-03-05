@@ -8,9 +8,11 @@ interface ThirstInputProps {
 
 const ThirstInput: React.FC<ThirstInputProps> = ({ thirst, setThirst }) => (
   <div>
-    <label className="thirst-input-title">Jauge de soif :</label>
+    <label htmlFor="thirst-input-select" className="thirst-input-title">
+      Jauge de soif :
+    </label>
     <div className="thirst-input-container">
-      <span className="thirst-input-icon" aria-label="Jauge de soif">
+      <span className="thirst-input-icon" aria-hidden="true">
         <svg
           width="22"
           height="22"
@@ -30,9 +32,11 @@ const ThirstInput: React.FC<ThirstInputProps> = ({ thirst, setThirst }) => (
       </span>
       <span className="thirst-input-label">En jours :</span>
       <select
+        id="thirst-input-select"
         className="thirst-input-select"
         value={thirst}
         onChange={e => setThirst(Number(e.target.value))}
+        aria-label="Nombre de jours pour la jauge de soif"
       >
         {Array.from({ length: 30 }, (_, i) => i + 1).map(day => (
           <option key={day} value={day}>
