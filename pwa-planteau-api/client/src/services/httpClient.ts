@@ -10,12 +10,7 @@
  * - Proxy Vercel: /api/* est redirigé vers l'API backend via vercel.json
  */
 
-// En production, Vercel proxy /api/* vers l'API backend (voir vercel.json)
-// En dev local, on utilise l'URL complète de l'API
-const API_BASE_URL =
-  import.meta.env.MODE === 'production'
-    ? '/api'
-    : import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000/api';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000/api';
 
 export interface ApiError extends Error {
   status?: number;
