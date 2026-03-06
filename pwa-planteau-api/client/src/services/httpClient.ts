@@ -48,8 +48,12 @@ async function handleTokenRefresh(): Promise<void> {
     await refreshPromise;
   } catch (error) {
     console.error('[httpClient] Token refresh failed, redirecting to login', error);
-    // Redirect to login on refresh failure
-    window.location.href = '/login';
+    // Stocke le message d'erreur pour la page login
+    sessionStorage.setItem('loginError', 'Votre session a expiré, veuillez vous reconnecter.');
+    // Empêche la boucle si déjà sur /login
+    if (window.location.pathname !== '/login') {
+      window.location.href = '/login';
+    }
     throw error;
   } finally {
     isRefreshing = false;
