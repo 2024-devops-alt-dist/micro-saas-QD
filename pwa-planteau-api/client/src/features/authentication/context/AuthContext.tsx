@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { authService } from '../service/authService';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 interface User {
   id: number;
@@ -36,11 +36,20 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+  const location = useLocation();
 
   // Vérifie la session au montage
   // Appelle /api/auth/me pour restaurer la session après un refresh de page
+  // Skip sur les pages publiques (login, register) pour éviter les 401 inutiles
   useEffect(() => {
     const loadUser = async () => {
+      // Skip session check on public pages
+      const publicPages = ['/login', '/register'];
+      if (publicPages.includes(location.pathname)) {
+        setLoading(false);
+        return;
+      }
+
       try {
         const response = await authService.me();
         setUser(response.user);
@@ -51,7 +60,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       }
     };
     loadUser();
-  }, []);
+  }, [location.pathname]);
 
   // Connexion
   const login = async (email: string, password: string) => {
