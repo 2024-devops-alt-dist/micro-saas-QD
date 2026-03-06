@@ -17,6 +17,9 @@ import authMiddleware from './middlewares/authMiddleware';
 import { router as uploadRouter } from './routes/uploadRoutes';
 
 const app = express();
+
+app.set('trust proxy', 1);
+
 // Optionally keep assets if needed
 app.use('/assets', express.static('public/assets'));
 app.use(express.json());
