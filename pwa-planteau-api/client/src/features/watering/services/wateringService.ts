@@ -1,5 +1,5 @@
 import mockData from '../data/mockWatering.json';
-import { httpClient } from '../../../services/httpClient';
+import api from '../../../services/apiClient';
 
 const USE_MOCK = false;
 
@@ -54,11 +54,11 @@ const mockApi = {
 
 const realApi = {
   async updateStatus(id: number, status: string): Promise<void> {
-    await httpClient.put(`/tasks/${id}`, { status });
+    await api.put(`/tasks/${id}`, { status });
   },
   async getAll(): Promise<Watering[]> {
     try {
-      const response = await httpClient.get<TaskResponse[]>('/tasks');
+      const response = await api.get<TaskResponse[]>('/tasks');
       // Map type to readable label
       const typeLabels: Record<string, string> = {
         WATERING: 'Arrosage',
@@ -69,7 +69,7 @@ const realApi = {
         FERTILIZING: 'Engrais',
         DEADHEADING: 'Supprimer fleurs fanées',
       };
-      return response.map(task => ({
+      return response.data.map(task => ({
         id_watering: task.id,
         plantId: task.plant?.id || task.plant_id,
         plantName: task.plant?.name || `Plant ${task.plant_id}`,
@@ -102,18 +102,19 @@ const realApi = {
       // Format: YYYY-MM-DDTHH:mm:ss (sans millisecondes ni Z)
       const scheduledDateString = `${dateOnly}T${h.padStart(2, '0')}:${m.padStart(2, '0')}:00`;
 
-      const response = await httpClient.post<TaskResponse>('/tasks', {
+      const response = await api.post<TaskResponse>('/tasks', {
         type: options?.type || 'WATERING',
         scheduled_date: scheduledDateString,
         status: 'TODO',
         plant_id: options?.plantId || 1,
         frequency_days: options?.thirst || undefined,
       });
+      const taskData = response.data;
       return {
-        id_watering: response.id,
+        id_watering: taskData.id,
         plantName: watering.plantName,
         frequency: watering.frequency,
-        nextWatering: response.scheduled_date.slice(0, 10),
+        nextWatering: taskData.scheduled_date.slice(0, 10),
         taskLabel: watering.frequency || 'Arrosage',
         type: options?.type || 'WATERING',
         plantId: options?.plantId || 1,
@@ -125,7 +126,7 @@ const realApi = {
   },
   async delete(id: number): Promise<{ success: boolean }> {
     try {
-      await httpClient.delete(`/tasks/${id}`);
+      await api.delete(`/tasks/${id}`);
       return { success: true };
     } catch (error) {
       console.error('Failed to delete watering task:', error);
