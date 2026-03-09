@@ -2,10 +2,11 @@ import { useState, useRef } from 'react';
 import Navbar from '../../../components/Navbar';
 import '../css/Profil.css';
 import { useAuth } from '../context/AuthContext';
-import axios from 'axios';
+import { uploadService } from '../../upload/services/uploadService';
+import { userService } from '../services/userService';
 
 export default function Profil() {
-  const { user, logout, loading } = useAuth();
+  const { user, logout, loading, refreshUser } = useAuth();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [uploading, setUploading] = useState(false);
 
@@ -14,26 +15,15 @@ export default function Profil() {
 
     setUploading(true);
     try {
-      // Upload image
-      const formData = new FormData();
-      formData.append('file', file);
-      formData.append('type', 'user');
-      const apiUrl = import.meta.env.VITE_API_BASE_URL || '';
-      const res = await axios.post(`${apiUrl}/upload`, formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-        withCredentials: true,
-      });
-      // Update user photo in DB
-      const photoUrl = (res.data as { url: string }).url;
-      await axios.put(
-        `${apiUrl}/users/${user.id}`,
-        { photo: photoUrl },
-        {
-          withCredentials: true,
-        }
-      );
+      // Upload l'image
+      const uploadResult = await uploadService.uploadFile(file, 'user');
+      const photoUrl = uploadResult.url;
+
+      // Mettre à jour la photo utilisateur en base de données
+      await userService.updateUser(user.id, { photo: photoUrl });
+
+      // Rafraîchir immédiatement les infos utilisateur pour voir la nouvelle photo
+      await refreshUser();
     } catch (err) {
       alert("Erreur lors de l'upload de la photo");
     } finally {

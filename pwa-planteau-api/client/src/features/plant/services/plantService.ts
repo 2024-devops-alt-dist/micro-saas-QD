@@ -1,5 +1,5 @@
 import mockData from '../data/mockPlants.json';
-import { httpClient } from '../../../services/httpClient';
+import api from '../../../services/apiClient';
 
 const USE_MOCK = false;
 
@@ -30,7 +30,7 @@ const mockApi = {
     // Retourne une copie des données mockées
     return [...mockData];
   },
-  async create(plant: Omit<Plant, 'id'>): Promise<Plant> {
+  async create(plant: Omit<Plant, 'id'>, _userId: number, _householdId: number): Promise<Plant> {
     // Simule la création d'une plante (id généré)
     return { id: Date.now(), ...plant };
   },
@@ -43,8 +43,8 @@ const mockApi = {
 const realApi = {
   async getAll(): Promise<Plant[]> {
     try {
-      const response = await httpClient.get<any[]>('/plants');
-      return response.map(plant => ({
+      const response = await api.get<any[]>('/plants');
+      return response.data.map(plant => ({
         id: plant.id,
         name: plant.name,
         scientificName: plant.scientific_name,
@@ -58,24 +58,27 @@ const realApi = {
       throw error;
     }
   },
-  async create(plant: Omit<Plant, 'id'>): Promise<Plant> {
+  async create(plant: Omit<Plant, 'id'>, userId: number, householdId: number): Promise<Plant> {
     try {
-      const response = await httpClient.post<any>('/plants', {
+      const response = await api.post<any>('/plants', {
         name: plant.name,
         scientific_name: plant.scientificName,
         type: plant.type,
         photo: plant.image,
         water_need: plant.waterNeed,
         room: plant.room,
+        user_id: userId,
+        household_id: householdId,
       });
+      const plantData = response.data;
       return {
-        id: response.id,
-        name: response.name,
-        scientificName: response.scientific_name,
-        type: response.type,
-        image: getFullImageUrl(response.photo),
-        waterNeed: response.water_need,
-        room: response.room,
+        id: plantData.id,
+        name: plantData.name,
+        scientificName: plantData.scientific_name,
+        type: plantData.type,
+        image: getFullImageUrl(plantData.photo),
+        waterNeed: plantData.water_need,
+        room: plantData.room,
       };
     } catch (error) {
       console.error('Failed to create plant:', error);
@@ -84,7 +87,7 @@ const realApi = {
   },
   async delete(id: number): Promise<{ success: boolean }> {
     try {
-      await httpClient.delete(`/plants/${id}`);
+      await api.delete(`/plants/${id}`);
       return { success: true };
     } catch (error) {
       console.error('Failed to delete plant:', error);

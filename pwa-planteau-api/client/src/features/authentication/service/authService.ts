@@ -1,4 +1,4 @@
-import { httpClient } from '../../../services/httpClient';
+import api from '../../../services/apiClient';
 
 interface RegisterData {
   email: string;
@@ -30,16 +30,16 @@ export const authService = {
    * Register a new user
    */
   async register(data: RegisterData): Promise<AuthResponse> {
-    const response = await httpClient.post<AuthResponse>('/auth/register', data);
-    return response;
+    const response = await api.post<AuthResponse>('/auth/register', data);
+    return response.data;
   },
 
   /**
    * Login with email and password
    */
   async login(data: LoginData): Promise<AuthResponse> {
-    const response = await httpClient.post<AuthResponse>('/auth/login', data);
-    return response;
+    const response = await api.post<AuthResponse>('/auth/login', data);
+    return response.data;
   },
 
   /**
@@ -47,7 +47,7 @@ export const authService = {
    */
   async logout(): Promise<void> {
     try {
-      await httpClient.post('/auth/logout', {});
+      await api.post('/auth/logout', {});
     } catch (error) {
       console.error('Logout error:', error);
     }
@@ -66,8 +66,8 @@ export const authService = {
       photo?: string;
     };
   }> {
-    const response = await httpClient.get('/auth/me');
-    return response as {
+    const response = await api.get('/auth/me');
+    return response.data as {
       user: {
         id: number;
         email: string;
@@ -95,7 +95,7 @@ export const authService = {
    * Refresh access token
    */
   async refreshToken(): Promise<void> {
-    await httpClient.post<AuthResponse>('/auth/refresh', {});
+    await api.post<AuthResponse>('/auth/refresh', {});
   },
 
   /**
