@@ -4,6 +4,8 @@ import Upload from '../../upload/Upload';
 import Navbar from '../../../components/Navbar';
 import '../css/AddPlant.css';
 import { useNavigate } from 'react-router-dom';
+import { uploadService } from '../../upload/services/uploadService';
+import { plantService } from '../services/plantService';
 
 const initialState = {
   name: '',
@@ -64,58 +66,44 @@ const AddPlant: React.FC = () => {
     }
 
     let imageUrl = form.image;
+    // Upload du fichier si présent
     if (file) {
-      const formData = new FormData();
-      formData.append('file', file);
-      formData.append('type', 'plant');
-      const API_URL = `${import.meta.env.VITE_API_BASE_URL}/upload`;
       try {
         setIsLoading(true);
-        const res = await fetch(API_URL, {
-          method: 'POST',
-          body: formData,
-          credentials: 'include',
-        });
-        const data = await res.json();
-        imageUrl = data.url;
+        // Utiliser uploadService pour uploader le fichier
+        const uploadResult = await uploadService.uploadFile(file, 'plant');
+        imageUrl = uploadResult.url;
       } catch (err) {
         setError("Erreur lors de l'upload de la photo");
         setIsLoading(false);
         return;
       }
     }
-    // Récupère user_id et household_id automatiquement via l'utilisateur connecté
+
+    // Création de la plante
     try {
       if (!file) setIsLoading(true);
 
-      // User is already available from AuthContext
       if (!user) {
         setError('Utilisateur non trouvé');
         setIsLoading(false);
         return;
       }
 
-      const user_id = user.id;
-      const household_id = user.household_id;
-      const API_PLANTS_URL = `${import.meta.env.VITE_API_BASE_URL}/plants`;
-      const res = await fetch(API_PLANTS_URL, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
+      // Créer la plante avec plantService, en passant les infos utilisateur
+      await plantService.create(
+        {
           name: form.name,
-          scientific_name: form.scientificName,
+          scientificName: form.scientificName,
           type: form.type,
-          photo: imageUrl,
-          water_need: form.waterNeed,
+          image: imageUrl,
+          waterNeed: form.waterNeed,
           room: form.room,
-          user_id,
-          household_id,
-        }),
-        credentials: 'include',
-      });
-      if (!res.ok) throw new Error('Erreur lors de la création de la plante');
+        },
+        user.id,
+        user.household_id
+      );
+
       // Rediriger vers la collection de plantes après succès
       navigate('/plants', { replace: true });
     } catch (err) {

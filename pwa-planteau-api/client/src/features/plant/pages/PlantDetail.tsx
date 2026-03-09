@@ -77,7 +77,7 @@ const PlantDetail: React.FC = () => {
               <div className="plant-detail-stat-value">{plant.waterNeed}</div>
             </div>
             <div className="plant-detail-stat plant-detail-stat-dark">
-              <div className="plant-detail-stat-label">Lumière</div>
+              <div className="plant-detail-stat-label">Type</div>
               <div className="plant-detail-stat-value">{plant.type}</div>
             </div>
             <div className="plant-detail-stat">
